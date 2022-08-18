@@ -32,6 +32,13 @@ module.exports = {
         test: /\.svg$/,
         type: 'asset/resource',
       },
+      {
+        test: /\.mp3$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'files',
+        },
+      },
     ],
   },
   plugins: [

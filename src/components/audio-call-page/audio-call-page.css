@@ -2,14 +2,6 @@
   background-color: var(--bs-cyan);
 }
 
-.game-window--hidden {
-  display: none;
-}
-
-.level-menu--hidden {
-  display: none;
-}
-
 .current-word {
   height: 200px;
 }
@@ -19,3 +11,6 @@
   margin: 0 auto;
 }
 
+.btn--hidden {
+  display: none;
+}

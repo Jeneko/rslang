@@ -15,9 +15,23 @@ export enum PageName {
 
 export enum Endpoints {
   words = 'words',
+  files = 'files',
   // TODO: add other endpoints
 }
 
 export interface Word {
-  // TODO: write proper interface
+  audio: string;
+  audioExample: string;
+  audioMeaning: string;
+  group: number;
+  id: string;
+  image: string;
+  page: number;
+  textExample: string;
+  textExampleTranslate: string;
+  textMeaning: string;
+  textMeaningTranslate: string;
+  transcription: string;
+  word: string;
+  wordTranslate: string;
 }

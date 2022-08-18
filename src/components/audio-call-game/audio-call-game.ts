@@ -29,32 +29,7 @@ export default async function getAudioCallGame(): Promise<HTMLElement> {
         <input data-level="6" type="radio" class="btn-check" name="btnradio" id="btnradio6" autocomplete="off">
         <label class="btn btn-outline-primary" for="btnradio6">HARD</label>
       </div>
-      <div class="container text-center game-window game-window--hidden">
-        <div class="row">
-          <div class="col current-word">
-            current word
-          </div>
-        </div>
-        <div class="row">
-        <div class="col">
-          <button type="button" class="btn btn-light">Word</button>
-        </div>
-        <div class="col">
-          <button type="button" class="btn btn-light">Word</button>
-        </div>
-        <div class="col">
-          <button type="button" class="btn btn-light">Word</button>
-        </div>
-        <div class="col">
-          <button type="button" class="btn btn-light">Word</button>
-        </div>
-        <div class="col">
-          <button type="button" class="btn btn-light">Word</button>
-        </div>
-      </div>
-      <button type="button" class="btn btn-primary btn-lg button-text-round">Next</button>
     </div>
-
   </div>
   `;
   getChoiceOfDifficultyLevel();
