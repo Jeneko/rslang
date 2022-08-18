@@ -1,0 +1,12 @@
+.game-window {
+  display: none;
+}
+
+.current-word {
+  height: 200px;
+}
+
+.button-text-round {
+  display: block;
+  margin: 0 auto;
+}
