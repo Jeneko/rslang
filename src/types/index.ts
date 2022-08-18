@@ -1,0 +1,23 @@
+export type State = {
+  page: PageName;
+  // TODO: add other state data we may need (like paginations and stuff)
+};
+
+export enum PageName {
+  main = 'main',
+  audioCall = 'audio-call',
+  sprint = 'sprint',
+  dictionary = 'dictionary',
+  stats = 'stats',
+  team = 'team',
+  // TODO: add other pages if needed
+}
+
+export enum Endpoints {
+  words = 'words',
+  // TODO: add other endpoints
+}
+
+export interface Word {
+  // TODO: write proper interface
+}
