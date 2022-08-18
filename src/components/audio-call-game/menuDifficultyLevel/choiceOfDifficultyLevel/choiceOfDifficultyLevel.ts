@@ -1,7 +1,9 @@
-export default async function choiceOfDifficultyLevel() {
+export default function choiceOfDifficultyLevel() {
   const menuLevels = document.querySelector('.btn-group');
-  console.log(menuLevels);
   menuLevels?.addEventListener('click', (e) => {
-    console.log(e.target);
+    const { target } = e;
+    if ((target as HTMLElement).classList.contains('btn-check')) {
+      console.log((target as HTMLElement).dataset.level);
+    }
   });
 }

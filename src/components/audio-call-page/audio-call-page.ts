@@ -7,6 +7,8 @@ export default async function getAudioCallPage(): Promise<HTMLElement> {
   elem.className = 'audio-call-page';
 
   elem.append(await getAudioCallGame());
-  await choiceOfDifficultyLevel();
+  document.addEventListener('DOMContentLoaded', async () => {
+    choiceOfDifficultyLevel();
+  });
   return elem;
 }
