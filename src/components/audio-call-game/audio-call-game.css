@@ -1,4 +1,4 @@
-.game-window {
+.game-window-hidden {
   display: none;
 }
 
@@ -10,3 +10,4 @@
   display: block;
   margin: 0 auto;
 }
+
