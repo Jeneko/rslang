@@ -8,8 +8,9 @@ export default async function startNewGame(event: Event) {
     const currentLevel = ((target as HTMLElement).dataset.level);
     controlGameWindow(true);
     if (currentLevel) {
+      const numberPage = 0;
       const listWords = await getWords(+currentLevel, 0);
-      const windowGame = await generateWindowGame(listWords[0], listWords);
+      const windowGame = await generateWindowGame(listWords[0], listWords, numberPage);
       console.log(windowGame);
     }
   }

@@ -1,12 +1,11 @@
 import { Word } from '../../../../../../types/index';
 import addEventsForAudioButton from '../addEventsForAudioButton/addEventsForAudioButton';
-import getRandomWords from './getRandomWords/getRandomWords';
+import getRandomWords from '../generateWindowGame/getRandomWords/getRandomWords';
 import addEventsForChoiceButtons from '../addEventsForChoiceButtons/addEventsForChoiceButtons';
-import addEventsForNextQuestionButton from '../addEventsForNextQuestionButton/addEventsForNextQuestionButton';
 
-export default async function generateWindowGame(currentWord: Word, arrayWords: Word[], numberPage: number) {
+export default async function nextQuestion(currentWord: Word, arrayWords: Word[], numberPage: number) {
   const windowGame = document.createElement('div');
-
+  console.log(numberPage);
   const {
     audio, word,
   } = currentWord;
@@ -35,7 +34,6 @@ export default async function generateWindowGame(currentWord: Word, arrayWords: 
       <div class="col">
         <button type="button" class="btn btn-light btn-choice-of-answer">${listRandomWords[4]}</button>
       </div>
-      <button type="button" class="btn btn-primary btn-next-question btn--hidden">Next</button>
     </div>
   `;
   console.log(windowGame);
@@ -44,5 +42,4 @@ export default async function generateWindowGame(currentWord: Word, arrayWords: 
   const buttonAudio = document.getElementById('playAudio');
   addEventsForAudioButton(buttonAudio as HTMLElement, audio);
   addEventsForChoiceButtons(word);
-  addEventsForNextQuestionButton(0, numberPage, arrayWords);
 }

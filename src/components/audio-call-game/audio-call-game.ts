@@ -30,6 +30,7 @@ export default async function getAudioCallGame(): Promise<HTMLElement> {
         <label class="btn btn-outline-primary" for="btnradio6">HARD</label>
       </div>
     </div>
+    <button type="button" class="btn btn-primary btn-next-question btn--hidden">Next</button>
   </div>
   `;
   getChoiceOfDifficultyLevel();
