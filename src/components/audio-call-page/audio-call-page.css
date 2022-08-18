@@ -1,3 +1,21 @@
 .audio-call-page {
   background-color: var(--bs-cyan);
 }
+
+.game-window--hidden {
+  display: none;
+}
+
+.level-menu--hidden {
+  display: none;
+}
+
+.current-word {
+  height: 200px;
+}
+
+.button-text-round {
+  display: block;
+  margin: 0 auto;
+}
+

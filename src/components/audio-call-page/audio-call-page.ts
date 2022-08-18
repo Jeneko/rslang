@@ -1,6 +1,6 @@
 import getAudioCallGame from 'components/audio-call-game/audio-call-game';
 import './audio-call-page.css';
-import choiceOfDifficultyLevel from '../audio-call-game/menuDifficultyLevel/choiceOfDifficultyLevel/choiceOfDifficultyLevel';
+import getChoiceOfDifficultyLevel from '../audio-call-game/menuDifficultyLevel/getChoiceOfDifficultyLevel/getChoiceOfDifficultyLevel';
 
 export default async function getAudioCallPage(): Promise<HTMLElement> {
   const elem = document.createElement('div');
@@ -8,7 +8,7 @@ export default async function getAudioCallPage(): Promise<HTMLElement> {
 
   elem.append(await getAudioCallGame());
   document.addEventListener('DOMContentLoaded', async () => {
-    choiceOfDifficultyLevel();
+    getChoiceOfDifficultyLevel();
   });
   return elem;
 }

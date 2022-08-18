@@ -1,6 +1,8 @@
-export default function controlGameWindow(flag: boolean) {
+export default function controlGameWindow(statusGame: boolean) {
   const gameWindow = document.querySelector('.game-window');
-  if (flag) {
-    gameWindow?.classList.remove('game-window-hidden');
+  const levelMenu = document.querySelector('.level-menu');
+  if (statusGame) {
+    gameWindow?.classList.remove('game-window--hidden');
+    levelMenu?.classList.add('level-menu--hidden');
   }
 }
