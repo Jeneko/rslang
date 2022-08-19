@@ -1,5 +1,7 @@
 export type State = {
   page: PageName;
+  studyBookChapter: number;
+  studyBookPage: number;
   // TODO: add other state data we may need (like paginations and stuff)
 };
 
