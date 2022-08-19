@@ -1,0 +1,13 @@
+.study-book-chapter-heading {
+  padding: 2rem 2rem;
+  border-radius: 6px;
+}
+
+.study-book-words-list ol {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(315px, 1fr));
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
