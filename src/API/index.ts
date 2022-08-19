@@ -1,6 +1,6 @@
 import { Endpoints, Word } from 'types/index';
 
-const SOURCE = 'https://team51-learnwords.herokuapp.com';
+export const SOURCE = 'https://team51-learnwords.herokuapp.com';
 
 export async function getWords(group: number, page: number): Promise<Word[]> {
   const url = `${SOURCE}/${Endpoints.words}?group=${group}&page=${page}`;
