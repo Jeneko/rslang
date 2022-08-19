@@ -1,4 +1,5 @@
-import showButtonNextQuestion from '../showButtonNextQuestion/showButtonNextQuestion';
+// import showButtonNextQuestion from '../showButtonNextQuestion/showButtonNextQuestion';
+import showCurrentWordInfo from './showCurrentWordInfo/showCurrentWordInfo';
 
 export default function addEventsForChoiceButtons(currentWord: string) {
   const buttonsChoice = document.querySelectorAll('.btn-choice-of-answer');
@@ -15,7 +16,8 @@ export default function addEventsForChoiceButtons(currentWord: string) {
         (target as HTMLElement).classList.remove('btn-light');
         (target as HTMLElement).classList.add('btn-danger');
       }
-      showButtonNextQuestion();
+      // showButtonNextQuestion();
+      showCurrentWordInfo();
     });
   });
 }

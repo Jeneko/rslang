@@ -17,3 +17,8 @@ export async function getWord(id: number): Promise<Word> {
 
   return result;
 }
+
+export async function getImage(path: string) {
+  const url = `${SOURCE}/${path}`;
+  return url;
+}

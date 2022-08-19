@@ -1,6 +1,6 @@
 const SOURCE = 'https://team51-learnwords.herokuapp.com';
 
-export default async function playAudio(e: Event, fileName: string) {
+export default async function playAudio(e: Event | null, fileName: string) {
   const url = `${SOURCE}/${fileName}`;
   const audio = new AudioContext();
   const response = await fetch(url);

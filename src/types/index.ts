@@ -1,5 +1,6 @@
 export type State = {
   page: PageName;
+  indexWord: number;
   // TODO: add other state data we may need (like paginations and stuff)
 };
 

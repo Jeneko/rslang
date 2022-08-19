@@ -5,6 +5,7 @@ const STATE_NAME = `state${SALT}`;
 
 const DEFAULT_STATE: State = {
   page: PageName.main,
+  indexWord: 0,
   // TODO: add other states data we may need (like paginations and stuff)
 };
 

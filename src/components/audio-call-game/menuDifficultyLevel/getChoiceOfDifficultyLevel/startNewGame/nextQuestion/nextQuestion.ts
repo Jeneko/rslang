@@ -2,20 +2,31 @@ import { Word } from '../../../../../../types/index';
 import addEventsForAudioButton from '../addEventsForAudioButton/addEventsForAudioButton';
 import getRandomWords from '../generateWindowGame/getRandomWords/getRandomWords';
 import addEventsForChoiceButtons from '../addEventsForChoiceButtons/addEventsForChoiceButtons';
+import playAudio from '../playAudio/playAudio';
+import { getImage } from '../../../../../../API/index';
 
 export default async function nextQuestion(currentWord: Word, arrayWords: Word[], numberPage: number) {
-  const windowGame = document.createElement('div');
+  const windowGame = document.querySelector('.game-window');
   console.log(numberPage);
   const {
-    audio, word,
+    audio, word, image, transcription, wordTranslate,
   } = currentWord;
+  const imageResponse = await getImage(image);
+  console.log(imageResponse);
   const listRandomWords = getRandomWords(word, arrayWords);
   console.log(listRandomWords);
-  windowGame.innerHTML = `
+  (windowGame as HTMLElement).innerHTML = `
     <div class="container text-center">
       <div class="row">
         <div class="col current-word">
-        <button id="playAudio" type="button" class="btn btn-dark">Audio</button>
+          <button id="playAudio" type="button" class="btn btn-dark">Audio</button>
+          <div class="card current-word-info current-word-info--hidden" style="width: 18rem;">
+            <img src="${imageResponse}" class="card-img-top" alt="Word">
+            <div class="card-body">
+              <p class="card-text">${word}, (${transcription}), ${wordTranslate}</p>
+            </div>
+          </div>
+          </div>
         </div>
       </div>
       <div class="row">
@@ -36,9 +47,7 @@ export default async function nextQuestion(currentWord: Word, arrayWords: Word[]
       </div>
     </div>
   `;
-  console.log(windowGame);
-  windowGame.classList.add('game-window', 'game-window--hidden');
-  document.body.append(windowGame);
+  playAudio(null, audio);
   const buttonAudio = document.getElementById('playAudio');
   addEventsForAudioButton(buttonAudio as HTMLElement, audio);
   addEventsForChoiceButtons(word);
