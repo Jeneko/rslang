@@ -7,7 +7,7 @@ export enum PageName {
   main = 'main',
   audioCall = 'audio-call',
   sprint = 'sprint',
-  dictionary = 'dictionary',
+  studyBook = 'study-book',
   stats = 'stats',
   team = 'team',
   // TODO: add other pages if needed

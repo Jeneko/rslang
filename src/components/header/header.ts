@@ -31,7 +31,7 @@ export default function getHeader(): HTMLElement {
               <a class="nav-link load-page-link" href="#main">Main</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#dictionary">Dictionary</a>
+              <a class="nav-link" href="#study-book">Study Book</a>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
