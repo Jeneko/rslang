@@ -3,6 +3,7 @@ import { PageName } from 'types/index';
 import getHeader from 'components/header/header';
 import getMainPage from 'components/main-page/main-page';
 import getSprintPage from 'components/sprint-page/sprint-page';
+import getStudyBookPage from 'components/study-book-page/study-book-page';
 import getAudioCallPage from 'components/audio-call-page/audio-call-page';
 
 async function loadPage(): Promise<void> {
@@ -15,6 +16,9 @@ async function loadPage(): Promise<void> {
   switch (curPage) {
     case PageName.main:
       document.body.append(getMainPage());
+      break;
+    case PageName.studyBook:
+      document.body.append(await getStudyBookPage());
       break;
     case PageName.audioCall:
       document.body.append(await getAudioCallPage());
