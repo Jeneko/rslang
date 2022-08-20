@@ -12,7 +12,7 @@ export const renderModal = () => `
     <button class="btn btn-lvl" id="level-2">3</button>
     <button class="btn btn-lvl" id="level-3">4</button>
     <button class="btn btn-lvl" id="level-4">5</button>
-    <button class ="btn btn-lvl" id="level-5">6</button>
+    <button class="btn btn-lvl" id="level-5">6</button>
   </div>
 </div>
 `;
