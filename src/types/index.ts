@@ -18,6 +18,7 @@ export enum PageName {
 
 export enum Endpoints {
   words = 'words',
+  users = 'users',
   // TODO: add other endpoints
 }
 
