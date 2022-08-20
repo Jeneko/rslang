@@ -13,14 +13,20 @@ export default function getRegisterForm(): HTMLElement {
 
   elem.innerHTML = `
     <div class="mb-3">
-      <label for="register-form-email" class="form-label">Email address</label>
-      <input type="email" class="form-control" id="register-form-email" aria-describedby="emailHelp">
+      <label for="register-form-email" class="form-label">
+        Email address
+        <span class="register-form-asterisk" title="Required field">*<span>
+      </label>
+      <input type="email" class="form-control" id="register-form-email" aria-describedby="emailHelp" required>
       <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
     </div>
     <div class="mb-3">
-      <label for="register-form-password" class="form-label">Password</label>
-      <input type="password" class="form-control" id="register-form-password" aria-describedby="passHelp">
-      <div id="passHelp" class="form-text">Password must be 8 symbols long minimum.</div>
+      <label for="register-form-password" class="form-label">
+        Password
+        <span class="register-form-asterisk" title="Required field">*<span>
+      </label>
+      <input type="password" pattern=".{8,}" class="form-control" id="register-form-password" aria-describedby="passHelp" title="8 characters minimum" required>
+      <div id="passHelp" class="form-text">Password must be 8 characters minimum.</div>
     </div>
     <button type="submit" class="btn btn-primary">Register / Login</button>
   `;
