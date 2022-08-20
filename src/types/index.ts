@@ -22,6 +22,17 @@ export enum Endpoints {
   // TODO: add other endpoints
 }
 
+export enum AlertType {
+  primary = 'primary',
+  secondary = 'secondary',
+  success = 'success',
+  danger = 'danger',
+  warning = 'warning',
+  info = 'info',
+  light = 'light',
+  dark = 'dark',
+}
+
 export interface Word {
   id: string;
   group: number;
