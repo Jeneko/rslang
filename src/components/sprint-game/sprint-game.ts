@@ -26,7 +26,7 @@ export const sprintHandler = (elem: HTMLElement) => {
   let words: Word[];
   let randomWords: CurrentWord;
 
-  elem?.addEventListener('click', async (event: MouseEvent) => {
+  elem.addEventListener('click', async (event: MouseEvent) => {
     const { classList } = event.target as Element;
     const gameWindow = document.querySelector('.sprint') as HTMLElement;
 
@@ -52,8 +52,28 @@ export const sprintHandler = (elem: HTMLElement) => {
       randomWords = chooseWords(words);
       updateGame(randomWords);
     }
-    if (classList.contains('close-results')) {
+    if (classList.contains('results__close-button')) {
       (document.querySelector('.sprint-game') as HTMLElement).innerHTML = renderModal();
+    }
+  });
+
+  document.addEventListener('keyup', (event: KeyboardEvent) => {
+    const chooseBtn = document.querySelector('.chooseBtn') as HTMLButtonElement;
+    if (chooseBtn) {
+      if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        isCurrentTranslate(randomWords);
+        words = deleteShownWord(words, randomWords.word);
+        randomWords = chooseWords(words);
+        updateGame(randomWords);
+      }
+      if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        isNotCurrentTranslate(randomWords);
+        words = deleteShownWord(words, randomWords.word);
+        randomWords = chooseWords(words);
+        updateGame(randomWords);
+      }
     }
   });
 };
