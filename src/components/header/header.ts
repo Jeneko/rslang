@@ -49,7 +49,10 @@ export default function getHeader(): HTMLElement {
               <a class="nav-link" href="#team">Our Team</a>
             </li>
           </ul>
-          <a href="#register" class="btn btn-sm btn-outline-secondary load-page-link">Register / Login</a>
+          <div class="btn-group">
+            <a href="#register" class="btn btn-warning load-page-link">Register</a>
+            <a href="#login" class="btn btn-primary">Login</a>
+          </div>
         </div>
       </div>
     </nav>

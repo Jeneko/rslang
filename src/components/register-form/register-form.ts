@@ -13,11 +13,18 @@ export default function getRegisterForm(): HTMLElement {
 
   elem.innerHTML = `
     <div class="mb-3">
+      <label for="register-form-name" class="form-label">
+        User name
+        <span class="register-form-asterisk" title="Required field">*<span>
+      </label>
+      <input name="name" type="text" class="form-control" id="register-form-name" required>
+    </div>
+    <div class="mb-3">
       <label for="register-form-email" class="form-label">
         Email address
         <span class="register-form-asterisk" title="Required field">*<span>
       </label>
-      <input type="email" class="form-control" id="register-form-email" aria-describedby="emailHelp" required>
+      <input name="email" type="email" class="form-control" id="register-form-email" aria-describedby="emailHelp" required>
       <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
     </div>
     <div class="mb-3">
@@ -25,10 +32,10 @@ export default function getRegisterForm(): HTMLElement {
         Password
         <span class="register-form-asterisk" title="Required field">*<span>
       </label>
-      <input type="password" pattern=".{8,}" class="form-control" id="register-form-password" aria-describedby="passHelp" title="8 characters minimum" required>
+      <input name="password" type="password" pattern=".{8,}" class="form-control" id="register-form-password" aria-describedby="passHelp" title="8 characters minimum" required>
       <div id="passHelp" class="form-text">Password must be 8 characters minimum.</div>
     </div>
-    <button type="submit" class="btn btn-primary">Register / Login</button>
+    <button type="submit" class="btn btn-primary">Register</button>
   `;
 
   eventHandler(elem);
