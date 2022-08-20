@@ -31,9 +31,6 @@ function updateBtnAudioNum(audioBtn: HTMLButtonElement): void {
   const newAudioNum = curAudioNum >= 3 ? '1' : `${curAudioNum + 1}`;
 
   audioBtn.dataset.audio = newAudioNum;
-
-  const numOnButton = audioBtn.querySelector('.btn-audio__num') as HTMLElement;
-  numOnButton.innerText = newAudioNum;
 }
 
 function handleEvents(elem: HTMLElement): void {
