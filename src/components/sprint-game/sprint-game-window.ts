@@ -1,64 +1,27 @@
 import { Word } from 'types/index';
+import { Answers, CurrentWord } from './types';
 
 export const points = {
   earnedPoints: 0,
   rewordPoints: 10,
 };
 
-const currentWord: CurrentWord = {
-  word: {
-    id: '',
-    group: 0,
-    page: 0,
-    word: '',
-    image: '',
-    audio: '',
-    audioMeaning: '',
-    audioExample: '',
-    textMeaning: '',
-    textExample: '',
-    transcription: '',
-    wordTranslate: '',
-    textMeaningTranslate: '',
-    textExampleTranslate: '',
-  },
-  random: {
-    id: '',
-    group: 0,
-    page: 0,
-    word: '',
-    image: '',
-    audio: '',
-    audioMeaning: '',
-    audioExample: '',
-    textMeaning: '',
-    textExample: '',
-    transcription: '',
-    wordTranslate: '',
-    textMeaningTranslate: '',
-    textExampleTranslate: '',
-  },
+export const answers: Answers = {
+  rightAnswers: [],
+  wrongAnswers: [],
 };
 
-type CurrentWord = {
-  word: Word;
-  random: Word;
-};
-
-export const rightAnswers: Word[] = [];
-export const wrongAnswers: Word[] = [];
-
-export const renderGame = () => `
+export const renderGame = (randomWords: CurrentWord) => `
   <div class="points">
     <p class="earned-points">${points.earnedPoints}</p>
     <p class="reword-points">+${points.rewordPoints}</p>
   </div>
   <div class="choose-words">
-    <p class="english-word">${currentWord.word.word}</p>
-    <p class="russian-word">${currentWord.random.wordTranslate}</p>
+    <p class="english-word">${randomWords.word.word}</p>
+    <p class="russian-word">${randomWords.random.wordTranslate}</p>
     <div class="choose-buttons">
-      <button class="btn btn-true">True</button>
-      <button class="btn btn-false">False</button>
+      <button class="btn chooseBtn btn-true">True</button>
+      <button class="btn chooseBtn btn-false">False</button>
     </div>
   </div>
   <div class="timer"><span class="time"></span></div>
@@ -68,46 +31,63 @@ export const chooseWords = (words: Word[]) => {
   const firstWord = words[randomNumber(words.length - 1)];
   const secondWord = words[randomNumber(words.length - 1)];
   const random = [firstWord, secondWord];
-  currentWord.word = firstWord;
-  currentWord.random = random[Math.round(Math.random())];
+  return {
+    word: firstWord,
+    random: random[Math.round(Math.random())],
+  };
 };
 
 const randomNumber = (max: number) => Math.floor(Math.random() * max);
 
-export const isCurrentTranslate = () => {
-  if (currentWord.word === currentWord.random) {
+export const deleteShownWord = (words: Word[], shownWord: Word) => words.filter((word) => word !== shownWord);
+
+export const isCurrentTranslate = (randomWords: CurrentWord) => {
+  if (randomWords.word === randomWords.random) {
     points.earnedPoints += points.rewordPoints;
-    rightAnswers.push(currentWord.word);
+    answers.rightAnswers.push(randomWords.word);
+  } else {
+    answers.wrongAnswers.push(randomWords.word);
   }
 };
 
-export const isNotCurrentTranslate = () => {
-  if (currentWord.word !== currentWord.random) {
+export const isNotCurrentTranslate = (randomWords: CurrentWord) => {
+  if (randomWords.word !== randomWords.random) {
     points.earnedPoints += points.rewordPoints;
-    wrongAnswers.push(currentWord.word);
+    answers.rightAnswers.push(randomWords.word);
+  } else {
+    answers.wrongAnswers.push(randomWords.word);
   }
+};
+
+export const updateGame = (randomWords: CurrentWord) => {
+  (document.querySelector('.earned-points') as HTMLElement).innerHTML = points.earnedPoints.toString();
+  (document.querySelector('.english-word') as HTMLElement).innerHTML = randomWords.word.word;
+  (document.querySelector('.russian-word') as HTMLElement).innerHTML = randomWords.random.wordTranslate;
 };
 
 const modalResults = () => `
 <div class="results">
-  <h3>${points} points</h3>
+  <h3>${points.earnedPoints} points</h3>
   <h5>Right answers:</h5>
   <ol>
-     ${rightAnswers.map((word) => `<li>${word.word} - ${word.wordTranslate}</li>`).join('')}
+     ${answers.rightAnswers.map((word) => `<li>${word.word} - ${word.wordTranslate}</li>`).join('')}
   </ol>
   <h5>Wrong answers:</h5>
   <ol>
-     ${wrongAnswers.map((word) => `<li>${word.word} - ${word.wordTranslate}</li>`).join('')}
+     ${answers.wrongAnswers.map((word) => `<li>${word.word} - ${word.wordTranslate}</li>`).join('')}
   </ol>
+  <button class="close-results">X</button>
 </div>
+
 `;
 
-export const timer = (gameWindow: HTMLElement) => {
-  let seconds: number = 60;
+let seconds: number = 60;
+export const timer = () => {
   (document.querySelector('.time') as HTMLElement).innerHTML = seconds.toString();
   seconds -= 1;
   if (seconds <= 0) {
-    gameWindow.innerHTML = modalResults();
+    (document.querySelector('.sprint') as HTMLElement).innerHTML = modalResults();
+    seconds = 60;
   } else {
     setTimeout(timer, 1000);
   }

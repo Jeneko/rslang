@@ -1,24 +1,17 @@
 import { Word } from 'types/index';
 import { renderModal, generateWords } from './modal-lvl';
 import {
-  chooseWords, isCurrentTranslate, isNotCurrentTranslate, renderGame, timer,
+  answers,
+  chooseWords,
+  deleteShownWord,
+  isCurrentTranslate,
+  isNotCurrentTranslate,
+  points,
+  renderGame,
+  timer,
+  updateGame,
 } from './sprint-game-window';
-
-// Dummy function content (to be replaced)
-// export default async function getSprintGame(): Promise<HTMLElement> {
-//   const words = await getWords(0, 0);
-//   const elem = document.createElement('div');
-//   elem.className = 'sprint-game';
-
-//   elem.innerHTML = `
-//     <h2>Sprint mini-game</h2>
-//     <pre>
-//       ${JSON.stringify(words, null, 2)}
-//     </pre>
-//   `;
-
-//   return elem;
-// }
+import { CurrentWord } from './types';
 
 export default function getSprintGame() {
   const elem = document.createElement('div');
@@ -30,6 +23,7 @@ export default function getSprintGame() {
 
 export const sprintHandler = (elem: HTMLElement) => {
   let words: Word[];
+  let randomWords: CurrentWord;
   elem?.addEventListener('click', async (event: MouseEvent) => {
     const { classList } = event.target as Element;
     const gameWindow = document.querySelector('.sprint') as HTMLElement;
@@ -37,19 +31,25 @@ export const sprintHandler = (elem: HTMLElement) => {
       const { id } = event.target as HTMLButtonElement;
       const lvl = Number(id.split('-')[1]);
       words = await generateWords(lvl);
-      chooseWords(words);
-      gameWindow.innerHTML = renderGame();
-      timer(gameWindow);
+      randomWords = chooseWords(words);
+      gameWindow.innerHTML = renderGame(randomWords);
+      timer();
     }
-    if (classList.contains('btn-true')) {
-      isCurrentTranslate();
-      chooseWords(words);
-      gameWindow.innerHTML = renderGame();
+    if (classList.contains('chooseBtn')) {
+      if (classList.contains('btn-true')) {
+        isCurrentTranslate(randomWords);
+      } else {
+        isNotCurrentTranslate(randomWords);
+      }
+      words = deleteShownWord(words, randomWords.word);
+      randomWords = chooseWords(words);
+      updateGame(randomWords);
     }
-    if (classList.contains('btn-false')) {
-      isNotCurrentTranslate();
-      chooseWords(words);
-      gameWindow.innerHTML = renderGame();
+    if (classList.contains('close-results')) {
+      (document.querySelector('.sprint-game') as HTMLElement).innerHTML = renderModal();
+      answers.rightAnswers = [];
+      answers.wrongAnswers = [];
+      points.earnedPoints = 0;
     }
   });
 };
