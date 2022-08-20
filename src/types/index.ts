@@ -12,6 +12,7 @@ export enum PageName {
   studyBook = 'study-book',
   stats = 'stats',
   team = 'team',
+  register = 'register',
   // TODO: add other pages if needed
 }
 

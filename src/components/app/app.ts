@@ -3,6 +3,7 @@ import { PageName } from 'types/index';
 import getHeader from 'components/header/header';
 import getMainPage from 'components/main-page/main-page';
 import getSprintPage from 'components/sprint-page/sprint-page';
+import getRegisterPage from 'components/register-page/register-page';
 import getStudyBookPage from 'components/study-book-page/study-book-page';
 import getAudioCallPage from 'components/audio-call-page/audio-call-page';
 
@@ -25,6 +26,9 @@ async function loadPage(): Promise<void> {
       break;
     case PageName.sprint:
       document.body.append(await getSprintPage());
+      break;
+    case PageName.register:
+      document.body.append(getRegisterPage());
       break;
     default:
       break;
