@@ -20,8 +20,8 @@ export const renderGame = (randomWords: CurrentWord) => `
     <p class="english-word">${randomWords.word.word}</p>
     <p class="russian-word">${randomWords.random.wordTranslate}</p>
     <div class="choose-buttons">
-      <button class="btn chooseBtn btn-true">True</button>
-      <button class="btn chooseBtn btn-false">False</button>
+      <button class="btn chooseBtn btn-primary btn-true">True</button>
+      <button class="btn chooseBtn btn-primary btn-false">False</button>
     </div>
   </div>
   <div class="timer"><span class="time"></span></div>
@@ -67,16 +67,20 @@ export const updateGame = (randomWords: CurrentWord) => {
 
 const modalResults = () => `
 <div class="results">
-  <h3>${points.earnedPoints} points</h3>
+  <h3 class="result-points">${points.earnedPoints} points</h3>
   <h5>Right answers:</h5>
-  <ol>
-     ${answers.rightAnswers.map((word) => `<li>${word.word} - ${word.wordTranslate}</li>`).join('')}
-  </ol>
+  <ul class="results__unordered-list">
+     ${answers.rightAnswers
+    .map((word) => `<li class="results__list-true">${word.word} - ${word.wordTranslate}</li>`)
+    .join('')}
+  </ul>
   <h5>Wrong answers:</h5>
-  <ol>
-     ${answers.wrongAnswers.map((word) => `<li>${word.word} - ${word.wordTranslate}</li>`).join('')}
-  </ol>
-  <button class="close-results">X</button>
+  <ul class="results__unordered-list">
+     ${answers.wrongAnswers
+    .map((word) => `<li class="results__list-false">${word.word} - ${word.wordTranslate}</li>`)
+    .join('')}
+  </ul>
+  <button class="results__close-button btn-close"></button>
 </div>
 
 `;

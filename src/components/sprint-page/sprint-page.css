@@ -1,3 +1,54 @@
-.sprint-page {
-  background-color: var(--bs-orange);
+.sprint {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.modal-lvl,
+.points,
+.choose-words,
+.timer {
+  text-align: center;
+}
+
+.modal-lvl,
+.choose-words {
+  padding: 2rem;
+  border: 1px solid var(--bs-gray-200);
+}
+
+.timer {
+  margin-top: 2rem;
+  font-size: 4rem;
+}
+
+.results {
+  position: relative;
+  padding: 2rem;
+  border: 1px solid var(--bs-gray-200);
+}
+
+.result-points {
+  color: var(--bs-pink);
+}
+
+.results__unordered-list {
+  list-style: none;
+}
+
+.results__list-true::before {
+  content: '✔';
+}
+
+.results__list-false::before {
+  content: '❌';
+}
+
+.results__close-button {
+  position: absolute;
+  top: -1.4rem;
+  right: -1.4rem;
+  border: 1px solid var(--bs-gray-200);
+  border-radius: 100%;
 }
