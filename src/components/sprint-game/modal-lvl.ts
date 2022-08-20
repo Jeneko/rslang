@@ -6,6 +6,7 @@ export const renderModal = () => `
 </h1>
 <div class="sprint">
     <div class="modal-lvl">
+    <p>From Easy to most Hard<p>
     <button class="btn btn-lvl" id="level-0">1</button>
     <button class="btn btn-lvl" id="level-1">2</button>
     <button class="btn btn-lvl" id="level-2">3</button>

@@ -6,6 +6,7 @@ import {
   deleteShownWord,
   isCurrentTranslate,
   isNotCurrentTranslate,
+  loadingBar,
   points,
   renderGame,
   timer,
@@ -24,16 +25,22 @@ export default function getSprintGame() {
 export const sprintHandler = (elem: HTMLElement) => {
   let words: Word[];
   let randomWords: CurrentWord;
+
   elem?.addEventListener('click', async (event: MouseEvent) => {
     const { classList } = event.target as Element;
     const gameWindow = document.querySelector('.sprint') as HTMLElement;
+
     if (classList.contains('btn-lvl')) {
+      gameWindow.innerHTML = loadingBar();
       const { id } = event.target as HTMLButtonElement;
       const lvl = Number(id.split('-')[1]);
       words = await generateWords(lvl);
       randomWords = chooseWords(words);
       gameWindow.innerHTML = renderGame(randomWords);
       timer();
+      answers.rightAnswers = [];
+      answers.wrongAnswers = [];
+      points.earnedPoints = 0;
     }
     if (classList.contains('chooseBtn')) {
       if (classList.contains('btn-true')) {
@@ -47,9 +54,6 @@ export const sprintHandler = (elem: HTMLElement) => {
     }
     if (classList.contains('close-results')) {
       (document.querySelector('.sprint-game') as HTMLElement).innerHTML = renderModal();
-      answers.rightAnswers = [];
-      answers.wrongAnswers = [];
-      points.earnedPoints = 0;
     }
   });
 };

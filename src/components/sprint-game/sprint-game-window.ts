@@ -92,3 +92,11 @@ export const timer = () => {
     setTimeout(timer, 1000);
   }
 };
+
+export const loadingBar = () => `
+<div class="d-flex justify-content-center">
+  <div class="spinner-border" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+`;
