@@ -2,7 +2,7 @@ import { Word } from 'types/index';
 import { sprintState } from './sprint-state';
 import { CurrentWord } from './types';
 
-export const renderGame = (randomWords: CurrentWord) => `
+export const renderGame = (randomWords: CurrentWord): string => `
   <div class="points">
     <p class="earned-points">${sprintState.earnedPoints}</p>
     <p class="reword-points">+${sprintState.rewordPoints}</p>
@@ -18,7 +18,7 @@ export const renderGame = (randomWords: CurrentWord) => `
   <div class="timer"><span class="time"></span></div>
 `;
 
-export const loadingBar = () => `
+export const loadingBar = `
 <div class="d-flex justify-content-center">
   <div class="spinner-border" role="status">
     <span class="visually-hidden">Loading...</span>
@@ -26,7 +26,7 @@ export const loadingBar = () => `
 </div>
 `;
 
-export const chooseWords = (words: Word[]) => {
+export const chooseWords = (words: Word[]): CurrentWord => {
   const firstWord = words[randomNumber(words.length - 1)];
   const secondWord = words[randomNumber(words.length - 1)];
   const random = [firstWord, secondWord];
@@ -36,12 +36,12 @@ export const chooseWords = (words: Word[]) => {
   };
 };
 
-const randomNumber = (max: number) => Math.floor(Math.random() * max);
+const randomNumber = (max: number): number => Math.round(Math.random() * max);
 
-export const deleteShownWord = (words: Word[], shownWord: Word) => words.filter((word) => word !== shownWord);
+export const deleteShownWord = (words: Word[], shownWord: Word): Word[] => words.filter((word) => word !== shownWord);
 
-export const isCurrentTranslate = (randomWords: CurrentWord) => {
-  if (randomWords.word === randomWords.random) {
+export const isCurrentTranslate = (randomWords: CurrentWord, depend: boolean): void => {
+  if (depend) {
     sprintState.earnedPoints += sprintState.rewordPoints;
     sprintState.rightAnswers.push(randomWords.word);
   } else {
@@ -49,22 +49,13 @@ export const isCurrentTranslate = (randomWords: CurrentWord) => {
   }
 };
 
-export const isNotCurrentTranslate = (randomWords: CurrentWord) => {
-  if (randomWords.word !== randomWords.random) {
-    sprintState.earnedPoints += sprintState.rewordPoints;
-    sprintState.rightAnswers.push(randomWords.word);
-  } else {
-    sprintState.wrongAnswers.push(randomWords.word);
-  }
+export const updateGame = (randomWords: CurrentWord, elem: HTMLElement): void => {
+  (elem.querySelector('.earned-points') as HTMLElement).innerHTML = sprintState.earnedPoints.toString();
+  (elem.querySelector('.english-word') as HTMLElement).innerHTML = randomWords.word.word;
+  (elem.querySelector('.russian-word') as HTMLElement).innerHTML = randomWords.random.wordTranslate;
 };
 
-export const updateGame = (randomWords: CurrentWord) => {
-  (document.querySelector('.earned-points') as HTMLElement).innerHTML = sprintState.earnedPoints.toString();
-  (document.querySelector('.english-word') as HTMLElement).innerHTML = randomWords.word.word;
-  (document.querySelector('.russian-word') as HTMLElement).innerHTML = randomWords.random.wordTranslate;
-};
-
-const modalResults = () => `
+const modalResults = (): string => `
 <div class="results">
   <h3 class="result-points">${sprintState.earnedPoints} points</h3>
   <h5>Right answers:</h5>
@@ -84,7 +75,7 @@ const modalResults = () => `
 
 `;
 
-export const timer = () => {
+export const timer = (): void => {
   (document.querySelector('.time') as HTMLElement).innerHTML = sprintState.seconds.toString();
   sprintState.seconds -= 1;
   if (sprintState.seconds <= 0) {

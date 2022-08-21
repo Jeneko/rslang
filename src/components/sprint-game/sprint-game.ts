@@ -3,7 +3,6 @@ import {
   chooseWords,
   deleteShownWord,
   isCurrentTranslate,
-  isNotCurrentTranslate,
   loadingBar,
   renderGame,
   timer,
@@ -11,60 +10,62 @@ import {
 } from './sprint-game-window';
 import { sprintState, unableSprintState } from './sprint-state';
 
-export default function getSprintGame() {
+export default function getSprintGame(): HTMLDivElement {
   const elem = document.createElement('div');
   elem.className = 'sprint-game';
-  elem.innerHTML = renderModal();
+  elem.innerHTML = renderModal;
   sprintHandler(elem);
   return elem;
 }
 
-export const sprintHandler = (elem: HTMLElement) => {
+export const sprintHandler = (elem: HTMLElement): void => {
   elem.addEventListener('click', async (event: MouseEvent) => {
     const { classList } = event.target as Element;
-    const gameWindow = document.querySelector('.sprint') as HTMLElement;
+    const gameWindow = elem.querySelector('.sprint') as HTMLElement;
 
     if (classList.contains('btn-lvl')) {
-      gameWindow.innerHTML = loadingBar();
-      const { id } = event.target as HTMLButtonElement;
-      const lvl = Number(id.split('-')[1]);
-      sprintState.words = await generateWords(lvl);
+      gameWindow.innerHTML = loadingBar;
+      const target = event.target as HTMLElement;
+      const { lvl } = target.dataset;
+      sprintState.words = await generateWords(Number(lvl));
       unableSprintState();
       sprintState.randomWords = chooseWords(sprintState.words);
       gameWindow.innerHTML = renderGame(sprintState.randomWords);
       timer();
+      const chooseBtn = elem.querySelector('.chooseBtn') as HTMLButtonElement;
+      chooseBtn.focus();
     }
     if (classList.contains('chooseBtn')) {
       if (classList.contains('btn-true')) {
-        isCurrentTranslate(sprintState.randomWords);
+        isCurrentTranslate(sprintState.randomWords, sprintState.randomWords.word === sprintState.randomWords.random);
       } else {
-        isNotCurrentTranslate(sprintState.randomWords);
+        isCurrentTranslate(sprintState.randomWords, sprintState.randomWords.word !== sprintState.randomWords.random);
       }
       sprintState.words = deleteShownWord(sprintState.words, sprintState.randomWords.word);
       sprintState.randomWords = chooseWords(sprintState.words);
-      updateGame(sprintState.randomWords);
+      updateGame(sprintState.randomWords, elem);
     }
     if (classList.contains('results__close-button')) {
-      (document.querySelector('.sprint-game') as HTMLElement).innerHTML = renderModal();
+      elem.innerHTML = renderModal;
     }
   });
 
-  document.addEventListener('keyup', (event: KeyboardEvent) => {
-    const chooseBtn = document.querySelector('.chooseBtn') as HTMLButtonElement;
+  elem.addEventListener('keyup', (event: KeyboardEvent) => {
+    const chooseBtn = elem.querySelector('.chooseBtn') as HTMLButtonElement;
     if (chooseBtn) {
       if (event.key === 'ArrowLeft') {
         event.preventDefault();
-        isCurrentTranslate(sprintState.randomWords);
+        isCurrentTranslate(sprintState.randomWords, sprintState.randomWords.word === sprintState.randomWords.random);
         sprintState.words = deleteShownWord(sprintState.words, sprintState.randomWords.word);
         sprintState.randomWords = chooseWords(sprintState.words);
-        updateGame(sprintState.randomWords);
+        updateGame(sprintState.randomWords, elem);
       }
       if (event.key === 'ArrowRight') {
         event.preventDefault();
-        isNotCurrentTranslate(sprintState.randomWords);
+        isCurrentTranslate(sprintState.randomWords, sprintState.randomWords.word !== sprintState.randomWords.random);
         sprintState.words = deleteShownWord(sprintState.words, sprintState.randomWords.word);
         sprintState.randomWords = chooseWords(sprintState.words);
-        updateGame(sprintState.randomWords);
+        updateGame(sprintState.randomWords, elem);
       }
     }
   });
