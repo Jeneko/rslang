@@ -1,6 +1,6 @@
-import { AlertType } from 'types/index';
+import { AlertType, ResponseError } from 'types/index';
 
-export default function getAlertMessage(type: AlertType, message: string): HTMLElement {
+export function getAlertMessage(type: AlertType, message: string): HTMLElement {
   const elem = document.createElement('div');
   elem.className = `alert alert-dismissible alert-${type}`;
   elem.innerHTML = `
@@ -9,4 +9,19 @@ export default function getAlertMessage(type: AlertType, message: string): HTMLE
   `;
 
   return elem;
+}
+
+export function outputAlert(elem: HTMLElement, type: AlertType, message: string): void {
+  elem.prepend(getAlertMessage(type, message));
+}
+
+export function outputResponseErrors(elem: HTMLElement, result: ResponseError): void {
+  result.errors.forEach((error) => {
+    outputAlert(elem, AlertType.danger, `Error: ${error.message}`);
+  });
+}
+
+export function clearAlerts(elem: HTMLElement): void {
+  const alerts = elem.querySelectorAll('.alert');
+  alerts.forEach((alert) => alert.remove());
 }

@@ -50,6 +50,12 @@ export interface Word {
   textExampleTranslate: string;
 }
 
+
+export interface ResponseError {
+  errors: Error[];
+  status: 'failed';
+}
+
 export interface Auth {
   message: string;
   token: string;
