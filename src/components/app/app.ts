@@ -42,6 +42,8 @@ async function loadPage(): Promise<void> {
 function handleEvents(): void {
   // Load page
   document.addEventListener('loadPage', loadPage);
+  // Auth update
+  document.addEventListener('authUpdate', loadPage);
 }
 
 export default function startApp(): void {
