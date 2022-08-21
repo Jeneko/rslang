@@ -1,18 +1,15 @@
-import { Word } from 'types/index';
 import { renderModal, generateWords } from './modal-lvl';
 import {
-  answers,
   chooseWords,
   deleteShownWord,
   isCurrentTranslate,
   isNotCurrentTranslate,
   loadingBar,
-  points,
   renderGame,
   timer,
   updateGame,
 } from './sprint-game-window';
-import { CurrentWord } from './types';
+import { sprintState, unableSprintState } from './sprint-state';
 
 export default function getSprintGame() {
   const elem = document.createElement('div');
@@ -23,9 +20,6 @@ export default function getSprintGame() {
 }
 
 export const sprintHandler = (elem: HTMLElement) => {
-  let words: Word[];
-  let randomWords: CurrentWord;
-
   elem.addEventListener('click', async (event: MouseEvent) => {
     const { classList } = event.target as Element;
     const gameWindow = document.querySelector('.sprint') as HTMLElement;
@@ -34,23 +28,21 @@ export const sprintHandler = (elem: HTMLElement) => {
       gameWindow.innerHTML = loadingBar();
       const { id } = event.target as HTMLButtonElement;
       const lvl = Number(id.split('-')[1]);
-      words = await generateWords(lvl);
-      randomWords = chooseWords(words);
-      gameWindow.innerHTML = renderGame(randomWords);
+      sprintState.words = await generateWords(lvl);
+      unableSprintState();
+      sprintState.randomWords = chooseWords(sprintState.words);
+      gameWindow.innerHTML = renderGame(sprintState.randomWords);
       timer();
-      answers.rightAnswers = [];
-      answers.wrongAnswers = [];
-      points.earnedPoints = 0;
     }
     if (classList.contains('chooseBtn')) {
       if (classList.contains('btn-true')) {
-        isCurrentTranslate(randomWords);
+        isCurrentTranslate(sprintState.randomWords);
       } else {
-        isNotCurrentTranslate(randomWords);
+        isNotCurrentTranslate(sprintState.randomWords);
       }
-      words = deleteShownWord(words, randomWords.word);
-      randomWords = chooseWords(words);
-      updateGame(randomWords);
+      sprintState.words = deleteShownWord(sprintState.words, sprintState.randomWords.word);
+      sprintState.randomWords = chooseWords(sprintState.words);
+      updateGame(sprintState.randomWords);
     }
     if (classList.contains('results__close-button')) {
       (document.querySelector('.sprint-game') as HTMLElement).innerHTML = renderModal();
@@ -62,17 +54,17 @@ export const sprintHandler = (elem: HTMLElement) => {
     if (chooseBtn) {
       if (event.key === 'ArrowLeft') {
         event.preventDefault();
-        isCurrentTranslate(randomWords);
-        words = deleteShownWord(words, randomWords.word);
-        randomWords = chooseWords(words);
-        updateGame(randomWords);
+        isCurrentTranslate(sprintState.randomWords);
+        sprintState.words = deleteShownWord(sprintState.words, sprintState.randomWords.word);
+        sprintState.randomWords = chooseWords(sprintState.words);
+        updateGame(sprintState.randomWords);
       }
       if (event.key === 'ArrowRight') {
         event.preventDefault();
-        isNotCurrentTranslate(randomWords);
-        words = deleteShownWord(words, randomWords.word);
-        randomWords = chooseWords(words);
-        updateGame(randomWords);
+        isNotCurrentTranslate(sprintState.randomWords);
+        sprintState.words = deleteShownWord(sprintState.words, sprintState.randomWords.word);
+        sprintState.randomWords = chooseWords(sprintState.words);
+        updateGame(sprintState.randomWords);
       }
     }
   });

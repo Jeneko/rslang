@@ -5,7 +5,12 @@ export type CurrentWord = {
   random: Word;
 };
 
-export type Answers = {
+export type SprintState = {
+  earnedPoints: number;
+  rewordPoints: number;
   rightAnswers: Word[];
   wrongAnswers: Word[];
+  words: Word[];
+  randomWords: CurrentWord;
+  seconds: number;
 };

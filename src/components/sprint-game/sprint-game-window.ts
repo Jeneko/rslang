@@ -1,20 +1,11 @@
 import { Word } from 'types/index';
-import { Answers, CurrentWord } from './types';
-
-export const points = {
-  earnedPoints: 0,
-  rewordPoints: 10,
-};
-
-export const answers: Answers = {
-  rightAnswers: [],
-  wrongAnswers: [],
-};
+import { sprintState } from './sprint-state';
+import { CurrentWord } from './types';
 
 export const renderGame = (randomWords: CurrentWord) => `
   <div class="points">
-    <p class="earned-points">${points.earnedPoints}</p>
-    <p class="reword-points">+${points.rewordPoints}</p>
+    <p class="earned-points">${sprintState.earnedPoints}</p>
+    <p class="reword-points">+${sprintState.rewordPoints}</p>
   </div>
   <div class="choose-words">
     <p class="english-word">${randomWords.word.word}</p>
@@ -25,6 +16,14 @@ export const renderGame = (randomWords: CurrentWord) => `
     </div>
   </div>
   <div class="timer"><span class="time"></span></div>
+`;
+
+export const loadingBar = () => `
+<div class="d-flex justify-content-center">
+  <div class="spinner-border" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
 `;
 
 export const chooseWords = (words: Word[]) => {
@@ -43,40 +42,40 @@ export const deleteShownWord = (words: Word[], shownWord: Word) => words.filter(
 
 export const isCurrentTranslate = (randomWords: CurrentWord) => {
   if (randomWords.word === randomWords.random) {
-    points.earnedPoints += points.rewordPoints;
-    answers.rightAnswers.push(randomWords.word);
+    sprintState.earnedPoints += sprintState.rewordPoints;
+    sprintState.rightAnswers.push(randomWords.word);
   } else {
-    answers.wrongAnswers.push(randomWords.word);
+    sprintState.wrongAnswers.push(randomWords.word);
   }
 };
 
 export const isNotCurrentTranslate = (randomWords: CurrentWord) => {
   if (randomWords.word !== randomWords.random) {
-    points.earnedPoints += points.rewordPoints;
-    answers.rightAnswers.push(randomWords.word);
+    sprintState.earnedPoints += sprintState.rewordPoints;
+    sprintState.rightAnswers.push(randomWords.word);
   } else {
-    answers.wrongAnswers.push(randomWords.word);
+    sprintState.wrongAnswers.push(randomWords.word);
   }
 };
 
 export const updateGame = (randomWords: CurrentWord) => {
-  (document.querySelector('.earned-points') as HTMLElement).innerHTML = points.earnedPoints.toString();
+  (document.querySelector('.earned-points') as HTMLElement).innerHTML = sprintState.earnedPoints.toString();
   (document.querySelector('.english-word') as HTMLElement).innerHTML = randomWords.word.word;
   (document.querySelector('.russian-word') as HTMLElement).innerHTML = randomWords.random.wordTranslate;
 };
 
 const modalResults = () => `
 <div class="results">
-  <h3 class="result-points">${points.earnedPoints} points</h3>
+  <h3 class="result-points">${sprintState.earnedPoints} points</h3>
   <h5>Right answers:</h5>
   <ul class="results__unordered-list">
-     ${answers.rightAnswers
+     ${sprintState.rightAnswers
     .map((word) => `<li class="results__list-true">${word.word} - ${word.wordTranslate}</li>`)
     .join('')}
   </ul>
   <h5>Wrong answers:</h5>
   <ul class="results__unordered-list">
-     ${answers.wrongAnswers
+     ${sprintState.wrongAnswers
     .map((word) => `<li class="results__list-false">${word.word} - ${word.wordTranslate}</li>`)
     .join('')}
   </ul>
@@ -85,22 +84,12 @@ const modalResults = () => `
 
 `;
 
-let seconds: number = 60;
 export const timer = () => {
-  (document.querySelector('.time') as HTMLElement).innerHTML = seconds.toString();
-  seconds -= 1;
-  if (seconds <= 0) {
+  (document.querySelector('.time') as HTMLElement).innerHTML = sprintState.seconds.toString();
+  sprintState.seconds -= 1;
+  if (sprintState.seconds <= 0) {
     (document.querySelector('.sprint') as HTMLElement).innerHTML = modalResults();
-    seconds = 60;
   } else {
     setTimeout(timer, 1000);
   }
 };
-
-export const loadingBar = () => `
-<div class="d-flex justify-content-center">
-  <div class="spinner-border" role="status">
-    <span class="visually-hidden">Loading...</span>
-  </div>
-</div>
-`;
