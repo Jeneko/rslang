@@ -13,6 +13,7 @@ export enum PageName {
   stats = 'stats',
   team = 'team',
   register = 'register',
+  login = 'login',
   // TODO: add other pages if needed
 }
 

@@ -2,6 +2,7 @@ import * as state from 'utils/state';
 import { PageName } from 'types/index';
 import getHeader from 'components/header/header';
 import getMainPage from 'components/main-page/main-page';
+import getLoginPage from 'components/login-page/login-page';
 import getSprintPage from 'components/sprint-page/sprint-page';
 import getRegisterPage from 'components/register-page/register-page';
 import getStudyBookPage from 'components/study-book-page/study-book-page';
@@ -29,6 +30,9 @@ async function loadPage(): Promise<void> {
       break;
     case PageName.register:
       document.body.append(getRegisterPage());
+      break;
+    case PageName.login:
+      document.body.append(getLoginPage());
       break;
     default:
       break;
