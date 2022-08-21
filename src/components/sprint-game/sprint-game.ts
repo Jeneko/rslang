@@ -52,20 +52,16 @@ export const sprintHandler = (elem: HTMLElement): void => {
 
   elem.addEventListener('keyup', (event: KeyboardEvent) => {
     const chooseBtn = elem.querySelector('.chooseBtn') as HTMLButtonElement;
+    const leftButton = elem.querySelector('.btn-true') as HTMLButtonElement;
+    const rightButton = elem.querySelector('.btn-false') as HTMLButtonElement;
     if (chooseBtn) {
       if (event.key === 'ArrowLeft') {
         event.preventDefault();
-        isCurrentTranslate(sprintState.randomWords, sprintState.randomWords.word === sprintState.randomWords.random);
-        sprintState.words = deleteShownWord(sprintState.words, sprintState.randomWords.word);
-        sprintState.randomWords = chooseWords(sprintState.words);
-        updateGame(sprintState.randomWords, elem);
+        leftButton.click();
       }
       if (event.key === 'ArrowRight') {
         event.preventDefault();
-        isCurrentTranslate(sprintState.randomWords, sprintState.randomWords.word !== sprintState.randomWords.random);
-        sprintState.words = deleteShownWord(sprintState.words, sprintState.randomWords.word);
-        sprintState.randomWords = chooseWords(sprintState.words);
-        updateGame(sprintState.randomWords, elem);
+        rightButton.click();
       }
     }
   });

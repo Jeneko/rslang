@@ -60,13 +60,13 @@ const modalResults = (): string => `
   <h3 class="result-points">${sprintState.earnedPoints} points</h3>
   <h5>Right answers:</h5>
   <ul class="results__unordered-list">
-     ${sprintState.rightAnswers
+  ${sprintState.rightAnswers
     .map((word) => `<li class="results__list-true">${word.word} - ${word.wordTranslate}</li>`)
     .join('')}
   </ul>
   <h5>Wrong answers:</h5>
   <ul class="results__unordered-list">
-     ${sprintState.wrongAnswers
+  ${sprintState.wrongAnswers
     .map((word) => `<li class="results__list-false">${word.word} - ${word.wordTranslate}</li>`)
     .join('')}
   </ul>
