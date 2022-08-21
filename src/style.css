@@ -8,3 +8,11 @@
   padding: 1rem;
   font-weight: bolder;
 }
+
+.asterisk {
+  color: var(--bs-red);
+}
+
+.user-form {
+  margin: 2rem 0;
+}
