@@ -19,6 +19,7 @@ export enum PageName {
 export enum Endpoints {
   words = 'words',
   users = 'users',
+  signin = 'signin',
   // TODO: add other endpoints
 }
 
@@ -31,6 +32,14 @@ export enum AlertType {
   info = 'info',
   light = 'light',
   dark = 'dark',
+}
+
+export enum StatusCode {
+  ok = 200,
+  expectationFailed = 417,
+  unprocessableEntity = 422,
+  notFound = 404,
+  forbidden = 403,
 }
 
 export interface Word {
@@ -50,6 +59,11 @@ export interface Word {
   textExampleTranslate: string;
 }
 
+export interface User {
+  email: string;
+  id: string;
+  name: string;
+}
 
 export interface ResponseError {
   errors: Error[];
