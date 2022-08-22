@@ -1,0 +1,9 @@
+.mini-games-menu {
+  text-align: right;
+}
+
+@media (max-width: 575px) {
+  .mini-games-menu {
+    text-align: left;
+  }
+}

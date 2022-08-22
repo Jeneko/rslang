@@ -1,0 +1,13 @@
+.study-book-pagination {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin: 2rem 0;
+}
+
+.study-book-pagination__cur-page {
+  width: 40px;
+  text-align: center;
+  font-weight: bold;
+  color: var(--bs-pink);
+}

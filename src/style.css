@@ -1,0 +1,10 @@
+.page-heading {
+  margin: 2rem 0;
+}
+
+.page-heading__rslang {
+  color: white;
+  background-color: var(--bs-pink);
+  padding: 1rem;
+  font-weight: bolder;
+}
