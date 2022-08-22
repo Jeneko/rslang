@@ -61,7 +61,10 @@ export default function getRegisterForm(): HTMLElement {
         <input name="password" type="password" pattern=".{8,}" class="form-control" id="login-form-password" aria-describedby="passHelp" title="8 characters minimum" required>
         <div id="passHelp" class="form-text">Password must be 8 characters minimum.</div>
       </div>
-      <button type="submit" class="btn btn-primary">Login</button>
+      <button type="submit" class="btn btn-primary">
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        Login
+      </button>
     `;
   }
 
