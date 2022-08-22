@@ -15,3 +15,5 @@ export type SprintState = {
   randomWords: CurrentWord;
   seconds: number;
 };
+
+export type DeleteWord = (wordsInd: number[], shownWord: number) => number[];

@@ -8,8 +8,8 @@ export const renderGame = (randomWords: CurrentWord): string => `
     <p class="reword-points">+${sprintState.rewordPoints}</p>
   </div>
   <div class="choose-words">
-    <p class="english-word">${(findWord(sprintState.words, randomWords.word) as Word).word}</p>
-    <p class="russian-word">${(findWord(sprintState.words, randomWords.random) as Word).wordTranslate}</p>
+    <p class="english-word">${sprintState.words[randomWords.word].word}</p>
+    <p class="russian-word">${sprintState.words[randomWords.random].wordTranslate}</p>
     <div class="choose-buttons">
       <button class="btn chooseBtn btn-primary btn-true">True</button>
       <button class="btn chooseBtn btn-primary btn-false">False</button>
@@ -36,11 +36,9 @@ export const chooseWords = (words: Word[]): CurrentWord => {
   };
 };
 
-const findWord = (words: Word[], wordIndex: number): Word | undefined => words.find((_, i) => i === wordIndex);
-
 const randomNumber = (max: number): number => Math.round(Math.random() * max);
 
-export const deleteShownWord = (wordsIndexes: number[], shownWord: number): number[] => wordsIndexes.filter((index) => index !== shownWord);
+export const deleteShownWord = (wordsInd: number[], shownWord: number): number[] => wordsInd.filter((i) => i !== shownWord);
 
 export const isCurrentTranslate = (randomWords: CurrentWord, depend: boolean): void => {
   if (depend) {
@@ -53,12 +51,8 @@ export const isCurrentTranslate = (randomWords: CurrentWord, depend: boolean): v
 
 export const updateGame = (randomWords: CurrentWord, elem: HTMLElement): void => {
   (elem.querySelector('.earned-points') as HTMLElement).innerHTML = sprintState.earnedPoints.toString();
-  (elem.querySelector('.english-word') as HTMLElement).innerHTML = (
-    findWord(sprintState.words, randomWords.word) as Word
-  ).word;
-  (elem.querySelector('.russian-word') as HTMLElement).innerHTML = (
-    findWord(sprintState.words, randomWords.random) as Word
-  ).wordTranslate;
+  (elem.querySelector('.english-word') as HTMLElement).innerHTML = sprintState.words[randomWords.word].word;
+  (elem.querySelector('.russian-word') as HTMLElement).innerHTML = sprintState.words[randomWords.random].wordTranslate;
 };
 
 const modalResults = (): string => `
@@ -68,9 +62,7 @@ const modalResults = (): string => `
   <ul class="results__unordered-list">
   ${sprintState.rightAnswers
     .map(
-      (word) => `<li class="results__list-true">${(findWord(sprintState.words, word) as Word).word} - ${
-        (findWord(sprintState.words, word) as Word).wordTranslate
-      }</li>`,
+      (wordIndex) => `<li class="results__list-true">${sprintState.words[wordIndex].word} - ${sprintState.words[wordIndex].wordTranslate}</li>`,
     )
     .join('')}
   </ul>
@@ -78,9 +70,7 @@ const modalResults = (): string => `
   <ul class="results__unordered-list">
   ${sprintState.wrongAnswers
     .map(
-      (word) => `<li class="results__list-false">${(findWord(sprintState.words, word) as Word).word} - ${
-        (findWord(sprintState.words, word) as Word).wordTranslate
-      }</li>`,
+      (wordIndex) => `<li class="results__list-false">${sprintState.words[wordIndex].word} - ${sprintState.words[wordIndex].wordTranslate}</li>`,
     )
     .join('')}
   </ul>
