@@ -1,4 +1,4 @@
-export default function controlGameWindow(statusGame: boolean) {
+export default function controlGameWindow(statusGame: boolean): void {
   const gameWindow = document.querySelector('.game-window');
   const levelMenu = document.querySelector('.level-menu');
   if (statusGame) {

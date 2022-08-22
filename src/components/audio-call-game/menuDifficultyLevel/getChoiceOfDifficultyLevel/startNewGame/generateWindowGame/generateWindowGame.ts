@@ -2,20 +2,18 @@ import { Word } from '../../../../../../types/index';
 import addEventsForAudioButton from '../addEventsForAudioButton/addEventsForAudioButton';
 import getRandomWords from './getRandomWords/getRandomWords';
 import addEventsForChoiceButtons from '../addEventsForChoiceButtons/addEventsForChoiceButtons';
-import addEventsForNextQuestionButton from '../addEventsForNextQuestionButton/addEventsForNextQuestionButton';
 import playAudio from '../playAudio/playAudio';
 import { getImage } from '../../../../../../API/index';
+import { GameState } from '../game.types';
 
-export default async function generateWindowGame(currentWord: Word, arrayWords: Word[], numberPage: number) {
+export default async function generateWindowGame(currentWord: Word, arrayWords: Word[], gameState: GameState): Promise<void> {
   const windowGame = document.querySelector('.game-window');
 
   const {
     audio, word, image, transcription, wordTranslate,
   } = currentWord;
   const imageResponse = await getImage(image);
-  console.log(imageResponse);
-  const listRandomWords = getRandomWords(word, arrayWords);
-  console.log(listRandomWords);
+  const listRandomWords = getRandomWords(currentWord, arrayWords);
   (windowGame as HTMLElement).innerHTML = `
     <div class="container text-center">
       <div class="row">
@@ -31,25 +29,24 @@ export default async function generateWindowGame(currentWord: Word, arrayWords: 
       </div>
       <div class="row">
       <div class="col">
-        <button type="button" class="btn btn-light btn-choice-of-answer">${listRandomWords[0]}</button>
+        <button type="button" data-id="${listRandomWords[0][1]}" class="btn btn-light btn-choice-of-answer">${listRandomWords[0][0]}</button>
       </div>
       <div class="col">
-        <button type="button" class="btn btn-light btn-choice-of-answer">${listRandomWords[1]}</button>
+        <button type="button" data-id="${listRandomWords[1][1]}" class="btn btn-light btn-choice-of-answer">${listRandomWords[1][0]}</button>
       </div>
       <div class="col">
-        <button type="button" class="btn btn-light btn-choice-of-answer">${listRandomWords[2]}</button>
+        <button type="button" data-id="${listRandomWords[2][1]}" class="btn btn-light btn-choice-of-answer">${listRandomWords[2][0]}</button>
       </div>
       <div class="col">
-        <button type="button" class="btn btn-light btn-choice-of-answer">${listRandomWords[3]}</button>
+        <button type="button" data-id="${listRandomWords[3][1]}" class="btn btn-light btn-choice-of-answer">${listRandomWords[3][0]}</button>
       </div>
       <div class="col">
-        <button type="button" class="btn btn-light btn-choice-of-answer">${listRandomWords[4]}</button>
+        <button type="button" data-id="${listRandomWords[4][1]}" class="btn btn-light btn-choice-of-answer">${listRandomWords[4][0]}</button>
       </div>
     </div>
   `;
   playAudio(null, audio);
   const buttonAudio = document.getElementById('playAudio');
   addEventsForAudioButton(buttonAudio as HTMLElement, audio);
-  addEventsForChoiceButtons(word);
-  addEventsForNextQuestionButton(numberPage, arrayWords);
+  addEventsForChoiceButtons(word, gameState);
 }

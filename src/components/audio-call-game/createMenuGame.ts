@@ -1,4 +1,4 @@
-export default async function getAudioCallGame(): Promise<HTMLElement> {
+export default function getAudioCallGame() {
   const elem = document.createElement('div');
   elem.className = 'audio-call-game';
 
@@ -30,7 +30,7 @@ export default async function getAudioCallGame(): Promise<HTMLElement> {
     </div>
     <div class="game-window game-window--hidden"></div>
   </div>
-  <button type="button" class="btn btn-primary btn-next-question btn--hidden">Next</button>
+  
   `;
   return elem;
 }
