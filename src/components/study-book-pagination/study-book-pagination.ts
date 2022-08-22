@@ -8,16 +8,8 @@ function setBtnPaginationStatus(elem: HTMLElement): void {
   const prevBtn = elem.querySelector('.btn-pagination-prev') as HTMLButtonElement;
   const nextBtn = elem.querySelector('.btn-pagination-next') as HTMLButtonElement;
 
-  prevBtn.disabled = false;
-  nextBtn.disabled = false;
-
-  if (curPage <= 0) {
-    prevBtn.disabled = true;
-  }
-
-  if (curPage >= PAGE_LIMIT - 1) {
-    nextBtn.disabled = true;
-  }
+  prevBtn.disabled = curPage <= 0;
+  nextBtn.disabled = curPage >= PAGE_LIMIT - 1;
 }
 
 function handleEvents(elem: HTMLElement): void {
