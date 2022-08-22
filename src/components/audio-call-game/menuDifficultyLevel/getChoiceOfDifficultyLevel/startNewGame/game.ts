@@ -15,7 +15,6 @@ export default async function startNewGame(event: Event) {
   <button type="button" class="btn btn-primary btn-next-question btn--hidden">Я не знаю</button>
   `;
   const windowGameBlock = document.querySelector('.audio-call-game');
-  console.log(windowGameBlock, blockButtonNextQuestion);
   const { target } = event;
   const state: GameState = {
     correctAnswers: [],
@@ -29,7 +28,6 @@ export default async function startNewGame(event: Event) {
       const randomPage = Math.trunc(Math.random() * 30);
       updateState('indexWord', 0);
       const listWords = await getWords(+currentLevel, randomPage);
-      console.log(listWords);
       await generateWindowGame(listWords[0], listWords, state);
       windowGameBlock?.append(blockButtonNextQuestion);
       addEventsForNextQuestionButton(randomPage, listWords, state);
