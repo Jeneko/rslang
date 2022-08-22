@@ -1,16 +1,17 @@
 import { Word } from 'types/index';
 
 export type CurrentWord = {
-  word: Word;
-  random: Word;
+  word: number;
+  random: number;
 };
 
 export type SprintState = {
   earnedPoints: number;
   rewordPoints: number;
-  rightAnswers: Word[];
-  wrongAnswers: Word[];
+  rightAnswers: number[];
+  wrongAnswers: number[];
   words: Word[];
+  wordsIndexes: number[];
   randomWords: CurrentWord;
   seconds: number;
 };
