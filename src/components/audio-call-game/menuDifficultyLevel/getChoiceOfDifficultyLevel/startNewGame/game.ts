@@ -75,6 +75,7 @@ export function showGameResult(gameState: GameState) {
 export function addEventsForNextQuestionButton(numberPage: number, listWords: Word[], gameState: GameState) {
   const buttonNextQuestion = document.querySelector('.btn-next-question');
   buttonNextQuestion?.addEventListener('click', () => {
+    buttonNextQuestion.textContent = 'Я не знаю';
     const currentIndex = getState().indexWord + 1;
     updateState('indexWord', currentIndex);
     clearGameWindow();
