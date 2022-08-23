@@ -2,12 +2,12 @@ import { Word } from '../../../../../../../types/index';
 import { GetRandomWordsType } from './getRandomWords.types';
 
 export default function getRandomWords(currentWord: Word, listWords: Word[]): GetRandomWordsType[] {
-  const list: GetRandomWordsType[] = [[currentWord.word, currentWord.id]];
+  const list: GetRandomWordsType[] = [[currentWord.wordTranslate, currentWord.id]];
   while (list.length < 5) {
     const randomIndex = Math.trunc(Math.random() * 20);
-    const newWord = listWords[randomIndex].word;
+    const newWord = listWords[randomIndex].wordTranslate;
     const idWord = listWords[randomIndex].id;
-    if (newWord !== currentWord.word) {
+    if (newWord !== currentWord.wordTranslate) {
       list.push([newWord, idWord]);
     }
   }
