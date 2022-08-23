@@ -1,4 +1,4 @@
-const SOURCE = 'https://team51-learnwords.herokuapp.com';
+import { SOURCE } from 'API/index';
 
 export default async function playAudio(fileName: string): Promise<void> {
   const url = `${SOURCE}/${fileName}`;
