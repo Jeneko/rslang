@@ -13,7 +13,7 @@ export type SprintState = {
   words: Word[];
   wordsIndexes: number[];
   randomWords: CurrentWord;
-  seconds: number;
+  timer: number;
 };
 
 export type DeleteWord = (wordsInd: number[], shownWord: number) => number[];

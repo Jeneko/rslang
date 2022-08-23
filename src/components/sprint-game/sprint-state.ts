@@ -11,13 +11,13 @@ export const sprintState: SprintState = {
     word: 0,
     random: 0,
   },
-  seconds: 60,
+  timer: 60,
 };
 
-export const unableSprintState = () => {
+export const defaultSprintState = () => {
   sprintState.rightAnswers = [];
   sprintState.wrongAnswers = [];
   sprintState.earnedPoints = 0;
   sprintState.rewordPoints = 10;
-  sprintState.seconds = 60;
+  sprintState.timer = 60;
 };

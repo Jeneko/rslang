@@ -8,7 +8,7 @@ import {
   timer,
   updateGame,
 } from './sprint-game-window';
-import { sprintState, unableSprintState } from './sprint-state';
+import { sprintState, defaultSprintState } from './sprint-state';
 
 export default function getSprintGame(): HTMLDivElement {
   const elem = document.createElement('div');
@@ -29,21 +29,17 @@ export const sprintHandler = (elem: HTMLElement): void => {
       const { lvl } = target.dataset;
       sprintState.words = await generateWords(Number(lvl));
       sprintState.wordsIndexes = sprintState.words.map((_, i) => i);
-      unableSprintState();
+      defaultSprintState();
       sprintState.randomWords = chooseWords(sprintState.words);
       gameWindow.innerHTML = renderGame(sprintState.randomWords);
       timer();
     }
     if (classList.contains('chooseBtn')) {
-      if (classList.contains('btn-true')) {
-        isCurrentTranslate(sprintState.randomWords, sprintState.randomWords.word === sprintState.randomWords.random);
-      } else {
-        isCurrentTranslate(sprintState.randomWords, sprintState.randomWords.word !== sprintState.randomWords.random);
-      }
+      const isRandom = sprintState.randomWords.word === sprintState.randomWords.random;
+      isCurrentTranslate(sprintState.randomWords, classList.contains('btn-true') ? isRandom : !isRandom);
       sprintState.wordsIndexes = deleteShownWord(sprintState.wordsIndexes, sprintState.randomWords.word);
       sprintState.randomWords = chooseWords(sprintState.words);
       updateGame(sprintState.randomWords, elem);
-      console.log(sprintState.wordsIndexes);
     }
     if (classList.contains('results__close-button')) {
       elem.innerHTML = renderModal;
@@ -55,13 +51,12 @@ export const sprintHandler = (elem: HTMLElement): void => {
     const leftButton = elem.querySelector('.btn-true') as HTMLButtonElement;
     const rightButton = elem.querySelector('.btn-false') as HTMLButtonElement;
     if (chooseBtn) {
+      event.preventDefault();
       if (event.key === 'ArrowLeft') {
-        event.preventDefault();
         leftButton.blur();
         leftButton.click();
       }
       if (event.key === 'ArrowRight') {
-        event.preventDefault();
         rightButton.blur();
         rightButton.click();
       }
@@ -73,12 +68,11 @@ export const sprintHandler = (elem: HTMLElement): void => {
     const leftButton = elem.querySelector('.btn-true') as HTMLButtonElement;
     const rightButton = elem.querySelector('.btn-false') as HTMLButtonElement;
     if (chooseBtn) {
+      event.preventDefault();
       if (event.key === 'ArrowLeft') {
-        event.preventDefault();
         leftButton.focus();
       }
       if (event.key === 'ArrowRight') {
-        event.preventDefault();
         rightButton.focus();
       }
     }

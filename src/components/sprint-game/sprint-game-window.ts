@@ -80,9 +80,9 @@ const modalResults = (): string => `
 `;
 
 export const timer = (): void => {
-  (document.querySelector('.time') as HTMLElement).innerHTML = sprintState.seconds.toString();
-  sprintState.seconds -= 1;
-  if (sprintState.seconds <= 0) {
+  (document.querySelector('.time') as HTMLElement).innerHTML = sprintState.timer.toString();
+  sprintState.timer -= 1;
+  if (sprintState.timer <= 0) {
     (document.querySelector('.sprint') as HTMLElement).innerHTML = modalResults();
   } else {
     setTimeout(timer, 1000);
