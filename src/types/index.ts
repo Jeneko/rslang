@@ -16,7 +16,6 @@ export enum PageName {
 
 export enum Endpoints {
   words = 'words',
-  files = 'files',
   // TODO: add other endpoints
 }
 
