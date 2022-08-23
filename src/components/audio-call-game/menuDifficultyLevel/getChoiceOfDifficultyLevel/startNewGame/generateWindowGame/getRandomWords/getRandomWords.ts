@@ -1,8 +1,7 @@
 import { Word } from 'types/index';
-import { GetRandomWordsType } from './getRandomWords.types';
 
-export default function getRandomWords(currentWord: Word, listWords: Word[]): GetRandomWordsType[] {
-  const list: GetRandomWordsType[] = [[currentWord.wordTranslate, currentWord.id]];
+export default function getRandomWords(currentWord: Word, listWords: Word[]): [string, string][] {
+  const list: [string, string][] = [[currentWord.wordTranslate, currentWord.id]];
   const MAX_AMOUNT_ANSWERS = 5;
   const MAX_AMOUNT_WORDS_IN_PAGE = 20;
   while (list.length < MAX_AMOUNT_ANSWERS) {
