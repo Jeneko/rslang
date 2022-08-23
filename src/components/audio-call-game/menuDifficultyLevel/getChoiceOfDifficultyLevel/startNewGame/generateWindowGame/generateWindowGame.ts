@@ -1,9 +1,9 @@
+import { SOURCE } from 'API/index';
 import { Word } from '../../../../../../types/index';
 import addEventsForAudioButton from '../addEventsForAudioButton/addEventsForAudioButton';
 import getRandomWords from './getRandomWords/getRandomWords';
 import addEventsForChoiceButtons from '../addEventsForChoiceButtons/addEventsForChoiceButtons';
 import playAudio from '../playAudio/playAudio';
-import { getImage } from '../../../../../../API/index';
 import { GameState } from '../game.types';
 
 export default async function generateWindowGame(currentWord: Word, arrayWords: Word[], gameState: GameState): Promise<void> {
@@ -12,7 +12,7 @@ export default async function generateWindowGame(currentWord: Word, arrayWords: 
   const {
     audio, word, image, transcription, wordTranslate,
   } = currentWord;
-  const imageResponse = await getImage(image);
+  const imageResponse = `${SOURCE}/${image}`;
   const listRandomWords = getRandomWords(currentWord, arrayWords);
   (windowGame as HTMLElement).innerHTML = `
     <div class="container text-center">
