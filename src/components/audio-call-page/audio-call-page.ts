@@ -1,12 +1,8 @@
-import createMenuGame from 'components/audio-call-game/createMenuGame';
 import './audio-call-page.css';
-import getChoiceOfDifficultyLevel from '../audio-call-game/menuDifficultyLevel/getChoiceOfDifficultyLevel/getChoiceOfDifficultyLevel';
+import { getChoiceOfDifficultyLevel } from '../audio-call-game/menuDifficultyLevel/getChoiceOfDifficultyLevel/startNewGame/game';
 
 export default async function getAudioCallPage(): Promise<HTMLElement> {
-  const elem = document.createElement('div');
+  const elem = getChoiceOfDifficultyLevel();
   elem.className = 'audio-call-page';
-
-  elem.append(await createMenuGame());
-  await getChoiceOfDifficultyLevel(elem);
   return elem;
 }

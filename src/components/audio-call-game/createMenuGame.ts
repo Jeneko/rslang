@@ -1,4 +1,4 @@
-export default function getAudioCallGame() {
+export default function createMenuGame() {
   const elem = document.createElement('div');
   elem.className = 'audio-call-game';
 

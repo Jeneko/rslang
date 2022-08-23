@@ -4,8 +4,9 @@ import generateWindowGame from './generateWindowGame/generateWindowGame';
 import { updateState, getState } from '../../../../../utils/state';
 import { GameState } from './game.types';
 import { Word } from '../../../../../types/index';
+import createMenuGame from '../../../createMenuGame';
 
-export default async function startNewGame(event: Event) {
+export async function startNewGame(event: Event) {
   if (document.querySelector('.button-wrapper')) {
     (document.querySelector('.button-wrapper') as HTMLElement).remove();
   }
@@ -52,7 +53,14 @@ export function showGameResult(gameState: GameState) {
   </div>
   `;
   const buttonPlayAgain = modalResultGame.querySelector('.btn-play-again');
-  buttonPlayAgain?.addEventListener('click', startNewGame);
+  buttonPlayAgain?.addEventListener('click', () => {
+    const gameWindow = document.querySelector('.game-window') as HTMLElement;
+    const wrapper = document.querySelector('.wrapper') as HTMLElement;
+    wrapper.innerHTML = '';
+    gameWindow.innerHTML = '';
+    const newGame = getChoiceOfDifficultyLevel();
+    wrapper.append(newGame);
+  });
   const blockListCorrect = modalResultGame.querySelector('.list-group-correct');
   const blockListWrong = modalResultGame.querySelector('.list-group-wrong');
   const { correctAnswers, wrongAnswers } = gameState;
@@ -92,4 +100,12 @@ export function clearGameWindow() {
   while (gameWindow?.firstChild) {
     gameWindow.firstChild.remove();
   }
+}
+
+export function getChoiceOfDifficultyLevel(): HTMLElement {
+  const elem = document.createElement('div');
+  elem.append(createMenuGame());
+  const menuLevels = elem.querySelector('.btn-group');
+  menuLevels?.addEventListener('click', startNewGame);
+  return elem;
 }
