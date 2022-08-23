@@ -6,7 +6,7 @@ import { GameState } from './game.types';
 import { Word } from '../../../../../types/index';
 import createMenuGame from '../../../createMenuGame';
 
-export async function startNewGame(event: Event) {
+export async function startNewGame(event: Event): Promise<void> {
   if (document.querySelector('.button-wrapper')) {
     (document.querySelector('.button-wrapper') as HTMLElement).remove();
   }
