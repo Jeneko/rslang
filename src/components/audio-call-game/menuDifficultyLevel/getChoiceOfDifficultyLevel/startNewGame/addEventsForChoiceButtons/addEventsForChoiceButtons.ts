@@ -4,6 +4,7 @@ import { GameState } from '../game.types';
 
 export const CHECKICON = '\u2713';
 export const WRONGICON = '\u2716';
+const nextQuestion = 'Next question';
 
 export default function addEventsForChoiceButtons(currentWord: string, gameState: GameState): void {
   const buttonsChoiceWrapper = document.querySelector('.row-buttons-choice-wrapper');
@@ -33,6 +34,6 @@ export default function addEventsForChoiceButtons(currentWord: string, gameState
     }
     buttonsChoice.forEach((button) => button.setAttribute('disabled', 'true'));
     showCurrentWordInfo();
-    buttonNextQuestion.textContent = 'Следующий вопрос';
+    buttonNextQuestion.textContent = nextQuestion;
   });
 }
