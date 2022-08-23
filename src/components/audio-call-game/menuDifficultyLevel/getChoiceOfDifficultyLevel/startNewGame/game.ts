@@ -8,7 +8,7 @@ import generateWindowGame from './generateWindowGame/generateWindowGame';
 import { CHECKICON, WRONGICON } from './addEventsForChoiceButtons/addEventsForChoiceButtons';
 
 export async function startNewGame(event: Event): Promise<void> {
-  const ButtonCheck = event.target as HTMLElement;
+  const buttonCheck = event.target as HTMLElement;
   const buttonsWrapper = document.querySelector('.button-wrapper-audiocall');
   if (buttonsWrapper) {
     buttonsWrapper.remove();
@@ -22,13 +22,14 @@ export async function startNewGame(event: Event): Promise<void> {
   const state: GameState = {
     correctAnswers: [],
     wrongAnswers: [],
-    currentLevel: ButtonCheck.dataset.level as string,
+    currentLevel: buttonCheck.dataset.level as string,
   };
-  if (ButtonCheck.classList.contains('btn-check') || ButtonCheck.classList.contains('btn-play-again')) {
-    const currentLevel = (ButtonCheck.dataset.level);
+  if (buttonCheck.classList.contains('btn-check') || buttonCheck.classList.contains('btn-play-again')) {
+    const currentLevel = (buttonCheck.dataset.level);
+    const MAX_PAGE_NUM = 30;
     controlGameWindow();
     if (currentLevel) {
-      const randomPage = Math.trunc(Math.random() * 30);
+      const randomPage = Math.trunc(Math.random() * MAX_PAGE_NUM);
       updateState('indexWord', 0);
       const listWords = await getWords(+currentLevel, randomPage);
       await generateWindowGame(listWords[0], listWords, state);
