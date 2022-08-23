@@ -18,7 +18,7 @@ export default async function generateWindowGame(currentWord: Word, arrayWords: 
       <div class="row">
         <div class="col current-word">
           <button id="playAudio" type="button" class="btn btn-dark">Audio</button>
-          <div class="card current-word-info current-word-info--hidden" style="width: 18rem;">
+          <div class="card current-word-info current-word-info--hidden">
             <img src="${imageResponse}" class="card-img-top" alt="Word">
             <div class="card-body">
               <p class="card-text">${word}, (${transcription}), ${wordTranslate}</p>
