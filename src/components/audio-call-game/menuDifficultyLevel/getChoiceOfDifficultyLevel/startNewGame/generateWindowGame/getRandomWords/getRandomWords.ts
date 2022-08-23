@@ -7,7 +7,7 @@ export default function getRandomWords(currentWord: Word, listWords: Word[]): Ge
     const randomIndex = Math.trunc(Math.random() * 20);
     const newWord = listWords[randomIndex].wordTranslate;
     const idWord = listWords[randomIndex].id;
-    if (newWord !== currentWord.wordTranslate) {
+    if (list.every((el) => el[0] !== newWord)) {
       list.push([newWord, idWord]);
     }
   }

@@ -5,7 +5,7 @@ import { getWord } from '../../../../../../API/index';
 export default function addEventsForChoiceButtons(currentWord: string, gameState: GameState): void {
   const buttonsChoice = document.querySelectorAll('.btn-choice-of-answer');
 
-  buttonsChoice.forEach((el) => {
+  buttonsChoice.forEach((el): void => {
     el.addEventListener('click', async (e: Event) => {
       const currentButton = e.target as HTMLElement;
       const buttonWord = currentButton.textContent;
