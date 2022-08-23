@@ -8,7 +8,7 @@ import {
   timer,
   updateGame,
 } from './sprint-game-window';
-import { sprintState, defaultSprintState } from './sprint-state';
+import { sprintState, setDefaultSprintState } from './sprint-state';
 
 export default function getSprintGame(): HTMLDivElement {
   const elem = document.createElement('div');
@@ -29,7 +29,7 @@ export const sprintHandler = (elem: HTMLElement): void => {
       const { lvl } = target.dataset;
       sprintState.words = await generateWords(Number(lvl));
       sprintState.wordsIndexes = sprintState.words.map((_, i) => i);
-      defaultSprintState();
+      setDefaultSprintState();
       sprintState.randomWords = chooseWords(sprintState.words);
       gameWindow.innerHTML = renderGame(sprintState.randomWords);
       timer();

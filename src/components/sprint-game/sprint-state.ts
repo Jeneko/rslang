@@ -14,7 +14,7 @@ export const sprintState: SprintState = {
   timer: 60,
 };
 
-export const defaultSprintState = () => {
+export const setDefaultSprintState = () => {
   sprintState.rightAnswers = [];
   sprintState.wrongAnswers = [];
   sprintState.earnedPoints = 0;
