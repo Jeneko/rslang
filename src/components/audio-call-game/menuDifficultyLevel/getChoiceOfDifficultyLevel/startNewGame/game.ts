@@ -22,7 +22,7 @@ export async function startNewGame(event: Event): Promise<void> {
   const state: GameState = {
     correctAnswers: [],
     wrongAnswers: [],
-    currentLevel: buttonCheck.dataset.level as string,
+    currentLevel: +(buttonCheck.dataset.level as String),
   };
   if (buttonCheck.classList.contains('btn-check') || buttonCheck.classList.contains('btn-play-again')) {
     const currentLevel = (buttonCheck.dataset.level);
