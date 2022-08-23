@@ -15,7 +15,7 @@ export async function startNewGame(event: Event): Promise<void> {
   const blockButtonNextQuestion = document.createElement('div');
   blockButtonNextQuestion.classList.add('button-wrapper-audiocall');
   blockButtonNextQuestion.innerHTML = `
-  <button type="button" class="btn btn-primary btn-next-question btn--hidden">Я не знаю</button>
+  <button type="button" class="btn btn-primary btn-next-question btn--hidden">I do not know</button>
   `;
   const windowGameBlock = document.querySelector('.audio-call-game');
   const { target } = event;
