@@ -2,6 +2,9 @@ import { getWord } from 'API/index';
 import showCurrentWordInfo from './showCurrentWordInfo/showCurrentWordInfo';
 import { GameState } from '../game.types';
 
+export const CHECKICON = '\u2713';
+export const WRONGICON = '\u2716';
+
 export default function addEventsForChoiceButtons(currentWord: string, gameState: GameState): void {
   const buttonsChoiceWrapper = document.querySelector('.row-buttons-choice-wrapper');
   const buttonsChoice = document.querySelectorAll('.btn-choice-of-answer');
@@ -17,13 +20,13 @@ export default function addEventsForChoiceButtons(currentWord: string, gameState
     const word = await getWord(wordId);
     if (buttonWord === currentWord) {
       gameState.correctAnswers.push(word);
-      currentIcon.textContent = '\u2713';
+      currentIcon.textContent = CHECKICON;
       currentButton.prepend(currentIcon);
       currentButton.classList.add('btn-success');
       currentButton.classList.remove('btn-light');
     } else {
       gameState.wrongAnswers.push(word);
-      currentIcon.textContent = '\u2716';
+      currentIcon.textContent = WRONGICON;
       currentButton.prepend(currentIcon);
       currentButton.classList.remove('btn-light');
       currentButton.classList.add('btn-danger');

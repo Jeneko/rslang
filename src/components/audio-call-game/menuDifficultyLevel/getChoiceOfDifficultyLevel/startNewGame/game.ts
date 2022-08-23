@@ -5,6 +5,7 @@ import { GameState } from 'game.types';
 import controlGameWindow from '../../controlGameWindow/controlGameWindow';
 import createMenuGame from '../../../createMenuGame';
 import generateWindowGame from './generateWindowGame/generateWindowGame';
+import { CHECKICON, WRONGICON } from './addEventsForChoiceButtons/addEventsForChoiceButtons';
 
 export async function startNewGame(event: Event): Promise<void> {
   if (document.querySelector('.button-wrapper')) {
@@ -67,13 +68,13 @@ export function showGameResult(gameState: GameState): void {
   correctAnswers.forEach((el) => {
     const listItem = document.createElement('li');
     listItem.classList.add('list-group-item');
-    listItem.innerHTML = `\u2713 ${el.word} | ${el.wordTranslate}`;
+    listItem.innerHTML = `${CHECKICON} ${el.word} | ${el.wordTranslate}`;
     blockListCorrect?.append(listItem);
   });
   wrongAnswers.forEach((el) => {
     const listItem = document.createElement('li');
     listItem.classList.add('list-group-item');
-    listItem.innerHTML = `\u2716 ${el.word} | ${el.wordTranslate}`;
+    listItem.innerHTML = `${WRONGICON} ${el.word} | ${el.wordTranslate}`;
     blockListWrong?.append(listItem);
   });
   buttonNextQuestion?.remove();
