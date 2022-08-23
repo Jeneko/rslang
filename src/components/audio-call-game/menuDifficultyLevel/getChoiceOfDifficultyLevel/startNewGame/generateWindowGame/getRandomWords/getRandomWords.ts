@@ -1,7 +1,7 @@
 import { Word } from '../../../../../../../types/index';
 import { GetRandomWordsType } from './getRandomWords.types';
 
-export default function getRandomWords(currentWord: Word, listWords: Word[]) {
+export default function getRandomWords(currentWord: Word, listWords: Word[]): GetRandomWordsType[] {
   const list: GetRandomWordsType[] = [[currentWord.word, currentWord.id]];
   while (list.length < 5) {
     const randomIndex = Math.trunc(Math.random() * 20);

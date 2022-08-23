@@ -45,7 +45,7 @@ export default async function generateWindowGame(currentWord: Word, arrayWords: 
       </div>
     </div>
   `;
-  playAudio(null, audio);
+  playAudio(audio);
   const buttonAudio = document.getElementById('playAudio');
   addEventsForAudioButton(buttonAudio as HTMLElement, audio);
   addEventsForChoiceButtons(word, gameState);
