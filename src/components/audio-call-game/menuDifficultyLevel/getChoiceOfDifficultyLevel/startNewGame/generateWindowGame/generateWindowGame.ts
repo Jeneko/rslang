@@ -1,6 +1,5 @@
 import { SOURCE } from 'API/index';
 import { Word } from '../../../../../../types/index';
-import addEventsForAudioButton from '../addEventsForAudioButton/addEventsForAudioButton';
 import getRandomWords from './getRandomWords/getRandomWords';
 import addEventsForChoiceButtons from '../addEventsForChoiceButtons/addEventsForChoiceButtons';
 import playAudio from '../playAudio/playAudio';
@@ -47,6 +46,6 @@ export default async function generateWindowGame(currentWord: Word, arrayWords: 
   `;
   playAudio(audio);
   const buttonAudio = document.getElementById('playAudio');
-  addEventsForAudioButton(buttonAudio as HTMLElement, audio);
+  buttonAudio?.addEventListener('click', () => playAudio(audio));
   addEventsForChoiceButtons(wordTranslate, gameState);
 }
