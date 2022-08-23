@@ -8,11 +8,12 @@ import generateWindowGame from './generateWindowGame/generateWindowGame';
 import { CHECKICON, WRONGICON } from './addEventsForChoiceButtons/addEventsForChoiceButtons';
 
 export async function startNewGame(event: Event): Promise<void> {
-  if (document.querySelector('.button-wrapper')) {
-    (document.querySelector('.button-wrapper') as HTMLElement).remove();
+  const buttonsWrapper = document.querySelector('.button-wrapper-audiocall');
+  if (buttonsWrapper) {
+    buttonsWrapper.remove();
   }
   const blockButtonNextQuestion = document.createElement('div');
-  blockButtonNextQuestion.classList.add('button-wrapper');
+  blockButtonNextQuestion.classList.add('button-wrapper-audiocall');
   blockButtonNextQuestion.innerHTML = `
   <button type="button" class="btn btn-primary btn-next-question btn--hidden">Я не знаю</button>
   `;
