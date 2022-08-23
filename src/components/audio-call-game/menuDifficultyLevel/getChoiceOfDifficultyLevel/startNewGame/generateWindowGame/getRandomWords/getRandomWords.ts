@@ -1,4 +1,4 @@
-import { Word } from '../../../../../../../types/index';
+import { Word } from 'types/index';
 import { GetRandomWordsType } from './getRandomWords.types';
 
 export default function getRandomWords(currentWord: Word, listWords: Word[]): GetRandomWordsType[] {

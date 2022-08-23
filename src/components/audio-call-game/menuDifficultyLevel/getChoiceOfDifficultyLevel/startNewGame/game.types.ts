@@ -1,4 +1,4 @@
-import { Word } from '../../../../../types/index';
+import { Word } from 'types/index';
 
 export type GameState = {
   correctAnswers: Word[];

@@ -1,5 +1,5 @@
 import { SOURCE } from 'API/index';
-import { Word } from '../../../../../../types/index';
+import { Word } from 'types/index';
 import getRandomWords from './getRandomWords/getRandomWords';
 import addEventsForChoiceButtons from '../addEventsForChoiceButtons/addEventsForChoiceButtons';
 import playAudio from '../playAudio/playAudio';

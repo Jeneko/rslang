@@ -1,10 +1,10 @@
+import { getWords } from 'API/index';
+import { updateState, getState } from 'utils/state';
+import { Word } from 'types/index';
+import { GameState } from 'game.types';
 import controlGameWindow from '../../controlGameWindow/controlGameWindow';
-import { getWords } from '../../../../../API/index';
-import generateWindowGame from './generateWindowGame/generateWindowGame';
-import { updateState, getState } from '../../../../../utils/state';
-import { GameState } from './game.types';
-import { Word } from '../../../../../types/index';
 import createMenuGame from '../../../createMenuGame';
+import generateWindowGame from './generateWindowGame/generateWindowGame';
 
 export async function startNewGame(event: Event): Promise<void> {
   if (document.querySelector('.button-wrapper')) {

@@ -1,6 +1,6 @@
+import { getWord } from 'API/index';
 import showCurrentWordInfo from './showCurrentWordInfo/showCurrentWordInfo';
 import { GameState } from '../game.types';
-import { getWord } from '../../../../../../API/index';
 
 export default function addEventsForChoiceButtons(currentWord: string, gameState: GameState): void {
   const buttonsChoice = document.querySelectorAll('.btn-choice-of-answer');
