@@ -24,7 +24,7 @@ export async function startNewGame(event: Event): Promise<void> {
   };
   if ((target as HTMLElement).classList.contains('btn-check') || (target as HTMLElement).classList.contains('btn-play-again')) {
     const currentLevel = ((target as HTMLElement).dataset.level);
-    controlGameWindow(true);
+    controlGameWindow();
     if (currentLevel) {
       const randomPage = Math.trunc(Math.random() * 30);
       updateState('indexWord', 0);
@@ -36,7 +36,7 @@ export async function startNewGame(event: Event): Promise<void> {
   }
 }
 
-export function showGameResult(gameState: GameState) {
+export function showGameResult(gameState: GameState): void {
   const modalResultGame = document.createElement('div');
   const parentModal = document.querySelector('.game-window');
   const buttonNextQuestion = document.querySelector('.btn-next-question');
@@ -80,7 +80,7 @@ export function showGameResult(gameState: GameState) {
   parentModal?.append(modalResultGame);
 }
 
-export function addEventsForNextQuestionButton(numberPage: number, listWords: Word[], gameState: GameState) {
+export function addEventsForNextQuestionButton(numberPage: number, listWords: Word[], gameState: GameState): void {
   const buttonNextQuestion = document.querySelector('.btn-next-question');
   buttonNextQuestion?.addEventListener('click', () => {
     buttonNextQuestion.textContent = 'Я не знаю';
@@ -95,7 +95,7 @@ export function addEventsForNextQuestionButton(numberPage: number, listWords: Wo
   });
 }
 
-export function clearGameWindow() {
+export function clearGameWindow(): void {
   const gameWindow = document.querySelector('.game-window');
   while (gameWindow?.firstChild) {
     gameWindow.firstChild.remove();
