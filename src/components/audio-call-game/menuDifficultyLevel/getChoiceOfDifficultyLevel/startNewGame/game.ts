@@ -8,6 +8,7 @@ import generateWindowGame from './generateWindowGame/generateWindowGame';
 import { CHECKICON, WRONGICON } from './addEventsForChoiceButtons/addEventsForChoiceButtons';
 
 export async function startNewGame(event: Event): Promise<void> {
+  const ButtonCheck = event.target as HTMLElement;
   const buttonsWrapper = document.querySelector('.button-wrapper-audiocall');
   if (buttonsWrapper) {
     buttonsWrapper.remove();
@@ -18,14 +19,13 @@ export async function startNewGame(event: Event): Promise<void> {
   <button type="button" class="btn btn-primary btn-next-question btn--hidden">I do not know</button>
   `;
   const windowGameBlock = document.querySelector('.audio-call-game');
-  const { target } = event;
   const state: GameState = {
     correctAnswers: [],
     wrongAnswers: [],
-    currentLevel: (target as HTMLElement).dataset.level as string,
+    currentLevel: ButtonCheck.dataset.level as string,
   };
-  if ((target as HTMLElement).classList.contains('btn-check') || (target as HTMLElement).classList.contains('btn-play-again')) {
-    const currentLevel = ((target as HTMLElement).dataset.level);
+  if (ButtonCheck.classList.contains('btn-check') || ButtonCheck.classList.contains('btn-play-again')) {
+    const currentLevel = (ButtonCheck.dataset.level);
     controlGameWindow();
     if (currentLevel) {
       const randomPage = Math.trunc(Math.random() * 30);
