@@ -26,7 +26,7 @@ export default async function generateWindowGame(currentWord: Word, arrayWords: 
           </div>
         </div>
       </div>
-      <div class="row">
+      <div class="row row-buttons-choice-wrapper">
       <div class="col">
         <button type="button" data-id="${listRandomWords[0][1]}" class="btn btn-light btn-choice-of-answer">${listRandomWords[0][0]}</button>
       </div>
