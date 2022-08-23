@@ -2,8 +2,8 @@ import { getWords } from 'API/index';
 import { updateState, getState } from 'utils/state';
 import { Word } from 'types/index';
 import { GameState } from 'game.types';
-import controlGameWindow from '../../controlGameWindow/controlGameWindow';
-import createMenuGame from '../../../createMenuGame';
+import controlGameWindow from 'components/audio-call-game/menuDifficultyLevel/controlGameWindow/controlGameWindow';
+import createMenuGame from 'components/audio-call-game/createMenuGame';
 import generateWindowGame from './generateWindowGame/generateWindowGame';
 import { CHECKICON, WRONGICON } from './addEventsForChoiceButtons/addEventsForChoiceButtons';
 
