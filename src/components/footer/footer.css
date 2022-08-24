@@ -3,3 +3,10 @@
   text-align: center;
   background-color: var(--bs-cyan);
 }
+
+.footer-rsschool {
+  background-image: url('../../assets/rsschool-logo.svg');
+  display: block;
+  height: 24px;
+  width: 62px;
+}
