@@ -1,3 +1,79 @@
-.about-team {
-  background: red;
+.team {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  max-width: 70rem;
+  margin: 4rem auto 2rem;
+  background-image: url('../../assets/world_language.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+.team__card {
+  display: flex;
+  max-width: 33rem;
+  border-radius: 10px;
+  backdrop-filter: blur(3px);
+  box-shadow: rgb(201, 201, 201) 0px 0px 10px;
+}
+
+.team__card-second {
+  align-self: flex-end;
+}
+
+.team__card-img {
+  flex-shrink: 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 200px;
+  height: 200px;
+  border-radius: 10px 0 0 10px;
+}
+
+.img-jeneko {
+  background-image: url(../../assets/jeneko.jpg);
+}
+
+.img-artem {
+  background-image: url(../../assets/artem.jpg);
+}
+
+.img-dima {
+  background-image: url(../../assets/dima.jpg);
+}
+
+.team__card-about {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1rem 1rem 1rem;
+}
+
+.team__card-about-specialty {
+  margin: -0.5rem 0 0.5rem;
+  font-style: italic;
+}
+
+.team__card-about-git:hover {
+  background-color: #d63384;
+}
+
+.team__card-about-git {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 2rem;
+  height: 2rem;
+  background-image: url(../../assets/github.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 100%;
+  transition: 0.3s;
+}
+
+@media (max-width: 500px) {
+  .team__card {
+    flex-direction: column;
+  }
 }
