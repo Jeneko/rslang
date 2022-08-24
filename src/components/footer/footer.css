@@ -1,19 +1,40 @@
 .footer {
+  padding: 1rem 0;
+  background: linear-gradient(to right, #5aa5fd 0%, #0074fc 100%);
+}
+
+.footer-container {
   display: flex;
-  padding: 2rem;
   justify-content: space-between;
-  background-color: var(--bs-cyan);
+  align-items: center;
+}
+
+.footer-year {
+  align-content: center;
 }
 
 .footer-rsschool {
   background-image: url('../../assets/rsschool-logo.svg');
+  background-repeat: no-repeat;
   display: block;
-  height: 24px;
-  width: 62px;
+  height: 1.5rem;
+  width: 4rem;
 }
 
 .footer__team {
-  list-style: none;
   display: flex;
-  gap: 20px;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.link-light {
+  text-decoration: none;
+}
+
+@media (max-width: 500px) {
+  .footer-container,
+  .footer__team {
+    flex-direction: column;
+    gap: 1rem;
+  }
 }
