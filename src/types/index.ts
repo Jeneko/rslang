@@ -21,6 +21,8 @@ export enum Endpoints {
   words = 'words',
   users = 'users',
   signin = 'signin',
+  tokens = 'tokens',
+  aggregatedWords = 'aggregatedWords',
   // TODO: add other endpoints
 }
 
@@ -37,10 +39,18 @@ export enum AlertType {
 
 export enum StatusCode {
   ok = 200,
+  noContent = 204,
   expectationFailed = 417,
   unprocessableEntity = 422,
+  badRequest = 400,
+  unauthorized = 401,
   notFound = 404,
   forbidden = 403,
+}
+
+export enum Difficulty {
+  hard = 'hard',
+  easy = 'easy',
 }
 
 export interface Word {
@@ -60,10 +70,33 @@ export interface Word {
   textExampleTranslate: string;
 }
 
+export interface AggregatedResults {
+  paginatedResults: Word[];
+  totalCount: { count: number }[];
+}
+
 export interface User {
   email: string;
   id: string;
   name: string;
+}
+
+export interface UserWord {
+  difficulty: Difficulty;
+  optional: UserWordOptions;
+}
+
+export interface ResponseUserWord extends UserWord {
+  id: string;
+  wordId: string;
+}
+
+export interface UserWordOptions {
+  learned: boolean;
+  guessedRight: number;
+  guessedWrong: number;
+  guessedInRow: number;
+  // TODO: add other options if needed
 }
 
 export interface ResponseError {
