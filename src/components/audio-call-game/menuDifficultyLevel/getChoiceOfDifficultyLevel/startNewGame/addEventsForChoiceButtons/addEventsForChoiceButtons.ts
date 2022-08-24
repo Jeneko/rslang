@@ -9,11 +9,13 @@ const nextQuestion = 'Next question';
 export default function addEventsForChoiceButtons(currentWord: string, gameState: GameState): void {
   const buttonsChoiceWrapper = document.querySelector('.row-buttons-choice-wrapper');
   const buttonsChoice = document.querySelectorAll('.btn-choice-of-answer');
+
   buttonsChoiceWrapper?.addEventListener('click', async (e: Event) => {
-    if (!(e.target as HTMLElement).classList.contains('btn-choice-of-answer')) {
+    const currentButton = e.target as HTMLElement;
+    if (!currentButton.classList.contains('btn-choice-of-answer')) {
       return;
     }
-    const currentButton = e.target as HTMLElement;
+
     const buttonWord = currentButton.textContent;
     const buttonNextQuestion = document.querySelector('.btn-next-question') as HTMLElement;
     const currentIcon = document.createElement('span');

@@ -6,14 +6,14 @@ import playAudio from '../playAudio/playAudio';
 import { GameState } from '../game.types';
 
 export default async function generateWindowGame(currentWord: Word, arrayWords: Word[], gameState: GameState): Promise<void> {
-  const windowGame = document.querySelector('.game-window');
+  const windowGame = document.querySelector('.game-window') as HTMLElement;
 
   const {
     audio, word, image, transcription, wordTranslate,
   } = currentWord;
   const imageResponse = `${SOURCE}/${image}`;
   const listRandomWords = getRandomWords(currentWord, arrayWords);
-  (windowGame as HTMLElement).innerHTML = `
+  windowGame.innerHTML = `
     <div class="container text-center">
       <div class="row">
         <div class="col current-word">

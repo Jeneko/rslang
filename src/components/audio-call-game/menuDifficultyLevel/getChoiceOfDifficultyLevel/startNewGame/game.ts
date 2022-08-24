@@ -7,11 +7,13 @@ import createMenuGame from 'components/audio-call-game/createMenuGame';
 import generateWindowGame from './generateWindowGame/generateWindowGame';
 import { CHECKICON, WRONGICON } from './addEventsForChoiceButtons/addEventsForChoiceButtons';
 
+const MAX_PAGE_NUM = 30;
+
 export async function startNewGame(event: Event): Promise<void> {
   const buttonCheck = event.target as HTMLElement;
   const buttonsWrapper = document.querySelector('.button-wrapper-audiocall');
   if (buttonsWrapper) {
-    buttonsWrapper.remove();
+    buttonsWrapper?.remove();
   }
   const blockButtonNextQuestion = document.createElement('div');
   blockButtonNextQuestion.classList.add('button-wrapper-audiocall');
@@ -26,7 +28,6 @@ export async function startNewGame(event: Event): Promise<void> {
   };
   if (buttonCheck.classList.contains('btn-check') || buttonCheck.classList.contains('btn-play-again')) {
     const currentLevel = (buttonCheck.dataset.level);
-    const MAX_PAGE_NUM = 30;
     controlGameWindow();
     if (currentLevel) {
       const randomPage = Math.trunc(Math.random() * MAX_PAGE_NUM);
@@ -39,50 +40,6 @@ export async function startNewGame(event: Event): Promise<void> {
   }
 }
 
-export function showGameResult(gameState: GameState): void {
-  const modalResultGame = document.createElement('div');
-  const parentModal = document.querySelector('.game-window');
-  const buttonNextQuestion = document.querySelector('.btn-next-question');
-  modalResultGame.classList.add('popup-winner-audio-call');
-  modalResultGame.innerHTML = `
-  <div id="modal-winner" class="modal-body">
-    <h3>Верные ответы (${gameState.correctAnswers.length})</h3>
-    <ul class="list-group list-group-correct">
-    </ul>
-    <h3>Ошибочные ответы (${gameState.wrongAnswers.length})</h3>
-    <ul class="list-group list-group-wrong">
-    </ul>
-    <button type="button" data-level="${gameState.currentLevel}" class="btn btn-play-again btn-primary">Играть еще раз</button>
-  </div>
-  `;
-  const buttonPlayAgain = modalResultGame.querySelector('.btn-play-again');
-  buttonPlayAgain?.addEventListener('click', () => {
-    const gameWindow = document.querySelector('.game-window') as HTMLElement;
-    const wrapper = document.querySelector('.wrapper') as HTMLElement;
-    wrapper.innerHTML = '';
-    gameWindow.innerHTML = '';
-    const newGame = getChoiceOfDifficultyLevel();
-    wrapper.append(newGame);
-  });
-  const blockListCorrect = modalResultGame.querySelector('.list-group-correct');
-  const blockListWrong = modalResultGame.querySelector('.list-group-wrong');
-  const { correctAnswers, wrongAnswers } = gameState;
-  correctAnswers.forEach((el) => {
-    const listItem = document.createElement('li');
-    listItem.classList.add('list-group-item');
-    listItem.innerHTML = `${CHECKICON} ${el.word} | ${el.wordTranslate}`;
-    blockListCorrect?.append(listItem);
-  });
-  wrongAnswers.forEach((el) => {
-    const listItem = document.createElement('li');
-    listItem.classList.add('list-group-item');
-    listItem.innerHTML = `${WRONGICON} ${el.word} | ${el.wordTranslate}`;
-    blockListWrong?.append(listItem);
-  });
-  buttonNextQuestion?.remove();
-  parentModal?.append(modalResultGame);
-}
-
 export function addEventsForNextQuestionButton(numberPage: number, listWords: Word[], gameState: GameState): void {
   const buttonNextQuestion = document.querySelector('.btn-next-question');
   buttonNextQuestion?.addEventListener('click', () => {
@@ -91,7 +48,9 @@ export function addEventsForNextQuestionButton(numberPage: number, listWords: Wo
     updateState('indexWord', currentIndex);
     clearGameWindow();
     if (currentIndex >= listWords.length) {
-      showGameResult(gameState);
+      const modalGameResult = getModalResultGame(gameState);
+      playAgainButtonClickHandler(modalGameResult);
+      showResult(modalGameResult, gameState);
     } else {
       generateWindowGame(listWords[currentIndex], listWords, gameState);
     }
@@ -105,10 +64,65 @@ export function clearGameWindow(): void {
   }
 }
 
-export function getChoiceOfDifficultyLevel(): HTMLElement {
-  const elem = document.createElement('div');
-  elem.append(createMenuGame());
-  const menuLevels = elem.querySelector('.btn-group');
+export function getNewWindowGame(): HTMLElement {
+  const menu = document.createElement('div');
+  menu.append(createMenuGame());
+  const menuLevels = menu.querySelector('.btn-group');
   menuLevels?.addEventListener('click', startNewGame);
-  return elem;
+  return menu;
+}
+
+function getAllAnswersForGame(list: Word[], blockList: HTMLElement, correctAnswers: boolean) {
+  const iconQuestion = correctAnswers ? CHECKICON : WRONGICON;
+  const fragment = document.createDocumentFragment();
+  list.forEach((el) => {
+    const listItem = document.createElement('li');
+    listItem.classList.add('list-group-item');
+    listItem.innerHTML = `${iconQuestion} ${el.word} | ${el.wordTranslate}`;
+    fragment.append(listItem);
+  });
+  blockList.append(fragment);
+}
+
+function getModalResultGame(gameState: GameState) {
+  const modalResultGame = document.createElement('div');
+  modalResultGame.classList.add('popup-winner-audio-call');
+  modalResultGame.innerHTML = `
+  <div id="modal-winner" class="modal-body">
+    <h3>Correct answers (${gameState.correctAnswers.length})</h3>
+    <ul class="list-group list-group-correct">
+    </ul>
+    <h3>Wrong answers (${gameState.wrongAnswers.length})</h3>
+    <ul class="list-group list-group-wrong">
+    </ul>
+    <button type="button" data-level="${gameState.currentLevel}" class="btn btn-play-again btn-primary">Играть еще раз</button>
+  </div>
+  `;
+  return modalResultGame;
+}
+
+function playAgainButtonClickHandler(modalResultGame: HTMLElement) {
+  const buttonPlayAgain = modalResultGame.querySelector('.btn-play-again');
+  buttonPlayAgain?.addEventListener('click', () => {
+    const gameWindow = document.querySelector('.game-window') as HTMLElement;
+    const wrapper = document.querySelector('.wrapper') as HTMLElement;
+    wrapper.innerHTML = '';
+    gameWindow.innerHTML = '';
+    const newWindowGame = getNewWindowGame();
+    wrapper.append(newWindowGame);
+  });
+}
+
+function showResult(modalResultGame: HTMLElement, gameState: GameState) {
+  const buttonNextQuestion = document.querySelector('.btn-next-question');
+  const parentModal = document.querySelector('.game-window');
+  const blockListCorrect = modalResultGame.querySelector('.list-group-correct') as HTMLElement;
+  const blockListWrong = modalResultGame.querySelector('.list-group-wrong') as HTMLElement;
+  const { correctAnswers, wrongAnswers } = gameState;
+
+  getAllAnswersForGame(correctAnswers, blockListCorrect, true);
+  getAllAnswersForGame(wrongAnswers, blockListWrong, false);
+
+  buttonNextQuestion?.remove();
+  parentModal?.append(modalResultGame);
 }

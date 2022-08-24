@@ -30,7 +30,6 @@ export default function createMenuGame(): HTMLElement {
     </div>
     <div class="game-window game-window--hidden"></div>
   </div>
-  
   `;
   return elem;
 }

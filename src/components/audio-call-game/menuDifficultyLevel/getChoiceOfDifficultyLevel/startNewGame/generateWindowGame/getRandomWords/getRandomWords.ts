@@ -1,9 +1,10 @@
 import { Word } from 'types/index';
 
+const MAX_AMOUNT_ANSWERS = 5;
+const MAX_AMOUNT_WORDS_IN_PAGE = 20;
+
 export default function getRandomWords(currentWord: Word, listWords: Word[]): [string, string][] {
   const list: [string, string][] = [[currentWord.wordTranslate, currentWord.id]];
-  const MAX_AMOUNT_ANSWERS = 5;
-  const MAX_AMOUNT_WORDS_IN_PAGE = 20;
   while (list.length < MAX_AMOUNT_ANSWERS) {
     const randomIndex = Math.trunc(Math.random() * MAX_AMOUNT_WORDS_IN_PAGE);
     const newWord = listWords[randomIndex].wordTranslate;
