@@ -1,6 +1,7 @@
 .footer {
+  display: flex;
   padding: 2rem;
-  text-align: center;
+  justify-content: space-between;
   background-color: var(--bs-cyan);
 }
 
@@ -9,4 +10,10 @@
   display: block;
   height: 24px;
   width: 62px;
+}
+
+.footer__team {
+  list-style: none;
+  display: flex;
+  gap: 20px;
 }
