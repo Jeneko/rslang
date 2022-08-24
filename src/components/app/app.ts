@@ -7,6 +7,7 @@ import getSprintPage from 'components/sprint-page/sprint-page';
 import getRegisterPage from 'components/register-page/register-page';
 import getStudyBookPage from 'components/study-book-page/study-book-page';
 import getAudioCallPage from 'components/audio-call-page/audio-call-page';
+import getTeamPage from 'components/team-page/team-page';
 
 async function loadPage(): Promise<void> {
   const curPage = state.getState().page;
@@ -33,6 +34,9 @@ async function loadPage(): Promise<void> {
       break;
     case PageName.login:
       document.body.append(getLoginPage());
+      break;
+    case PageName.team:
+      document.body.append(getTeamPage());
       break;
     default:
       break;
