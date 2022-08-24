@@ -9,11 +9,7 @@ export function saveAuth(auth: Auth): void {
 
 export function getAuth(): Auth | null {
   const authString = localStorage.getItem(AUTH_NAME);
-  if (typeof authString === 'string') {
-    const auth = JSON.parse(authString);
-    return auth;
-  }
-  return null;
+  return typeof authString === 'string' ? JSON.parse(authString) : null;
 }
 
 export function updateAuth(key: string, value: string): void {
