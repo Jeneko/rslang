@@ -73,7 +73,16 @@
 }
 
 @media (max-width: 500px) {
+  .team {
+    background-image: none;
+  }
+
   .team__card {
     flex-direction: column;
+    width: 100%;
+  }
+
+  .team__card-second {
+    align-self: flex-start;
   }
 }
