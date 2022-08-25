@@ -5,6 +5,11 @@ export type CurrentWord = {
   random: number;
 };
 
+export type Session = {
+  count: number;
+  session: number;
+};
+
 export type SprintState = {
   earnedPoints: number;
   rewordPoints: number;
@@ -14,6 +19,7 @@ export type SprintState = {
   wordsIndexes: number[];
   randomWords: CurrentWord;
   timer: number;
+  session: Session;
 };
 
 export type DeleteWord = (wordsInd: number[], shownWord: number) => number[];

@@ -7,6 +7,7 @@ export const renderGame = (randomWords: CurrentWord): string => `
     <p class="reword-points">+${sprintState.rewordPoints}</p>
   </div>
   <div class="choose-words">
+    <div class="session">🤨</div>
     <p class="english-word">${sprintState.words[randomWords.word].word}</p>
     <p class="russian-word">${sprintState.words[randomWords.random].wordTranslate}</p>
     <div class="choose-buttons">
@@ -43,13 +44,19 @@ export const isCurrentTranslate = (randomWords: CurrentWord, depend: boolean): v
   if (depend) {
     sprintState.earnedPoints += sprintState.rewordPoints;
     sprintState.rightAnswers.push(randomWords.word);
+    sprintState.session.count += 1;
+    sessionCounter();
   } else {
     sprintState.wrongAnswers.push(randomWords.word);
+    sprintState.session.session = sprintState.session.count > sprintState.session.session ? sprintState.session.count : sprintState.session.session;
+    sprintState.session.count = 0;
+    sessionCounter();
   }
 };
 
 export const updateGame = (randomWords: CurrentWord, elem: HTMLElement): void => {
   (elem.querySelector('.earned-points') as HTMLElement).innerHTML = sprintState.earnedPoints.toString();
+  (elem.querySelector('.reword-points') as HTMLElement).innerHTML = `+${sprintState.rewordPoints}`;
   (elem.querySelector('.english-word') as HTMLElement).innerHTML = sprintState.words[randomWords.word].word;
   (elem.querySelector('.russian-word') as HTMLElement).innerHTML = sprintState.words[randomWords.random].wordTranslate;
 };
@@ -87,5 +94,20 @@ export const timer = (): void => {
     } else {
       setTimeout(timer, 1000);
     }
+  }
+};
+
+const sessionCounter = () => {
+  if (sprintState.session.count < 3) {
+    sprintState.rewordPoints = 10;
+    (document.querySelector('.session') as HTMLElement).textContent = '🤨';
+  }
+  if (sprintState.session.count >= 3 && sprintState.session.count < 6) {
+    sprintState.rewordPoints = 20;
+    (document.querySelector('.session') as HTMLElement).textContent = '🙂';
+  }
+  if (sprintState.session.count >= 6) {
+    sprintState.rewordPoints = 40;
+    (document.querySelector('.session') as HTMLElement).textContent = '😀';
   }
 };
