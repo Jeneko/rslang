@@ -15,7 +15,7 @@ export default function getAboutTeam(): HTMLElement {
           <div class="team__card-about">
             <h2 class="team__card-about-name">Evgeniy Kozlov</h2>
             <p class="team__card-about-specialty">Team leader, Frontend developer</p>
-            <p class="team__card-about-progress">Did basic project settings, login logout forms,TextBook page, saving and getting statistic logic</p>
+            <p class="team__card-about-progress">Did basic project settings, logout forms, TextBook, saving and getting statistic logic</p>
             <a href="https://github.com/Jeneko" target="_blank" class="team__card-about-git"></a>
           </div>
         </div>
