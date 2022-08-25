@@ -1,19 +1,29 @@
+import { PageName } from 'types/index';
+import * as state from 'utils/state';
 import { renderModal, generateWords } from './modal-lvl';
 import {
   chooseWords,
   deleteShownWord,
   isCurrentTranslate,
   loadingBar,
+  modalResults,
   renderGame,
   timer,
   updateGame,
 } from './sprint-game-window';
 import { sprintState, setDefaultSprintState } from './sprint-state';
 
-export default function getSprintGame(): HTMLDivElement {
+export default async function getSprintGame(): Promise<HTMLDivElement> {
   const elem = document.createElement('div');
   elem.className = 'sprint-game';
   elem.innerHTML = renderModal;
+  if (state.getState().page === PageName.studyBook) {
+    const gameWindow = elem.querySelector('.sprint') as HTMLElement;
+    gameWindow.innerHTML = loadingBar;
+    const lvl = state.getState().studyBookChapter as number;
+    const currentPage = state.getState().studyBookPage as number;
+    createGame(lvl, currentPage, gameWindow);
+  }
   sprintHandler(elem);
   return elem;
 }
@@ -27,19 +37,18 @@ export const sprintHandler = (elem: HTMLElement): void => {
       gameWindow.innerHTML = loadingBar;
       const target = event.target as HTMLElement;
       const { lvl } = target.dataset;
-      sprintState.words = await generateWords(Number(lvl));
-      sprintState.wordsIndexes = sprintState.words.map((_, i) => i);
-      setDefaultSprintState();
-      sprintState.randomWords = chooseWords(sprintState.words);
-      gameWindow.innerHTML = renderGame(sprintState.randomWords);
-      timer();
+      createGame(Number(lvl), 30, gameWindow);
     }
     if (classList.contains('chooseBtn')) {
       const isRandom = sprintState.randomWords.word === sprintState.randomWords.random;
       isCurrentTranslate(sprintState.randomWords, classList.contains('btn-true') ? isRandom : !isRandom);
       sprintState.wordsIndexes = deleteShownWord(sprintState.wordsIndexes, sprintState.randomWords.word);
-      sprintState.randomWords = chooseWords(sprintState.words);
-      updateGame(sprintState.randomWords, elem);
+      sprintState.randomWords = chooseWords(sprintState.wordsIndexes);
+      if (sprintState.wordsIndexes.length) {
+        updateGame(sprintState.randomWords, elem);
+      } else {
+        gameWindow.innerHTML = modalResults();
+      }
     }
     if (classList.contains('results__close-button')) {
       elem.innerHTML = renderModal;
@@ -47,10 +56,10 @@ export const sprintHandler = (elem: HTMLElement): void => {
   });
 
   document.addEventListener('keyup', (event: KeyboardEvent) => {
-    const chooseBtn = elem.querySelector('.chooseBtn') as HTMLButtonElement;
     const leftButton = elem.querySelector('.btn-true') as HTMLButtonElement;
     const rightButton = elem.querySelector('.btn-false') as HTMLButtonElement;
-    if (chooseBtn) {
+
+    if (elem.querySelector('.chooseBtn')) {
       if (event.key === 'ArrowLeft') {
         leftButton.blur();
         leftButton.click();
@@ -63,10 +72,10 @@ export const sprintHandler = (elem: HTMLElement): void => {
   });
 
   document.addEventListener('keydown', (event: KeyboardEvent) => {
-    const chooseBtn = elem.querySelector('.chooseBtn') as HTMLButtonElement;
     const leftButton = elem.querySelector('.btn-true') as HTMLButtonElement;
     const rightButton = elem.querySelector('.btn-false') as HTMLButtonElement;
-    if (chooseBtn) {
+
+    if (elem.querySelector('.chooseBtn')) {
       if (event.key === 'ArrowLeft') {
         leftButton.focus();
       }
@@ -75,4 +84,13 @@ export const sprintHandler = (elem: HTMLElement): void => {
       }
     }
   });
+};
+
+const createGame = async (lvl: number, currentPage: number, elem: HTMLElement) => {
+  sprintState.words = await generateWords(Number(lvl), currentPage);
+  sprintState.wordsIndexes = sprintState.words.map((_, i) => i);
+  setDefaultSprintState();
+  sprintState.randomWords = chooseWords(sprintState.wordsIndexes);
+  elem.innerHTML = renderGame(sprintState.randomWords);
+  timer();
 };

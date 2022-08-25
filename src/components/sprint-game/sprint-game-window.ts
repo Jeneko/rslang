@@ -1,4 +1,3 @@
-import { Word } from 'types/index';
 import { sprintState } from './sprint-state';
 import { CurrentWord } from './types';
 
@@ -26,12 +25,12 @@ export const loadingBar = `
 </div>
 `;
 
-export const chooseWords = (words: Word[]): CurrentWord => {
-  const firstWordIndex = randomNumber(words.length - 1);
-  const secondWordIndex = randomNumber(words.length - 1);
-  const random = [firstWordIndex, secondWordIndex];
+export const chooseWords = (wordsIndexes: number[]): CurrentWord => {
+  const firstWordIndex = randomNumber(wordsIndexes.length - 1);
+  const secondWordIndex = randomNumber(wordsIndexes.length - 1);
+  const random = [wordsIndexes[firstWordIndex], wordsIndexes[secondWordIndex]];
   return {
-    word: firstWordIndex,
+    word: wordsIndexes[firstWordIndex],
     random: random[Math.round(Math.random())],
   };
 };
@@ -55,7 +54,7 @@ export const updateGame = (randomWords: CurrentWord, elem: HTMLElement): void =>
   (elem.querySelector('.russian-word') as HTMLElement).innerHTML = sprintState.words[randomWords.random].wordTranslate;
 };
 
-const modalResults = (): string => `
+export const modalResults = (): string => `
 <div class="results">
   <h3 class="result-points">${sprintState.earnedPoints} points</h3>
   <h5>Right answers:</h5>
@@ -80,11 +79,13 @@ const modalResults = (): string => `
 `;
 
 export const timer = (): void => {
-  (document.querySelector('.time') as HTMLElement).innerHTML = sprintState.timer.toString();
-  sprintState.timer -= 1;
-  if (sprintState.timer <= 0) {
-    (document.querySelector('.sprint') as HTMLElement).innerHTML = modalResults();
-  } else {
-    setTimeout(timer, 1000);
+  if (document.querySelector('.time')) {
+    (document.querySelector('.time') as HTMLElement).innerHTML = sprintState.timer.toString();
+    sprintState.timer -= 1;
+    if (sprintState.timer <= 0) {
+      (document.querySelector('.sprint') as HTMLElement).innerHTML = modalResults();
+    } else {
+      setTimeout(timer, 1000);
+    }
   }
 };
