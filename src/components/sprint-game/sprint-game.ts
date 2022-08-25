@@ -51,7 +51,6 @@ export const sprintHandler = (elem: HTMLElement): void => {
     const leftButton = elem.querySelector('.btn-true') as HTMLButtonElement;
     const rightButton = elem.querySelector('.btn-false') as HTMLButtonElement;
     if (chooseBtn) {
-      event.preventDefault();
       if (event.key === 'ArrowLeft') {
         leftButton.blur();
         leftButton.click();
@@ -68,7 +67,6 @@ export const sprintHandler = (elem: HTMLElement): void => {
     const leftButton = elem.querySelector('.btn-true') as HTMLButtonElement;
     const rightButton = elem.querySelector('.btn-false') as HTMLButtonElement;
     if (chooseBtn) {
-      event.preventDefault();
       if (event.key === 'ArrowLeft') {
         leftButton.focus();
       }
