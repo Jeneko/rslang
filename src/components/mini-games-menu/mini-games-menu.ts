@@ -1,3 +1,7 @@
+import getAudioCallPage from 'components/audio-call-page/audio-call-page';
+import getHeader from 'components/header/header';
+import getSprintPage from 'components/sprint-page/sprint-page';
+import { PageName } from 'types/index';
 import * as state from 'utils/state';
 import './mini-games-menu.css';
 
@@ -22,8 +26,15 @@ const handleMiniGamesMenu = (elem: HTMLElement) => {
     const target = event.target as Element;
     if (target.classList.contains('game')) {
       const link = target.textContent as string;
+      document.body.innerHTML = '';
+      document.body.append(getHeader());
+      if (link.toLowerCase() === PageName.sprint) {
+        document.body.append(await getSprintPage());
+      }
+      if (link.toLowerCase() === PageName.audioCall) {
+        document.body.append(await getAudioCallPage());
+      }
       state.updateState('page', link.toLowerCase());
-      elem.dispatchEvent(new Event('loadPage', { bubbles: true }));
     }
   });
 };
