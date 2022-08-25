@@ -3,38 +3,15 @@
   background: linear-gradient(to right, #5aa5fd 0%, #0074fc 100%);
 }
 
-.footer-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.footer-year {
-  align-content: center;
-}
-
 .footer-rsschool {
   background-image: url('../../assets/rsschool-logo.svg');
   background-repeat: no-repeat;
-  display: block;
+  display: inline-block;
   height: 1.5rem;
   width: 4rem;
 }
 
-.footer__team {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
-
 .link-light {
   text-decoration: none;
-}
-
-@media (max-width: 500px) {
-  .footer-container,
-  .footer__team {
-    flex-direction: column;
-    gap: 1rem;
-  }
+  margin-left: 1rem;
 }
