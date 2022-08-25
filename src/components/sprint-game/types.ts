@@ -23,3 +23,9 @@ export type SprintState = {
 };
 
 export type DeleteWord = (wordsInd: number[], shownWord: number) => number[];
+
+export enum Points {
+  small = 10,
+  medium = 20,
+  high = 40,
+}

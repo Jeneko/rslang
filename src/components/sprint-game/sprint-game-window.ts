@@ -1,5 +1,5 @@
 import { sprintState } from './sprint-state';
-import { CurrentWord } from './types';
+import { CurrentWord, Points } from './types';
 
 export const renderGame = (randomWords: CurrentWord): string => `
   <div class="points">
@@ -45,12 +45,11 @@ export const isCurrentTranslate = (randomWords: CurrentWord, depend: boolean): v
     sprintState.earnedPoints += sprintState.rewordPoints;
     sprintState.rightAnswers.push(randomWords.word);
     sprintState.session.count += 1;
+    sprintState.session.session = sprintState.session.count;
     sessionCounter();
   } else {
     sprintState.wrongAnswers.push(randomWords.word);
-    sprintState.session.session = sprintState.session.count > sprintState.session.session ? sprintState.session.count : sprintState.session.session;
-    sprintState.session.count = 0;
-    sessionCounter();
+    setDefaultSession();
   }
 };
 
@@ -98,16 +97,20 @@ export const timer = (): void => {
 };
 
 const sessionCounter = () => {
-  if (sprintState.session.count < 3) {
-    sprintState.rewordPoints = 10;
-    (document.querySelector('.session') as HTMLElement).textContent = '🤨';
-  }
-  if (sprintState.session.count >= 3 && sprintState.session.count < 6) {
-    sprintState.rewordPoints = 20;
+  sprintState.session.session = sprintState.session.count > sprintState.session.session ? sprintState.session.count : sprintState.session.session;
+
+  if (sprintState.session.count === 3) {
+    sprintState.rewordPoints = Points.medium;
     (document.querySelector('.session') as HTMLElement).textContent = '🙂';
   }
-  if (sprintState.session.count >= 6) {
-    sprintState.rewordPoints = 40;
+  if (sprintState.session.count === 6) {
+    sprintState.rewordPoints = Points.high;
     (document.querySelector('.session') as HTMLElement).textContent = '😀';
   }
+};
+
+const setDefaultSession = () => {
+  sprintState.session.count = 0;
+  sprintState.rewordPoints = Points.small;
+  (document.querySelector('.session') as HTMLElement).textContent = '🤨';
 };
