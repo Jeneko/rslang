@@ -1,4 +1,5 @@
 import * as state from 'utils/state';
+import getAuthMenu from 'components/auth-menu/auth-menu';
 
 function handleEvents(elem: HTMLElement): void {
   elem.onclick = async (e) => {
@@ -31,7 +32,7 @@ export default function getHeader(): HTMLElement {
               <a class="nav-link load-page-link" href="#main">Main</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#dictionary">Dictionary</a>
+              <a class="nav-link load-page-link" href="#study-book">Study Book</a>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -49,10 +50,14 @@ export default function getHeader(): HTMLElement {
               <a class="nav-link" href="#team">Our Team</a>
             </li>
           </ul>
+          <div class="auth-menu"></div>
         </div>
       </div>
     </nav>
   `;
+
+  const authMenu = elem.querySelector('.auth-menu') as HTMLElement;
+  authMenu.replaceWith(getAuthMenu());
 
   handleEvents(elem);
 

@@ -1,0 +1,26 @@
+button .spinner-border {
+  display: none;
+}
+
+button:disabled .spinner-border {
+  display: inline-block;
+}
+
+.page-heading {
+  margin: 2rem 0;
+}
+
+.page-heading__rslang {
+  color: white;
+  background-color: var(--bs-pink);
+  padding: 1rem;
+  font-weight: bolder;
+}
+
+.asterisk {
+  color: var(--bs-red);
+}
+
+.user-form {
+  margin: 2rem 0;
+}
