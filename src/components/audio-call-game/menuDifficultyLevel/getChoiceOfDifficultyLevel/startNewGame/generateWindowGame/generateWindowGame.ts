@@ -10,7 +10,7 @@ export default async function generateWindowGame(currentWord: Word, arrayWords: 
   const windowGame = document.querySelector('.game-window') as HTMLElement;
 
   const {
-    audio, word, image, transcription, wordTranslate,
+    audio, word, image, transcription, wordTranslate, id,
   } = currentWord;
   const imageResponse = `${SOURCE}/${image}`;
   const listRandomWords = getRandomWords(currentWord, arrayWords);
@@ -21,7 +21,7 @@ export default async function generateWindowGame(currentWord: Word, arrayWords: 
           <button id="playAudio" type="button" class="btn button-audio">
             <img class="audiocall-speaker-image" src="${imageAudio}" alt="speaker">
           </button>
-          <div class="card current-word-info current-word-info--hidden">
+          <div data-id=${id} class="card current-word-info current-word-info--hidden">
             <img src="${imageResponse}" class="card-img-top" alt="Word">
             <div class="card-body">
               <p class="card-text">${word}, (${transcription}), ${wordTranslate}</p>

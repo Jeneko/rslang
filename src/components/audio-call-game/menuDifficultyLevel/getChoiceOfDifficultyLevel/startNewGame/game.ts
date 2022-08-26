@@ -1,12 +1,13 @@
-import { getWords } from 'API/index';
+import { getWords, getWord } from 'API/index';
 import { updateState, getState } from 'utils/state';
 import { Word } from 'types/index';
 import { GameState } from 'game.types';
 import controlGameWindow from 'components/audio-call-game/menuDifficultyLevel/controlGameWindow/controlGameWindow';
 import createMenuGame from 'components/audio-call-game/createMenuGame';
 import generateWindowGame from './generateWindowGame/generateWindowGame';
-import addEventsForKeyboard from './addEventsForKeyboard/addEventsForKeyboard';
+import showCurrentWordInfo from './addEventsForChoiceButtons/showCurrentWordInfo/showCurrentWordInfo';
 import { CHECKICON, WRONGICON } from './addEventsForChoiceButtons/addEventsForChoiceButtons';
+import hiddenAllButtons from './addEventsForChoiceButtons/disableAllButtonsChoice/disableAllButtonsChoice';
 
 const MAX_PAGE_NUM = 30;
 
@@ -17,7 +18,6 @@ export async function startNewGame(event: Event): Promise<void> {
   if (buttonsWrapper) {
     buttonsWrapper?.remove();
   }
-  addEventsForKeyboard();
   const blockButtonNextQuestion = document.createElement('div');
   blockButtonNextQuestion.classList.add('button-wrapper-audiocall');
   blockButtonNextQuestion.innerHTML = `
@@ -44,18 +44,32 @@ export async function startNewGame(event: Event): Promise<void> {
 }
 
 export function addEventsForNextQuestionButton(numberPage: number, listWords: Word[], gameState: GameState): void {
-  const buttonNextQuestion = document.querySelector('.btn-next-question');
-  buttonNextQuestion?.addEventListener('click', () => {
+  const buttonNextQuestion = document.querySelector('.btn-next-question') as HTMLElement;
+  buttonNextQuestion.setAttribute('wordchosen', 'false');
+  buttonNextQuestion?.addEventListener('click', async () => {
     buttonNextQuestion.textContent = 'I do not know';
-    const currentIndex = getState().indexWord + 1;
-    updateState('indexWord', currentIndex);
-    clearGameWindow();
+    const currentIndex = getState().indexWord;
+    console.log(currentIndex);
     if (currentIndex >= listWords.length) {
+      clearGameWindow();
       const modalGameResult = getModalResultGame(gameState);
       playAgainButtonClickHandler(modalGameResult);
       showResult(modalGameResult, gameState);
+      updateState('indexWord', currentIndex + 1);
+    } else if (buttonNextQuestion.getAttribute('wordchosen') === 'false') {
+      hiddenAllButtons();
+      showCurrentWordInfo();
+      buttonNextQuestion.textContent = 'Next question';
+      buttonNextQuestion.setAttribute('wordchosen', 'true');
+      const wordId = (document.querySelector('.current-word-info') as HTMLElement).dataset.id as string;
+      const word = await getWord(wordId as string);
+      console.log(wordId);
+      gameState.wrongAnswers.push(word);
     } else {
+      buttonNextQuestion.setAttribute('wordchosen', 'false');
+      clearGameWindow();
       generateWindowGame(listWords[currentIndex], listWords, gameState);
+      updateState('indexWord', currentIndex + 1);
     }
   });
 }

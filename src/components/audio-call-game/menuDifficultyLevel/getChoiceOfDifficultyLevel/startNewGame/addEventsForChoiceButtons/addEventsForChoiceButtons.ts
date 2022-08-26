@@ -1,6 +1,7 @@
 import { getWord } from 'API/index';
 import showCurrentWordInfo from './showCurrentWordInfo/showCurrentWordInfo';
 import { GameState } from '../game.types';
+import hiddenAllButtons from './disableAllButtonsChoice/disableAllButtonsChoice';
 
 export const CHECKICON = '\u2713';
 export const WRONGICON = '\u2716';
@@ -19,12 +20,7 @@ async function checkAnswer(e: Event, eventExecutor: string, buttonsChoice: NodeL
   if (!currentButton || currentButton.hasAttribute('disabled')) {
     return;
   }
-  buttonsChoice.forEach((button) => {
-    button.setAttribute('disabled', 'true');
-    if (button.textContent === currentWord) {
-      button.classList.add('btn-success');
-    }
-  });
+  hiddenAllButtons();
   const buttonWord = currentButton.textContent;
   const buttonNextQuestion = document.querySelector('.btn-next-question') as HTMLElement;
   const currentIcon = document.createElement('span');
@@ -56,9 +52,15 @@ function getCheckButton(e: Event, eventExecutor: string): HTMLElement | null {
       const numberButton = valuesKeyTargets.indexOf(keyTarget);
       const allButtons = document.querySelectorAll('.btn-choice-of-answer');
       const currentButton = allButtons[numberButton];
+      const buttonNextQuestion = document.querySelector('.btn-next-question');
+      buttonNextQuestion?.setAttribute('wordchosen', 'true');
+      console.log(buttonNextQuestion);
       return currentButton as HTMLElement;
     }
   } else if (eventExecutor === 'click') {
+    const buttonNextQuestion = document.querySelector('.btn-next-question');
+    buttonNextQuestion?.setAttribute('wordchosen', 'true');
+    console.log(buttonNextQuestion);
     return e.target as HTMLElement;
   }
 
