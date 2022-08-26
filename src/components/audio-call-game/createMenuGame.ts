@@ -16,7 +16,6 @@ export default function createMenuGame(): HTMLElement {
         <li><button class="btn btn-primary btn-select-level" data-level="5">6</button></li>
         <li><button class="btn btn-danger btn-select-level" data-level="6">7</button></li>
       </ol>
-      
     </div>
     <div class="game-window game-window--hidden"></div>
   </div>

@@ -1,5 +1,6 @@
 import { SOURCE } from 'API/index';
 import { Word } from 'types/index';
+import imageAudio from 'assets/speaker-icon.svg';
 import getRandomWords from './getRandomWords/getRandomWords';
 import addEventsForChoiceButtons from '../addEventsForChoiceButtons/addEventsForChoiceButtons';
 import playAudio from '../playAudio/playAudio';
@@ -17,7 +18,9 @@ export default async function generateWindowGame(currentWord: Word, arrayWords: 
     <div class="container text-center">
       <div class="row">
         <div class="col current-word">
-          <button id="playAudio" type="button" class="btn btn-dark">Audio</button>
+          <button id="playAudio" type="button" class="btn button-audio">
+            <img class="audiocall-speaker-image" src="${imageAudio}" alt="speaker">
+          </button>
           <div class="card current-word-info current-word-info--hidden">
             <img src="${imageResponse}" class="card-img-top" alt="Word">
             <div class="card-body">
@@ -28,7 +31,7 @@ export default async function generateWindowGame(currentWord: Word, arrayWords: 
       </div>
       <div class="row row-buttons-choice-wrapper">
       <div class="col">
-        <button type="button" data-id="${listRandomWords[0][1]}" class="btn btn-light btn-choice-of-answer">${listRandomWords[0][0]}</button>
+        <button  type="button" data-id="${listRandomWords[0][1]}" class="btn btn-light btn-choice-of-answer">${listRandomWords[0][0]}</button>
       </div>
       <div class="col">
         <button type="button" data-id="${listRandomWords[1][1]}" class="btn btn-light btn-choice-of-answer">${listRandomWords[1][0]}</button>

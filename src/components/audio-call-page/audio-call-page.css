@@ -1,5 +1,10 @@
+.audio-call-page:focus {
+  border: none;
+  outline: none;
+}
+
 .current-word {
-  height: 400px;
+  height: 440px;
 }
 
 .button-text-round {
@@ -45,4 +50,28 @@
 
 .buttons-level-block--hidden {
   display: none;
+}
+
+.btn-play-again {
+  margin-top: 20px;
+}
+
+.audiocall-speaker-image {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+}
+
+.button-audio {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+}
+
+.row-buttons-choice-wrapper {
+  margin-top: 24px;
+}
+
+.current-word-info {
+  margin-top: 24px;
 }

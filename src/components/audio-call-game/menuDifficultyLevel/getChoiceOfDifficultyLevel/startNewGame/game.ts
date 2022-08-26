@@ -5,6 +5,7 @@ import { GameState } from 'game.types';
 import controlGameWindow from 'components/audio-call-game/menuDifficultyLevel/controlGameWindow/controlGameWindow';
 import createMenuGame from 'components/audio-call-game/createMenuGame';
 import generateWindowGame from './generateWindowGame/generateWindowGame';
+import addEventsForKeyboard from './addEventsForKeyboard/addEventsForKeyboard';
 import { CHECKICON, WRONGICON } from './addEventsForChoiceButtons/addEventsForChoiceButtons';
 
 const MAX_PAGE_NUM = 30;
@@ -16,6 +17,7 @@ export async function startNewGame(event: Event): Promise<void> {
   if (buttonsWrapper) {
     buttonsWrapper?.remove();
   }
+  addEventsForKeyboard();
   const blockButtonNextQuestion = document.createElement('div');
   blockButtonNextQuestion.classList.add('button-wrapper-audiocall');
   blockButtonNextQuestion.innerHTML = `
@@ -68,6 +70,7 @@ export function clearGameWindow(): void {
 export function getNewWindowGame(): HTMLElement {
   const menu = document.querySelector('.audio-call-page') as HTMLElement || document.createElement('div') as HTMLElement;
   menu.append(createMenuGame());
+  menu.setAttribute('tabindex', '-1');
   const menuLevels = menu.querySelector('.btn-wrapper');
   console.log(menuLevels);
   menuLevels?.addEventListener('click', startNewGame);
