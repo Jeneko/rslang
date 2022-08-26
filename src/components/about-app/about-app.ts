@@ -1,8 +1,6 @@
-// import rsschoolLogoUrl from './rsschool-logo.svg';
 import './about-app.css';
 import svg from './learn.svg';
 
-// Dummy function content (to be replaced)
 export default function getAboutApp(): HTMLElement {
   const elem = document.createElement('div');
   elem.className = 'about-app';
@@ -20,7 +18,7 @@ export default function getAboutApp(): HTMLElement {
           </p>
         </div>
         <div class="col-sm-10 col-md-5 align-self-center about-wrapper--block">
-          <img src="${svg}" class="about-wrapper--img" alt="background-image">
+          <img src="${svg}" class="about-wrapper--img" alt="Brain full of English">
         </div>
       </div>
     </div>
