@@ -12,7 +12,6 @@ import hiddenAllButtons from './addEventsForChoiceButtons/disableAllButtonsChoic
 const MAX_PAGE_NUM = 30;
 
 export async function startNewGame(event: Event): Promise<void> {
-  console.log(event.target);
   const buttonCheck = event.target as HTMLElement;
   const buttonsWrapper = document.querySelector('.button-wrapper-audiocall');
   if (buttonsWrapper) {
@@ -49,7 +48,6 @@ export function addEventsForNextQuestionButton(numberPage: number, listWords: Wo
   buttonNextQuestion?.addEventListener('click', async () => {
     buttonNextQuestion.textContent = 'I do not know';
     const currentIndex = getState().indexWord;
-    console.log(currentIndex);
     if (currentIndex >= listWords.length) {
       clearGameWindow();
       const modalGameResult = getModalResultGame(gameState);
@@ -63,7 +61,6 @@ export function addEventsForNextQuestionButton(numberPage: number, listWords: Wo
       buttonNextQuestion.setAttribute('wordchosen', 'true');
       const wordId = (document.querySelector('.current-word-info') as HTMLElement).dataset.id as string;
       const word = await getWord(wordId as string);
-      console.log(wordId);
       gameState.wrongAnswers.push(word);
     } else {
       buttonNextQuestion.setAttribute('wordchosen', 'false');
@@ -84,9 +81,7 @@ export function clearGameWindow(): void {
 export function getNewWindowGame(): HTMLElement {
   const menu = document.querySelector('.audio-call-page') as HTMLElement || document.createElement('div') as HTMLElement;
   menu.append(createMenuGame());
-  menu.setAttribute('tabindex', '-1');
   const menuLevels = menu.querySelector('.btn-wrapper');
-  console.log(menuLevels);
   menuLevels?.addEventListener('click', startNewGame);
   return menu;
 }
@@ -127,8 +122,7 @@ function playAgainButtonClickHandler(modalResultGame: HTMLElement) {
     const wrapper = document.querySelector('.audio-call-page') as HTMLElement;
     wrapper.innerHTML = '';
     gameWindow.innerHTML = '';
-    const newWindowGame = getNewWindowGame();
-    wrapper.append(newWindowGame);
+    getNewWindowGame();
   });
 }
 

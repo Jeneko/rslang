@@ -2,7 +2,7 @@ import { SOURCE } from 'API/index';
 import { Word } from 'types/index';
 import imageAudio from 'assets/speaker-icon.svg';
 import getRandomWords from './getRandomWords/getRandomWords';
-import addEventsForChoiceButtons from '../addEventsForChoiceButtons/addEventsForChoiceButtons';
+import addEventsForChoiceButtons, { addEventsForKeyboard } from '../addEventsForChoiceButtons/addEventsForChoiceButtons';
 import playAudio from '../playAudio/playAudio';
 import { GameState } from '../game.types';
 
@@ -29,7 +29,7 @@ export default async function generateWindowGame(currentWord: Word, arrayWords: 
           </div>
         </div>
       </div>
-      <div class="row row-buttons-choice-wrapper">
+      <div tabindex="-1" class="row row-buttons-choice-wrapper">
       <div class="col">
         <button  type="button" data-id="${listRandomWords[0][1]}" class="btn btn-light btn-choice-of-answer">${listRandomWords[0][0]}</button>
       </div>
@@ -51,4 +51,5 @@ export default async function generateWindowGame(currentWord: Word, arrayWords: 
   const buttonAudio = document.getElementById('playAudio');
   buttonAudio?.addEventListener('click', () => playAudio(audio));
   addEventsForChoiceButtons(wordTranslate, gameState);
+  addEventsForKeyboard(wordTranslate, gameState);
 }
