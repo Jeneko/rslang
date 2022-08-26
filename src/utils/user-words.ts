@@ -66,7 +66,7 @@ export async function getWordsWithUserData(group: number, page: number): Promise
 
   const wordsWithUserData = words.map((word) => {
     const userWord = userWords.find((curUserWord) => curUserWord.wordId === word.id);
-    return userWord ? { ...word, ...userWord } : { ...word, ...USER_WORD_DEFAULTS };
+    return userWord ? { ...userWord, ...word } : { ...word, ...USER_WORD_DEFAULTS };
   });
 
   return wordsWithUserData;
