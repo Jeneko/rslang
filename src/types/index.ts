@@ -48,9 +48,10 @@ export enum StatusCode {
   forbidden = 403,
 }
 
-export enum Difficulty {
+export enum WordStatus {
+  default = 'default',
+  learned = 'learned',
   hard = 'hard',
-  easy = 'easy',
 }
 
 export interface Word {
@@ -82,21 +83,20 @@ export interface User {
 }
 
 export interface UserWord {
-  difficulty: Difficulty;
+  difficulty: WordStatus;
   optional: UserWordOptions;
+}
+
+export interface UserWordOptions {
+  guessedRight: number;
+  guessedWrong: number;
+  guessedInRow: number;
+  // TODO: add other options if needed
 }
 
 export interface ResponseUserWord extends UserWord {
   id: string;
   wordId: string;
-}
-
-export interface UserWordOptions {
-  learned: boolean;
-  guessedRight: number;
-  guessedWrong: number;
-  guessedInRow: number;
-  // TODO: add other options if needed
 }
 
 export interface ResponseError {
