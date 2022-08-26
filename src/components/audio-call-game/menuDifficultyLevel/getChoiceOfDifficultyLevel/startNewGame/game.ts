@@ -10,6 +10,7 @@ import { CHECKICON, WRONGICON } from './addEventsForChoiceButtons/addEventsForCh
 const MAX_PAGE_NUM = 30;
 
 export async function startNewGame(event: Event): Promise<void> {
+  console.log(event.target);
   const buttonCheck = event.target as HTMLElement;
   const buttonsWrapper = document.querySelector('.button-wrapper-audiocall');
   if (buttonsWrapper) {
@@ -26,7 +27,7 @@ export async function startNewGame(event: Event): Promise<void> {
     wrongAnswers: [],
     currentLevel: +(buttonCheck.dataset.level as String),
   };
-  if (buttonCheck.classList.contains('btn-check') || buttonCheck.classList.contains('btn-play-again')) {
+  if (buttonCheck.classList.contains('btn-select-level') || buttonCheck.classList.contains('btn-play-again')) {
     const currentLevel = (buttonCheck.dataset.level);
     controlGameWindow();
     if (currentLevel) {
@@ -65,9 +66,10 @@ export function clearGameWindow(): void {
 }
 
 export function getNewWindowGame(): HTMLElement {
-  const menu = document.createElement('div');
+  const menu = document.querySelector('.audio-call-page') as HTMLElement || document.createElement('div') as HTMLElement;
   menu.append(createMenuGame());
-  const menuLevels = menu.querySelector('.btn-group');
+  const menuLevels = menu.querySelector('.btn-wrapper');
+  console.log(menuLevels);
   menuLevels?.addEventListener('click', startNewGame);
   return menu;
 }
@@ -95,7 +97,7 @@ function getModalResultGame(gameState: GameState) {
     <h3>Wrong answers (${gameState.wrongAnswers.length})</h3>
     <ul class="list-group list-group-wrong">
     </ul>
-    <button type="button" data-level="${gameState.currentLevel}" class="btn btn-play-again btn-primary">Играть еще раз</button>
+    <button type="button" data-level="${gameState.currentLevel}" class="btn btn-play-again btn-primary">Play again</button>
   </div>
   `;
   return modalResultGame;
@@ -105,7 +107,7 @@ function playAgainButtonClickHandler(modalResultGame: HTMLElement) {
   const buttonPlayAgain = modalResultGame.querySelector('.btn-play-again');
   buttonPlayAgain?.addEventListener('click', () => {
     const gameWindow = document.querySelector('.game-window') as HTMLElement;
-    const wrapper = document.querySelector('.wrapper') as HTMLElement;
+    const wrapper = document.querySelector('.audio-call-page') as HTMLElement;
     wrapper.innerHTML = '';
     gameWindow.innerHTML = '';
     const newWindowGame = getNewWindowGame();
