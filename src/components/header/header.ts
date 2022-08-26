@@ -47,7 +47,7 @@ export default function getHeader(): HTMLElement {
               <a class="nav-link" href="#stats">Statistics</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#team">Our Team</a>
+              <a class="nav-link load-page-link" href="#team">Our Team</a>
             </li>
           </ul>
           <div class="auth-menu"></div>
