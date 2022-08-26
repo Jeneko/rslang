@@ -153,7 +153,7 @@ export async function getUserWord(wordId: string): Promise<ResponseUserWord | fa
 
 export async function getAllUserWords(): Promise<ResponseUserWord[]> {
   const curAuth = auth.getAuth();
-  if (!curAuth) throw new Error('No Auth found');
+  if (!curAuth) return [];
 
   const url = `${SOURCE}/${Endpoints.users}/${curAuth.userId}/${Endpoints.words}`;
   const response = await authFetch(url);
