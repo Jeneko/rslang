@@ -1,5 +1,5 @@
 import {
-  getWords, getAllUserWords, updateUserWord, createUserWord,
+  getWord, getWords, getAllUserWords, updateUserWord, createUserWord,
 } from 'API/index';
 import {
   WordStatus, UserWordOptions, UserWord, WordWithUserWord,
@@ -71,4 +71,14 @@ export async function getWordsWithUserData(group: number, page: number): Promise
   });
 
   return wordsWithUserData;
+}
+
+export async function getWordWithUserData(id: string): Promise<WordWithUserWord> {
+  const word = await getWord(id) as WordWithUserWord;
+  const userWords = await getAllUserWords();
+  const userWord = userWords.find((curUserWord) => curUserWord.wordId === word.id);
+
+  word.userWord = userWord || USER_WORD_DEFAULTS;
+
+  return word;
 }
