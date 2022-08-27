@@ -1,5 +1,6 @@
 export type State = {
   page: PageName;
+  isUserChapter: boolean;
   studyBookChapter: number;
   studyBookPage: number;
   indexWord: number;
@@ -73,7 +74,7 @@ export interface Word {
 }
 
 export interface AggregatedResults {
-  paginatedResults: Word[];
+  paginatedResults: WordWithUserWord[];
   totalCount: { count: number }[];
 }
 
@@ -86,6 +87,11 @@ export interface User {
 export interface UserWord {
   difficulty: WordStatus;
   optional: UserWordOptions;
+}
+
+export interface WordWithUserWord extends Word {
+  _id?: string;
+  userWord: UserWord;
 }
 
 export interface UserWordOptions {

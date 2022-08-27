@@ -1,8 +1,8 @@
 import {
-  getWords, getAllUserWords, updateUserWord, createUserWord,
+  getWord, getWords, getAllUserWords, updateUserWord, createUserWord, getAggregatedWords,
 } from 'API/index';
 import {
-  WordStatus, UserWordOptions, Word, UserWord,
+  WordStatus, UserWordOptions, UserWord, WordWithUserWord,
 } from 'types/index';
 
 const OPTIONAL_DEFAULTS: UserWordOptions = {
@@ -60,14 +60,38 @@ export async function setWordOptional(wordId: string, optional: Partial<UserWord
   });
 }
 
-export async function getWordsWithUserData(group: number, page: number): Promise<(Word & UserWord)[]> {
-  const words = await getWords(group, page);
+export async function getWordsWithUserData(group: number, page: number): Promise<WordWithUserWord[]> {
+  const words = await getWords(group, page) as WordWithUserWord[];
   const userWords = await getAllUserWords();
 
   const wordsWithUserData = words.map((word) => {
     const userWord = userWords.find((curUserWord) => curUserWord.wordId === word.id);
-    return userWord ? { ...word, ...userWord } : { ...word, ...USER_WORD_DEFAULTS };
+    word.userWord = userWord || USER_WORD_DEFAULTS;
+    return word;
   });
 
   return wordsWithUserData;
+}
+
+export async function getWordWithUserData(id: string): Promise<WordWithUserWord> {
+  const word = await getWord(id) as WordWithUserWord;
+  const userWords = await getAllUserWords();
+  const userWord = userWords.find((curUserWord) => curUserWord.wordId === word.id);
+
+  word.userWord = userWord || USER_WORD_DEFAULTS;
+
+  return word;
+}
+
+export async function getAllUserWordsWithData(): Promise<WordWithUserWord[]> {
+  try {
+    const aggregatedResults = await getAggregatedWords('{"userWord.difficulty": "hard"}', 1000);
+    const userWordsWithData = aggregatedResults[0].paginatedResults;
+    const tmp = userWordsWithData.map((el) => {
+      // eslint-disable-next-line no-underscore-dangle
+      el.id = el._id as string;
+      return el;
+    });
+    return tmp;
+  } catch { return []; }
 }
