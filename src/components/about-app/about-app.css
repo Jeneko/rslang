@@ -1,5 +1,24 @@
 .about-app {
   text-align: center;
-  background-color: black;
   padding: 2rem;
+}
+
+.about-wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
+
+.about-wrapper--block {
+  max-width: 400px;
+  text-align: start;
+}
+
+.about-wrapper--block > * {
+  padding-top: 50px;
+}
+
+.about-app--content {
+  color: rgb(87, 87, 87);
+  font-style: italic;
 }

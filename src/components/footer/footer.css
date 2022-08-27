@@ -1,5 +1,17 @@
 .footer {
-  padding: 2rem;
-  text-align: center;
-  background-color: var(--bs-cyan);
+  padding: 1rem 0;
+  background: linear-gradient(to right, #5aa5fd 0%, #0074fc 100%);
+}
+
+.footer-rsschool {
+  background-image: url('assets/rsschool-logo.svg');
+  background-repeat: no-repeat;
+  display: inline-block;
+  height: 1.5rem;
+  width: 4rem;
+}
+
+.link-light {
+  text-decoration: none;
+  margin-left: 1rem;
 }
