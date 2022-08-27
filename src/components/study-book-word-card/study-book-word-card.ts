@@ -1,50 +1,27 @@
 import { SOURCE } from 'API/index';
-import { Word } from 'types/index';
-import speakerIcon from './speaker-icon.svg';
+import { getAuth } from 'utils/auth';
+import { WordWithUserWord } from 'types/index';
+import { getWordWithUserData } from 'utils/user-words';
+import getWordAudio from 'components/word-audio/word-audio';
+import getStatusBadge from 'components/status-badge/status-badge';
+import getWordStatusControls from 'components/word-status-controls/word-status-controls';
 import './study-book-word-card.css';
 
-function playAudio(audioBtn: HTMLButtonElement): void {
-  const audioTitles = ['Pronunciation', 'Meaning', 'Example'];
-  audioBtn.disabled = true;
-  audioBtn.classList.add('btn-audio--playing');
+function handleEvents(elem: HTMLElement, wordId: string): void {
+  elem.addEventListener('updateWordCard', async () => {
+    const word = await getWordWithUserData(wordId);
+    const newWordCard = getStudyBookWordCard(word);
+    elem.replaceWith(newWordCard);
+    newWordCard.dispatchEvent(new Event('updateChapterStatus', { bubbles: true }));
+  });
 
-  const audioNum = Number(audioBtn.dataset.audio);
-  const audioContainer = audioBtn.parentElement as HTMLElement;
-  const audio = audioContainer.querySelector(`input[name="audio-${audioNum}`) as HTMLInputElement;
-  const audioUrl = audio.value as string;
-  const url = `${SOURCE}/${audioUrl}`;
-
-  const audioTitle = audioBtn.querySelector('.btn-audio__audio-title') as HTMLElement;
-  audioTitle.innerText = audioTitles[audioNum - 1];
-
-  const music = new Audio(url);
-  music.play();
-  music.onended = () => {
-    audioBtn.disabled = false;
-    audioBtn.classList.remove('btn-audio--playing');
-    updateBtnAudioNum(audioBtn);
-  };
+  elem.addEventListener('deleteWordCard', () => {
+    (elem.parentElement as HTMLElement).remove();
+  });
 }
 
-function updateBtnAudioNum(audioBtn: HTMLButtonElement): void {
-  const curAudioNum = Number(audioBtn.dataset.audio);
-  const newAudioNum = curAudioNum >= 3 ? '1' : `${curAudioNum + 1}`;
-
-  audioBtn.dataset.audio = newAudioNum;
-}
-
-function handleEvents(elem: HTMLElement): void {
-  elem.onclick = (e: Event) => {
-    const target = e.target as HTMLButtonElement;
-    const audioBtn = target.closest('.btn-audio') as HTMLButtonElement;
-
-    if (audioBtn) {
-      playAudio(audioBtn);
-    }
-  };
-}
-
-export default function getStudyBookWordCard(word: Word): HTMLElement {
+export default function getStudyBookWordCard(word: WordWithUserWord): HTMLElement {
+  const curAuth = getAuth();
   const elem = document.createElement('article');
   elem.className = 'word-card';
 
@@ -57,15 +34,7 @@ export default function getStudyBookWordCard(word: Word): HTMLElement {
     <div class="word-card__image">
     <img src="${SOURCE}/${word.image}">
     </div>
-    <div class="word-card__audio">
-      <button class="btn-audio" data-id="${word.id}" data-audio="1">
-        <img class="btn-audio__speaker-icon" src="${speakerIcon}">
-        <div class="btn-audio__audio-title"></div>
-      </button>
-      <input type="hidden" name="audio-1" value="${word.audio}">
-      <input type="hidden" name="audio-2" value="${word.audioMeaning}">
-      <input type="hidden" name="audio-3" value="${word.audioExample}">
-    </div>
+    <div class="word-card__btn-container"></div>
     <div class="word-card__meaning">
       <div class="word-card__data-heading">Meaning:</div>
       <div class="word-card__text">${word.textMeaning}</div>
@@ -80,12 +49,21 @@ export default function getStudyBookWordCard(word: Word): HTMLElement {
     <div class="word-card__text-translation">
       <span class="word-card__text">(Translation): ${word.textExampleTranslate}</span>
     </div>
-    <div class="word-card__buttons"></div>
   `;
 
-  handleEvents(elem);
+  const wordCardBtnContainer = elem.querySelector('.word-card__btn-container') as HTMLElement;
+  wordCardBtnContainer.append(getWordAudio(word));
 
-  // TODO: add buttons to control word status for registered users
+  // If authorized
+  if (curAuth) {
+    wordCardBtnContainer.append(getWordStatusControls(word));
+
+    const statusBadge = getStatusBadge(word);
+    statusBadge.classList.add('word-card__status-badge');
+    elem.prepend(statusBadge);
+  }
+
+  handleEvents(elem, word.id);
 
   return elem;
 }

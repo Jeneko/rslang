@@ -1,9 +1,16 @@
 .word-card {
+  position: relative;
   height: 100%;
   display: flex;
   flex-direction: column;
   padding: 2rem;
   border: 1px solid var(--bs-gray-200);
+}
+
+.word-card__status-badge {
+  position: absolute;
+  top: -2px;
+  right: 2rem;
 }
 
 .word-card__word {
@@ -27,14 +34,9 @@
   transition: all 0.3s ease;
 }
 
-
 .word-card__text-translation:hover {
   color: var(--bs-pink);
   opacity: 1;
-}
-
-.word-card__meaning {
-  margin-top: 0.5rem;
 }
 
 .word-card__image {
@@ -52,37 +54,9 @@
   object-fit: cover;
 }
 
-.btn-audio {
+.word-card__btn-container {
+  margin-bottom: 0.5rem;
   display: flex;
-  padding: 0;
-  gap: 0.5rem;
   align-items: center;
-  border: none;
-  background: none;
-  position: relative;
-}
-
-.btn-audio:disabled {
-  pointer-events: none;
-  cursor: default;
-}
-
-.btn-audio:disabled .btn-audio__speaker-icon {
-  opacity: 0.5;
-}
-
-.btn-audio__speaker-icon {
-  width: 30px;
-}
-
-.btn-audio__audio-title {
-  color: #000;
-  background-color: #ffeabf;
-  padding: 2px 10px;
-  border-radius: 3px;
-  display: none;
-}
-
-.btn-audio--playing .btn-audio__audio-title {
-  display: block;
+  justify-content: space-between;
 }
