@@ -195,7 +195,7 @@ export async function deleteUserWord(wordId: string): Promise<void> {
   await authFetch(url, options);
 }
 
-export async function getAggregatedWords(filter?: string, wordsPerPage: number = WORDS_PER_PAGE_DEFAULTS, group?: number, page?: number): Promise<AggregatedResults> {
+export async function getAggregatedWords(filter?: string, wordsPerPage: number = WORDS_PER_PAGE_DEFAULTS, group?: number, page?: number): Promise<AggregatedResults[]> {
   const curAuth = auth.getAuth();
   if (!curAuth) throw new Error('No Auth found');
 
@@ -214,7 +214,7 @@ export async function getAggregatedWords(filter?: string, wordsPerPage: number =
     throw new Error(errorText);
   }
 
-  const result = await response.json() as AggregatedResults;
+  const result = await response.json() as AggregatedResults[];
 
   return result;
 }
