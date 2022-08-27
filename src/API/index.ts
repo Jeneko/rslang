@@ -14,7 +14,7 @@ export async function getWords(group: number, page: number): Promise<Word[]> {
   return result;
 }
 
-export async function getWord(id: number): Promise<Word> {
+export async function getWord(id: string): Promise<Word> {
   const url = `${SOURCE}/${Endpoints.words}/${id}`;
   const response = await fetch(url);
   const result = await response.json() as Word;
