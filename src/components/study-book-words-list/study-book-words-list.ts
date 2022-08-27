@@ -3,24 +3,35 @@ import * as state from 'utils/state';
 import { getWordsWithUserData, getAllUserWordsWithData } from 'utils/user-words';
 import getStudyBookWordCard from 'components/study-book-word-card/study-book-word-card';
 import getStudyBookPagination from 'components/study-book-pagination/study-book-pagination';
+import { registerToUseHTML, emptyUserChapterHTML } from './study-book-words-list-html';
 import './study-book-words-list.css';
+
+function updateChapterInfo(wordsList: HTMLElement): void {
+  const { isUserChapter } = state.getState();
+  const wordsCards = wordsList.querySelectorAll('.word-card');
+
+  if (wordsCards.length === 0 && isUserChapter) {
+    const chapterInfo = wordsList.querySelector('.study-book-chapter-info') as HTMLElement;
+    chapterInfo.innerHTML = emptyUserChapterHTML;
+  }
+}
 
 function updateChapterStatus(wordsList: HTMLElement): void {
   const { isUserChapter } = state.getState();
-
-  if (isUserChapter) return;
-
+  const wordsCards = wordsList.querySelectorAll('.word-card');
   const badgesHard = wordsList.querySelectorAll('.status-badge--hard');
   const badgesLearned = wordsList.querySelectorAll('.status-badge--learned');
   const chapterStatus = wordsList.querySelector('.study-book-chapter-status') as HTMLElement;
 
-  if (badgesHard.length >= 20) {
+  if (isUserChapter) return;
+
+  if (badgesHard.length === wordsCards.length) {
     wordsList.classList.add('study-book-words-list--hard');
     chapterStatus.textContent = '| Hard list';
     return;
   }
 
-  if (badgesLearned.length >= 20) {
+  if (badgesLearned.length === wordsCards.length) {
     wordsList.classList.add('study-book-words-list--learned');
     chapterStatus.textContent = '| Learn Complete';
     return;
@@ -33,6 +44,7 @@ function updateChapterStatus(wordsList: HTMLElement): void {
 
 function handleEvents(elem: HTMLElement): void {
   elem.addEventListener('updateChapterStatus', () => updateChapterStatus(elem));
+  elem.addEventListener('deleteWordCard', () => updateChapterInfo(elem));
 }
 
 export default async function getStudyBookWordsList(): Promise<HTMLElement> {
@@ -45,25 +57,17 @@ export default async function getStudyBookWordsList(): Promise<HTMLElement> {
   const elem = document.createElement('div');
   elem.className = 'study-book-words-list';
 
-  const pageInfo = isUserChapter
-    ? 'User Words'
-    : `Page ${curPage}`;
-
-  const registerToUseHTML = `
-    <p class="text-center">
-      Chapter 7 contains the most difficult words user selected manually.
-      Please, <a class="load-page-link" href="#login">Login</a>
-      or <a class="load-page-link" href="#register">Register</a>
-      to start using this chapter.
-    </p>
-  `;
+  const pageInfo = isUserChapter ? 'User Words' : `Page ${curPage}`;
 
   elem.innerHTML = `
     <h2 class="study-book-chapter-heading">
       Chapter ${curChapter} | ${pageInfo}
       <span class="study-book-chapter-status"></span>
     </h2>
-    ${!curAuth && isUserChapter ? registerToUseHTML : ''}
+    <div class="study-book-chapter-info">
+      ${!curAuth && isUserChapter ? registerToUseHTML : ''}
+    </div>
+    <ol></ol>
   `;
 
   // Get apropriate set of words
@@ -73,24 +77,19 @@ export default async function getStudyBookWordsList(): Promise<HTMLElement> {
 
   // Fill words list with words
   if (words.length) {
-    const orderedList = document.createElement('ol');
+    const list = elem.querySelector('ol') as HTMLElement;
 
     words.forEach((word) => {
       const listItem = document.createElement('li');
       listItem.append(getStudyBookWordCard(word));
-      orderedList.append(listItem);
+      list.append(listItem);
     });
-
-    elem.append(orderedList);
   }
 
   // If current chapter is empty User Chapter and user is authorized
   if (isUserChapter && !words.length && curAuth) {
-    elem.innerHTML += `
-      <p class="text-center">
-        For now there is no words in this chapter. Mark words as <b>Hard</b> to add them into <b>Chapter 7 | User Words.</b>
-      </p>
-    `;
+    const chapterInfo = elem.querySelector('.study-book-chapter-info') as HTMLElement;
+    chapterInfo.innerHTML = emptyUserChapterHTML;
   }
 
   // Add pagination if current chapter is NOT User Chapter
