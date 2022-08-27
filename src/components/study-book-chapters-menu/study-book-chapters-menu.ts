@@ -19,7 +19,7 @@ function handleEvents(elem: HTMLElement): void {
     const btn = target.closest('.btn-select-chapter') as HTMLElement;
     if (btn) {
       const chapter = btn.dataset.chapter as string;
-      state.updateState('studyBookChapter', chapter);
+      state.updateState('studyBookChapter', Number(chapter));
       state.updateState('studyBookPage', 0);
       elem.dispatchEvent(new Event('loadStudyBookChapter', { bubbles: true }));
     }
