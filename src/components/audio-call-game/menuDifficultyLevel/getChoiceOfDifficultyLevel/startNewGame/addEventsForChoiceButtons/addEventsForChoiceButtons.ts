@@ -15,6 +15,10 @@ export default function addEventsForChoiceButtons(currentWord: string, gameState
 }
 
 async function checkAnswer(e: Event, eventExecutor: string, buttonsChoice: NodeListOf<Element>, currentWord: string, gameState: GameState) {
+  const button = e.target as HTMLElement;
+  if (!button.classList.contains('btn-choice-of-answer') && eventExecutor === 'click') {
+    return;
+  }
   const currentButton = getCheckButton(e, eventExecutor) as HTMLElement | null;
   const buttonNextQuestion = document.querySelector('.btn-next-question') as HTMLElement;
   if (!currentButton || currentButton.hasAttribute('disabled')) {
