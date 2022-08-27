@@ -25,7 +25,7 @@ export enum Endpoints {
   signin = 'signin',
   tokens = 'tokens',
   aggregatedWords = 'aggregatedWords',
-  // TODO: add other endpoints
+  statistics = 'statistics',
 }
 
 export enum AlertType {
@@ -54,6 +54,31 @@ export enum WordStatus {
   default = 'default',
   learned = 'learned',
   hard = 'hard',
+}
+
+export interface Statistic {
+  learnedWords: number;
+  optional: StatisticOptions;
+}
+
+export interface StatisticOptions {
+  words: WordsStatistic[];
+  sprint: GameStatistic[];
+  audiocall: GameStatistic[];
+}
+
+export interface GameStatistic {
+  date: Date;
+  newWordsQty: number;
+  longestRow: number;
+  rightAnswers: number;
+}
+
+export interface WordsStatistic {
+  date: Date;
+  newWordsQty: number;
+  learnedWordsQty: number;
+  rightAnswers: number;
 }
 
 export interface Word {
