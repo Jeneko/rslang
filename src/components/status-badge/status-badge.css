@@ -3,8 +3,7 @@
   display: inline-flex;
   align-items: center;
   gap: 1rem;
-  padding-left: 2rem;
-  padding-right: 1rem;
+  padding: 6px 1rem 0 2rem;
   color: white;
   overflow: hidden;
   border: none;
