@@ -21,8 +21,7 @@ export default function getHeader(): HTMLElement {
 
   elem.innerHTML = `
     <nav class="navbar navbar-expand-lg bg-light">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">RSLang</a>
+      <div class="container">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -44,7 +43,7 @@ export default function getHeader(): HTMLElement {
               </ul>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#stats">Statistics</a>
+              <a class="nav-link load-page-link" href="#stats">Statistics</a>
             </li>
             <li class="nav-item">
               <a class="nav-link load-page-link" href="#team">Our Team</a>
