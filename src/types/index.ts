@@ -87,6 +87,11 @@ export interface UserWord {
   optional: UserWordOptions;
 }
 
+export interface WordWithUserWord extends Word {
+  _id?: string;
+  userWord: UserWord;
+}
+
 export interface UserWordOptions {
   guessedRight: number;
   guessedWrong: number;
