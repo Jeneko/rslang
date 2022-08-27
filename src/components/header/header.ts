@@ -1,19 +1,4 @@
-import * as state from 'utils/state';
 import getAuthMenu from 'components/auth-menu/auth-menu';
-
-function handleEvents(elem: HTMLElement): void {
-  elem.onclick = async (e) => {
-    e.preventDefault();
-    const target = e.target as HTMLLinkElement;
-
-    // Click on links
-    if (target.classList.contains('load-page-link')) {
-      const link = target.getAttribute('href') as string;
-      state.updateState('page', link.slice(1));
-      elem.dispatchEvent(new Event('loadPage', { bubbles: true }));
-    }
-  };
-}
 
 export default function getHeader(): HTMLElement {
   const elem = document.createElement('header');
@@ -58,8 +43,6 @@ export default function getHeader(): HTMLElement {
 
   const authMenu = elem.querySelector('.auth-menu') as HTMLElement;
   authMenu.replaceWith(getAuthMenu());
-
-  handleEvents(elem);
 
   return elem;
 }
