@@ -10,7 +10,7 @@ export default function getAboutApp(): HTMLElement {
       <div class="row justify-content-around about-wrapper">
         <div class="col-sm-10 col-md-5 align-self-center about-wrapper--block">
           <h1 class="page-heading__rslang about-app--title display-2">RS Lang</h1>
-          <h2 class="about-app--subtitle display-4">Learning English is very easy and fun!</h2>
+          <h2 class="about-app--subtitle display-4">Learning English can be easy and fun!</h2>
           <p class="about-app--content">
             Memorize words using the dictionary and playing mini games,
             listen to pronunciation, study transcription, examples in sentences,
