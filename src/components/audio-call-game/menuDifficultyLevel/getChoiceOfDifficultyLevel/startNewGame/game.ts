@@ -36,6 +36,7 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
       if (currentLevel) {
         const randomPage = Math.trunc(Math.random() * MAX_PAGE_NUM);
         updateState('indexWord', 0);
+
         const listWords = await getWords(+currentLevel, randomPage);
         await generateWindowGame(listWords[0], listWords, state);
         windowGameBlock?.append(blockButtonNextQuestion);
@@ -169,13 +170,13 @@ function showResult(modalResultGame: HTMLElement, gameState: GameState) {
 export async function checkNextQuestion(e: Event, buttonNextQuestion: HTMLElement, listWords: Word[], gameState: GameState) {
   console.log('event work');
   buttonNextQuestion.textContent = 'I do not know';
-  const currentIndex = getState().indexWord;
+  const currentIndex = getState().indexWord + 1;
   if (currentIndex >= listWords.length) {
     clearGameWindow();
     const modalGameResult = getModalResultGame(gameState);
     playAgainButtonClickHandler(modalGameResult);
     showResult(modalGameResult, gameState);
-    updateState('indexWord', currentIndex + 1);
+    updateState('indexWord', currentIndex);
   } else if (buttonNextQuestion.getAttribute('wordchosen') === 'false') {
     hiddenAllButtons();
     showCurrentWordInfo();
@@ -188,6 +189,6 @@ export async function checkNextQuestion(e: Event, buttonNextQuestion: HTMLElemen
     buttonNextQuestion.setAttribute('wordchosen', 'false');
     clearGameWindow();
     generateWindowGame(listWords[currentIndex], listWords, gameState);
-    updateState('indexWord', currentIndex + 1);
+    updateState('indexWord', currentIndex);
   }
 }
