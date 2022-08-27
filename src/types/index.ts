@@ -72,7 +72,7 @@ export interface Word {
 }
 
 export interface AggregatedResults {
-  paginatedResults: Word[];
+  paginatedResults: WordWithUserWord[];
   totalCount: { count: number }[];
 }
 
