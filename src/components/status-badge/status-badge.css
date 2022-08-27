@@ -1,0 +1,36 @@
+.status-badge {
+  text-transform: capitalize;
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  padding-left: 2rem;
+  padding-right: 1rem;
+  color: white;
+  overflow: hidden;
+  border: none;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  box-shadow: 0px 12px 6px -6px rgb(0 37 50 / 20%);
+  transition: all 0.3s ease;
+}
+
+.status-badge:hover {
+  transform: translateY(-3px);
+  box-shadow: 0px 15px 7px -7px rgb(0 37 50 / 15%);
+}
+
+.status-badge--hard {
+  background-color: var(--bs-red);
+}
+
+.status-badge--learned {
+  background-color: var(--bs-green);
+}
+
+.status-badge--default {
+  display: none;
+}
+
+.status-badge__cross-icon {
+  width: 11px;
+}
