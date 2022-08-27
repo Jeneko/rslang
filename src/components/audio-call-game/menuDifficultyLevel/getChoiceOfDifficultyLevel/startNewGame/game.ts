@@ -6,8 +6,9 @@ import controlGameWindow from 'components/audio-call-game/menuDifficultyLevel/co
 import createMenuGame from 'components/audio-call-game/createMenuGame';
 import generateWindowGame from './generateWindowGame/generateWindowGame';
 import showCurrentWordInfo from './addEventsForChoiceButtons/showCurrentWordInfo/showCurrentWordInfo';
-import { CHECKICON, WRONGICON } from './addEventsForChoiceButtons/addEventsForChoiceButtons';
 import hiddenAllButtons from './addEventsForChoiceButtons/disableAllButtonsChoice/disableAllButtonsChoice';
+import audioImage from '../../../../../assets/speaker-icon.svg';
+import playAudio from './playAudio/playAudio';
 
 const MAX_PAGE_NUM = 30;
 
@@ -113,13 +114,17 @@ export function getNewWindowGame(): HTMLElement {
   return menu;
 }
 
-function getAllAnswersForGame(list: Word[], blockList: HTMLElement, correctAnswers: boolean) {
-  const iconQuestion = correctAnswers ? CHECKICON : WRONGICON;
+function getAllAnswersForGame(list: Word[], blockList: HTMLElement) {
   const fragment = document.createDocumentFragment();
   list.forEach((el) => {
     const listItem = document.createElement('li');
     listItem.classList.add('list-group-item');
-    listItem.innerHTML = `${iconQuestion} ${el.word} | ${el.wordTranslate}`;
+    listItem.innerHTML = `<button class="button-audio-result"><img class="button-audio-image" src="${audioImage}"></button> ${el.word} | ${el.wordTranslate}`;
+    const buttonAudio = listItem.querySelector('.button-audio-result');
+    buttonAudio?.addEventListener('click', () => {
+      console.log(el, el.audio);
+      playAudio(el.audio);
+    });
     fragment.append(listItem);
   });
   blockList.append(fragment);
@@ -160,8 +165,8 @@ function showResult(modalResultGame: HTMLElement, gameState: GameState) {
   const blockListWrong = modalResultGame.querySelector('.list-group-wrong') as HTMLElement;
   const { correctAnswers, wrongAnswers } = gameState;
 
-  getAllAnswersForGame(correctAnswers, blockListCorrect, true);
-  getAllAnswersForGame(wrongAnswers, blockListWrong, false);
+  getAllAnswersForGame(correctAnswers, blockListCorrect);
+  getAllAnswersForGame(wrongAnswers, blockListWrong);
 
   buttonNextQuestion?.remove();
   parentModal?.append(modalResultGame);

@@ -75,3 +75,15 @@
 .current-word-info {
   margin-top: 24px;
 }
+
+.button-audio-result {
+  width: 30px;
+  margin-right: 1.3rem;
+  border: none;
+  background-color: transparent;
+}
+
+.button-audio-image {
+  width: 30px;
+  height: 30px;
+}

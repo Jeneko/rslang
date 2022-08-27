@@ -1,4 +1,4 @@
-import { getWord } from 'API/index';
+import { Word } from 'types/index';
 import showCurrentWordInfo from './showCurrentWordInfo/showCurrentWordInfo';
 import { GameState } from '../game.types';
 import hiddenAllButtons from './disableAllButtonsChoice/disableAllButtonsChoice';
@@ -7,14 +7,14 @@ export const CHECKICON = '\u2713';
 export const WRONGICON = '\u2716';
 const nextQuestion = 'Next question';
 
-export default function addEventsForChoiceButtons(currentWord: string, gameState: GameState): void {
+export default function addEventsForChoiceButtons(currentWord: string, gameState: GameState, correctWord: Word): void {
   const buttonsChoiceWrapper = document.querySelector('.row-buttons-choice-wrapper');
   const buttonsChoice = document.querySelectorAll('.btn-choice-of-answer');
-  buttonsChoiceWrapper?.addEventListener('click', async (e: Event) => checkAnswer(e, 'click', buttonsChoice, currentWord, gameState));
+  buttonsChoiceWrapper?.addEventListener('click', async (e: Event) => checkAnswer(e, 'click', buttonsChoice, currentWord, gameState, correctWord));
   console.log(currentWord, 'current');
 }
 
-async function checkAnswer(e: Event, eventExecutor: string, buttonsChoice: NodeListOf<Element>, currentWord: string, gameState: GameState) {
+async function checkAnswer(e: Event, eventExecutor: string, buttonsChoice: NodeListOf<Element>, currentWord: string, gameState: GameState, correctWord: Word) {
   const button = e.target as HTMLElement;
   if (!button.classList.contains('btn-choice-of-answer') && eventExecutor === 'click') {
     return;
@@ -26,7 +26,7 @@ async function checkAnswer(e: Event, eventExecutor: string, buttonsChoice: NodeL
   }
   hiddenAllButtons();
 
-  wordDistribution(currentButton, currentWord, gameState);
+  wordDistribution(currentButton, currentWord, gameState, correctWord);
 
   showCurrentWordInfo();
   buttonNextQuestion.textContent = nextQuestion;
@@ -60,24 +60,23 @@ function getCheckButton(e: Event, eventExecutor: string): HTMLElement | null {
   return null;
 }
 
-export function addEventsForKeyboard(currentWord: string, gameState: GameState) {
+export function addEventsForKeyboard(currentWord: string, gameState: GameState, correctWord: Word) {
   const buttonsChoice = document.querySelectorAll('.btn-choice-of-answer');
   const gamePage = document.querySelector('.row-buttons-choice-wrapper') as HTMLElement;
   gamePage.focus();
   gamePage.addEventListener('keyup', (e) => {
-    checkAnswer(e, 'key', buttonsChoice, currentWord, gameState);
+    checkAnswer(e, 'key', buttonsChoice, currentWord, gameState, correctWord);
   });
   gamePage.addEventListener('blur', () => {
     gamePage.focus();
   });
 }
 
-export async function wordDistribution(currentButton: HTMLElement, currentWord: string, gameState: GameState) {
+export async function wordDistribution(currentButton: HTMLElement, currentWord: string, gameState: GameState, correctWord: Word) {
   const buttonWord = currentButton.textContent;
 
   const currentIcon = document.createElement('span');
-  const wordId = (currentButton as HTMLElement).dataset.id as string;
-  const word = await getWord(wordId);
+  const word = correctWord;
   console.log(buttonWord, currentWord);
   if (buttonWord === currentWord) {
     gameState.correctAnswers.push(word);
