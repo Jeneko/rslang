@@ -1,8 +1,8 @@
-export default function createMenuGame(): HTMLElement {
+export default function createMenuGame(previousBookStudy: boolean): HTMLElement {
   const elem = document.createElement('div');
   elem.className = 'audio-call-game container';
-
-  elem.innerHTML = `
+  if (!previousBookStudy) {
+    elem.innerHTML = `
     <h1 class="page-heading"><span class="page-heading__rslang">RSLang</span> Audio-call</h1>
     <div class="buttons-level-block">
       <h2>Levels</h2>
@@ -17,8 +17,14 @@ export default function createMenuGame(): HTMLElement {
         <li><button class="btn btn-danger btn-select-level" data-level="6">7</button></li>
       </ol>
     </div>
-    <div class="game-window game-window--hidden"></div>
+      <div class="game-window game-window--hidden"></div>
   </div>
   `;
+  } else {
+    elem.innerHTML = `
+    <h1 class="page-heading"><span class="page-heading__rslang">RSLang</span> Audio-call</h1>
+    <div class="game-window"></div>
+  `;
+  }
   return elem;
 }

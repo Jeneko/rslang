@@ -11,40 +11,75 @@ import hiddenAllButtons from './addEventsForChoiceButtons/disableAllButtonsChoic
 
 const MAX_PAGE_NUM = 30;
 
-export async function startNewGame(event: Event): Promise<void> {
-  const buttonCheck = event.target as HTMLElement;
-  const buttonsWrapper = document.querySelector('.button-wrapper-audiocall');
-  if (buttonsWrapper) {
-    buttonsWrapper?.remove();
-  }
-  const blockButtonNextQuestion = document.createElement('div');
-  blockButtonNextQuestion.classList.add('button-wrapper-audiocall');
-  blockButtonNextQuestion.innerHTML = `
-  <button type="button" class="btn btn-primary btn-next-question btn--hidden">I do not know</button>
-  `;
-
-  const windowGameBlock = document.querySelector('.audio-call-game');
-  const state: GameState = {
-    correctAnswers: [],
-    wrongAnswers: [],
-    currentLevel: +(buttonCheck.dataset.level as String),
-  };
-  if (buttonCheck.classList.contains('btn-select-level') || buttonCheck.classList.contains('btn-play-again')) {
-    const currentLevel = (buttonCheck.dataset.level);
-    controlGameWindow();
-    if (currentLevel) {
-      const randomPage = Math.trunc(Math.random() * MAX_PAGE_NUM);
-      updateState('indexWord', 0);
-      const listWords = await getWords(+currentLevel, randomPage);
-      await generateWindowGame(listWords[0], listWords, state);
-      windowGameBlock?.append(blockButtonNextQuestion);
-      addEventsForNextQuestionButton(randomPage, listWords, state);
+export async function startNewGame(event: Event | null, startPage: HTMLElement | undefined): Promise<void> {
+  if (event) {
+    const buttonCheck = event.target as HTMLElement;
+    const buttonsWrapper = document.querySelector('.button-wrapper-audiocall');
+    if (buttonsWrapper) {
+      buttonsWrapper?.remove();
     }
+    const blockButtonNextQuestion = document.createElement('div');
+    blockButtonNextQuestion.classList.add('button-wrapper-audiocall');
+    blockButtonNextQuestion.innerHTML = `
+    <button type="button" class="btn btn-primary btn-next-question btn--hidden">I do not know</button>
+    `;
+
+    const windowGameBlock = document.querySelector('.audio-call-game') as HTMLElement;
+    const state: GameState = {
+      correctAnswers: [],
+      wrongAnswers: [],
+      currentLevel: +(buttonCheck.dataset.level as String),
+    };
+    if (buttonCheck.classList.contains('btn-select-level') || buttonCheck.classList.contains('btn-play-again')) {
+      const currentLevel = (buttonCheck.dataset.level);
+      controlGameWindow();
+      if (currentLevel) {
+        const randomPage = Math.trunc(Math.random() * MAX_PAGE_NUM);
+        updateState('indexWord', 0);
+        const listWords = await getWords(+currentLevel, randomPage);
+        await generateWindowGame(listWords[0], listWords, state);
+        windowGameBlock?.append(blockButtonNextQuestion);
+        addEventsForNextQuestionButton(windowGameBlock, listWords, state);
+      }
+    }
+  } else {
+    let buttonsWrapper = document.querySelector('.button-wrapper-audiocall');
+    if (buttonsWrapper) {
+      buttonsWrapper.remove();
+    } else {
+      buttonsWrapper = document.createElement('div');
+      buttonsWrapper.classList.add('.button-wrapper-audiocall');
+    }
+    const currentPage = getState().studyBookPage;
+    const currentChapter = getState().studyBookChapter;
+    if (buttonsWrapper) {
+      buttonsWrapper?.remove();
+    }
+    const blockButtonNextQuestion = document.createElement('div');
+    blockButtonNextQuestion.classList.add('button-wrapper-audiocall');
+    blockButtonNextQuestion.innerHTML = `
+    <button type="button" class="btn btn-primary btn-next-question btn--hidden">I do not know</button>
+    `;
+
+    const windowGameBlock = startPage?.querySelector('.audio-call-game') as HTMLElement;
+    const state: GameState = {
+      correctAnswers: [],
+      wrongAnswers: [],
+      currentLevel: +currentPage,
+    };
+    controlGameWindow();
+    updateState('indexWord', 0);
+    const listWords = await getWords(currentChapter, currentPage);
+    await generateWindowGame(listWords[0], listWords, state);
+    windowGameBlock?.append(blockButtonNextQuestion);
+    addEventsForNextQuestionButton(windowGameBlock, listWords, state);
+    console.log(windowGameBlock);
   }
 }
 
-export function addEventsForNextQuestionButton(numberPage: number, listWords: Word[], gameState: GameState) {
-  const buttonNextQuestion = document.querySelector('.btn-next-question') as HTMLElement;
+export function addEventsForNextQuestionButton(windowGameBlock: HTMLElement, listWords: Word[], gameState: GameState) {
+  const buttonNextQuestion = windowGameBlock.querySelector('.btn-next-question') as HTMLElement;
+  console.log(buttonNextQuestion, 'button next');
   buttonNextQuestion.setAttribute('wordchosen', 'false');
   buttonNextQuestion?.addEventListener('click', (e: Event) => {
     checkNextQuestion(e, buttonNextQuestion, listWords, gameState);
@@ -62,10 +97,18 @@ export function clearGameWindow(): void {
 }
 
 export function getNewWindowGame(): HTMLElement {
+  const previousPage = getState().page;
   const menu = document.querySelector('.audio-call-page') as HTMLElement || document.createElement('div') as HTMLElement;
-  menu.append(createMenuGame());
-  const menuLevels = menu.querySelector('.btn-wrapper');
-  menuLevels?.addEventListener('click', startNewGame);
+  if (previousPage === 'study-book') {
+    menu.append(createMenuGame(true));
+    startNewGame(null, menu);
+  } else {
+    console.log('no-auth');
+    menu.append(createMenuGame(false));
+    const menuLevels = menu.querySelector('.btn-wrapper');
+    menuLevels?.addEventListener('click', (e: Event) => startNewGame(e, undefined));
+  }
+  console.log(menu);
   return menu;
 }
 
