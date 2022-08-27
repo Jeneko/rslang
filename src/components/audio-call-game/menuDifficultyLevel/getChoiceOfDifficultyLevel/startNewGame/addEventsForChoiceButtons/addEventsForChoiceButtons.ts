@@ -32,6 +32,13 @@ function getCheckButton(e: Event, eventExecutor: string): HTMLElement | null {
   if (eventExecutor === 'key') {
     const valuesKeyTargets = ['Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5'];
     const keyTarget = (e as KeyboardEvent).code;
+    console.log(keyTarget);
+    if (keyTarget === 'Enter') {
+      console.log('enter');
+      const buttonNextQuestion = document.querySelector('.btn-next-question');
+      const event = new Event('checkNextQuestion');
+      buttonNextQuestion?.dispatchEvent(event);
+    }
     if (valuesKeyTargets.includes(keyTarget)) {
       const numberButton = valuesKeyTargets.indexOf(keyTarget);
       const allButtons = document.querySelectorAll('.btn-choice-of-answer');

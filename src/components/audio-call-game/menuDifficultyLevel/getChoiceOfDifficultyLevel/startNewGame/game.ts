@@ -22,6 +22,7 @@ export async function startNewGame(event: Event): Promise<void> {
   blockButtonNextQuestion.innerHTML = `
   <button type="button" class="btn btn-primary btn-next-question btn--hidden">I do not know</button>
   `;
+
   const windowGameBlock = document.querySelector('.audio-call-game');
   const state: GameState = {
     correctAnswers: [],
@@ -42,32 +43,14 @@ export async function startNewGame(event: Event): Promise<void> {
   }
 }
 
-export function addEventsForNextQuestionButton(numberPage: number, listWords: Word[], gameState: GameState): void {
+export function addEventsForNextQuestionButton(numberPage: number, listWords: Word[], gameState: GameState) {
   const buttonNextQuestion = document.querySelector('.btn-next-question') as HTMLElement;
   buttonNextQuestion.setAttribute('wordchosen', 'false');
-  buttonNextQuestion?.addEventListener('click', async () => {
-    buttonNextQuestion.textContent = 'I do not know';
-    const currentIndex = getState().indexWord;
-    if (currentIndex >= listWords.length) {
-      clearGameWindow();
-      const modalGameResult = getModalResultGame(gameState);
-      playAgainButtonClickHandler(modalGameResult);
-      showResult(modalGameResult, gameState);
-      updateState('indexWord', currentIndex + 1);
-    } else if (buttonNextQuestion.getAttribute('wordchosen') === 'false') {
-      hiddenAllButtons();
-      showCurrentWordInfo();
-      buttonNextQuestion.textContent = 'Next question';
-      buttonNextQuestion.setAttribute('wordchosen', 'true');
-      const wordId = (document.querySelector('.current-word-info') as HTMLElement).dataset.id as string;
-      const word = await getWord(wordId as string);
-      gameState.wrongAnswers.push(word);
-    } else {
-      buttonNextQuestion.setAttribute('wordchosen', 'false');
-      clearGameWindow();
-      generateWindowGame(listWords[currentIndex], listWords, gameState);
-      updateState('indexWord', currentIndex + 1);
-    }
+  buttonNextQuestion?.addEventListener('click', (e: Event) => {
+    checkNextQuestion(e, buttonNextQuestion, listWords, gameState);
+  });
+  buttonNextQuestion.addEventListener('checkNextQuestion', (e) => {
+    checkNextQuestion(e, buttonNextQuestion, listWords, gameState);
   });
 }
 
@@ -138,4 +121,30 @@ function showResult(modalResultGame: HTMLElement, gameState: GameState) {
 
   buttonNextQuestion?.remove();
   parentModal?.append(modalResultGame);
+}
+
+export async function checkNextQuestion(e: Event, buttonNextQuestion: HTMLElement, listWords: Word[], gameState: GameState) {
+  console.log('event work');
+  buttonNextQuestion.textContent = 'I do not know';
+  const currentIndex = getState().indexWord;
+  if (currentIndex >= listWords.length) {
+    clearGameWindow();
+    const modalGameResult = getModalResultGame(gameState);
+    playAgainButtonClickHandler(modalGameResult);
+    showResult(modalGameResult, gameState);
+    updateState('indexWord', currentIndex + 1);
+  } else if (buttonNextQuestion.getAttribute('wordchosen') === 'false') {
+    hiddenAllButtons();
+    showCurrentWordInfo();
+    buttonNextQuestion.textContent = 'Next question';
+    buttonNextQuestion.setAttribute('wordchosen', 'true');
+    const wordId = (document.querySelector('.current-word-info') as HTMLElement).dataset.id as string;
+    const word = await getWord(wordId as string);
+    gameState.wrongAnswers.push(word);
+  } else {
+    buttonNextQuestion.setAttribute('wordchosen', 'false');
+    clearGameWindow();
+    generateWindowGame(listWords[currentIndex], listWords, gameState);
+    updateState('indexWord', currentIndex + 1);
+  }
 }
