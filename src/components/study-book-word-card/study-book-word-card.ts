@@ -4,6 +4,7 @@ import { WordWithUserWord } from 'types/index';
 import { getWordWithUserData } from 'utils/user-words';
 import getWordAudio from 'components/word-audio/word-audio';
 import getStatusBadge from 'components/status-badge/status-badge';
+import getWordStatistic from 'components/word-statistic/word-statistic';
 import getWordStatusControls from 'components/word-status-controls/word-status-controls';
 import './study-book-word-card.css';
 
@@ -59,8 +60,13 @@ export default function getStudyBookWordCard(word: WordWithUserWord): HTMLElemen
     wordCardBtnContainer.append(getWordStatusControls(word));
 
     const statusBadge = getStatusBadge(word);
+    const wordStats = getWordStatistic(word);
+
     statusBadge.classList.add('word-card__status-badge');
+    wordStats.classList.add('word-card__word-stat-container');
+
     elem.prepend(statusBadge);
+    elem.prepend(wordStats);
   }
 
   handleEvents(elem, word.id);
