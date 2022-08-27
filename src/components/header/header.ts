@@ -1,5 +1,16 @@
 import * as state from 'utils/state';
 import getAuthMenu from 'components/auth-menu/auth-menu';
+import './header.css';
+
+function highlightActiveMenuItem(elem: HTMLElement): void {
+  const { page } = state.getState();
+  const activePage = elem.querySelector(`[href="#${page}"]`) as HTMLButtonElement;
+  console.log(activePage);
+
+  if (activePage) {
+    activePage.classList.add('active-page');
+  }
+}
 
 function handleEvents(elem: HTMLElement): void {
   elem.onclick = async (e) => {
@@ -58,6 +69,7 @@ export default function getHeader(): HTMLElement {
   const authMenu = elem.querySelector('.auth-menu') as HTMLElement;
   authMenu.replaceWith(getAuthMenu());
 
+  highlightActiveMenuItem(elem);
   handleEvents(elem);
 
   return elem;
