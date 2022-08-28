@@ -80,12 +80,14 @@ export async function wordDistribution(currentButton: HTMLElement, currentWord: 
   console.log(buttonWord, currentWord);
   if (buttonWord === currentWord) {
     gameState.correctAnswers.push(word);
+    currentIcon.classList.add('correct-icon-audiocall');
     currentIcon.textContent = CHECKICON;
     currentButton.prepend(currentIcon);
     currentButton.classList.add('btn-success');
     currentButton.classList.remove('btn-light');
   } else {
     gameState.wrongAnswers.push(word);
+    currentIcon.classList.add('wrong-icon-audiocall');
     currentIcon.textContent = WRONGICON;
     currentButton.prepend(currentIcon);
     currentButton.classList.remove('btn-light');

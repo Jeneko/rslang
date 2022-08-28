@@ -87,3 +87,28 @@
   width: 30px;
   height: 30px;
 }
+
+.btn-choice-of-answer {
+  font-size: 20px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.btn-choice-of-answer:disabled {
+  opacity: 1;
+}
+
+.btn-next-question {
+  margin-top: 40px;
+  font-size: 30px;
+}
+
+.wrong-icon-audiocall {
+  color: transparent;  
+  text-shadow: 0 0 0 white;
+}
+
+.correct-icon-audiocall {
+  color: transparent;  
+  text-shadow: 0 0 0 white;
+}
