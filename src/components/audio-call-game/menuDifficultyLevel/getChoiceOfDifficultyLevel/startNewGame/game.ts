@@ -1,4 +1,4 @@
-import { getWords, getWord } from 'API/index';
+import { getWords, getWord, getAggregatedWords } from 'API/index';
 import { updateState, getState } from 'utils/state';
 import { Word } from 'types/index';
 import { GameState } from 'game.types';
@@ -105,7 +105,8 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
     };
     controlGameWindow();
     updateState('indexWord', 0);
-    const listWords = await getWords(currentChapter, currentPage);
+    const listWords = await getAuthWords(currentChapter, currentPage);
+    console.log(listWords, listWords.length);
     await generateWindowGame(listWords[0], listWords, state);
     windowGameBlock?.append(blockButtonNextQuestion);
     addEventsForNextQuestionButton(windowGameBlock, listWords, state);
@@ -230,4 +231,28 @@ export async function checkNextQuestion(e: Event, buttonNextQuestion: HTMLElemen
     generateWindowGame(listWords[currentIndex], listWords, gameState);
     updateState('indexWord', currentIndex);
   }
+}
+
+async function getAuthWords(currentLevel: string | number, currentPage: string | number): Promise<Word[]> {
+  const words: Word[] = [];
+  async function getMoreWords(level: number, page: number) {
+    console.log('cicle');
+    const filter = `{"$and":[{"userWord.difficulty": {"$not": {"$eq": "learned"}}},{"page":${level}},{"group": ${page}}]}`;
+    const resp = await getAggregatedWords(filter, 20);
+    let result = resp[0].paginatedResults;
+    if (words.length + result.length > 20) {
+      const length = words.length + result.length - 20;
+      result = result.splice(length);
+    }
+    words.push(...result);
+    if (page === 0) {
+      return;
+    }
+    if (words.length < 20) {
+      await getMoreWords(level, page - 1);
+    }
+  }
+  await getMoreWords(+currentLevel, +currentPage);
+  console.log(words.flat(), words.flat().length, 'words');
+  return words.flat();
 }

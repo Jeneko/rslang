@@ -1,3 +1,8 @@
+import getAudioCallPage from 'components/audio-call-page/audio-call-page';
+import getHeader from 'components/header/header';
+import getSprintPage from 'components/sprint-page/sprint-page';
+import { PageName } from 'types/index';
+import * as state from 'utils/state';
 import './mini-games-menu.css';
 
 export default function getMiniGamesMenu(): HTMLElement {
@@ -7,9 +12,29 @@ export default function getMiniGamesMenu(): HTMLElement {
   elem.innerHTML = `
     <h2>Mini-Games</h2>
     <p>Start playing from here</p>
-    <button class="btn btn-primary">Audio-Call</button>
-    <button class="btn btn-primary">Sprint</button>
+    <button class="btn btn-primary game">Audio-Call</button>
+    <button class="btn btn-primary game">Sprint</button>
   `;
+
+  handleMiniGamesMenu(elem);
 
   return elem;
 }
+
+const handleMiniGamesMenu = (elem: HTMLElement) => {
+  elem.addEventListener('click', async (event) => {
+    const target = event.target as Element;
+    if (target.classList.contains('game')) {
+      const link = target.textContent as string;
+      document.body.innerHTML = '';
+      document.body.append(getHeader());
+      if (link.toLowerCase() === PageName.sprint) {
+        document.body.append(await getSprintPage());
+      }
+      if (link.toLowerCase() === PageName.audioCall) {
+        document.body.append(await getAudioCallPage());
+      }
+      state.updateState('page', link.toLowerCase());
+    }
+  });
+};
