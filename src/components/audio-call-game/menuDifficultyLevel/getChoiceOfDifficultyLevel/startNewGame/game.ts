@@ -4,6 +4,8 @@ import { Word } from 'types/index';
 import { GameState } from 'game.types';
 import controlGameWindow from 'components/audio-call-game/menuDifficultyLevel/controlGameWindow/controlGameWindow';
 import createMenuGame from 'components/audio-call-game/createMenuGame';
+import { getAllUserWordsWithData } from 'utils/user-words';
+import { getAuth } from 'utils/auth';
 import generateWindowGame from './generateWindowGame/generateWindowGame';
 import showCurrentWordInfo from './addEventsForChoiceButtons/showCurrentWordInfo/showCurrentWordInfo';
 import hiddenAllButtons from './addEventsForChoiceButtons/disableAllButtonsChoice/disableAllButtonsChoice';
@@ -14,6 +16,24 @@ const MAX_PAGE_NUM = 30;
 
 export async function startNewGame(event: Event | null, startPage: HTMLElement | undefined): Promise<void> {
   if (event) {
+    const statusAuth = getAuth();
+    if (!statusAuth && +((event.target as HTMLElement).dataset.level as string) === 6) {
+      if (document.querySelector('.info-no-auth')) {
+        return;
+      }
+      const modalInfo = document.createElement('div');
+      modalInfo.innerHTML = `
+        <p>
+          Chapter 7 contains the most difficult words user selected manually. Please, Login or Register to start using this chapter.
+        </p>
+      `;
+      modalInfo.classList.add('container', 'info-no-auth');
+      document.body.append(modalInfo);
+      return;
+    }
+    if (document.querySelector('.info-no-auth')) {
+      document.querySelector('.info-no-auth')?.remove();
+    }
     const buttonCheck = event.target as HTMLElement;
     const buttonsWrapper = document.querySelector('.button-wrapper-audiocall');
     if (buttonsWrapper) {
@@ -37,8 +57,22 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
       if (currentLevel) {
         const randomPage = Math.trunc(Math.random() * MAX_PAGE_NUM);
         updateState('indexWord', 0);
-
-        const listWords = await getWords(+currentLevel, randomPage);
+        const listWords = +currentLevel === 6 ? await getAllUserWordsWithData() : await getWords(+currentLevel, randomPage);
+        console.log(listWords);
+        if (listWords.length === 0) {
+          if (document.querySelector('.info-no-auth')) {
+            return;
+          }
+          const modalInfo = document.createElement('div');
+          modalInfo.innerHTML = `
+            <p>
+              You do not have hard words!
+            </p>
+          `;
+          modalInfo.classList.add('container', 'info-empty-hard-words');
+          document.body.append(modalInfo);
+          return;
+        }
         await generateWindowGame(listWords[0], listWords, state);
         windowGameBlock?.append(blockButtonNextQuestion);
         addEventsForNextQuestionButton(windowGameBlock, listWords, state);

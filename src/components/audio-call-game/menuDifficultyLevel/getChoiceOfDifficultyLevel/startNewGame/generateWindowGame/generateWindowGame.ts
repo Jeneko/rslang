@@ -14,6 +14,7 @@ export default async function generateWindowGame(currentWord: Word, arrayWords: 
   } = currentWord;
   const imageResponse = `${SOURCE}/${image}`;
   const listRandomWords = getRandomWords(currentWord, arrayWords);
+  console.log(arrayWords, arrayWords.length, 'ArrayWords');
   windowGame.innerHTML = `
     <div class="container text-center">
       <div class="row">
@@ -30,23 +31,23 @@ export default async function generateWindowGame(currentWord: Word, arrayWords: 
         </div>
       </div>
       <div tabindex="-1" class="row row-buttons-choice-wrapper">
-      <div class="col">
-        <button  type="button" data-id="${listRandomWords[0][1]}" class="btn btn-light btn-choice-of-answer">${listRandomWords[0][0]}</button>
-      </div>
-      <div class="col">
-        <button type="button" data-id="${listRandomWords[1][1]}" class="btn btn-light btn-choice-of-answer">${listRandomWords[1][0]}</button>
-      </div>
-      <div class="col">
-        <button type="button" data-id="${listRandomWords[2][1]}" class="btn btn-light btn-choice-of-answer">${listRandomWords[2][0]}</button>
-      </div>
-      <div class="col">
-        <button type="button" data-id="${listRandomWords[3][1]}" class="btn btn-light btn-choice-of-answer">${listRandomWords[3][0]}</button>
-      </div>
-      <div class="col">
-        <button type="button" data-id="${listRandomWords[4][1]}" class="btn btn-light btn-choice-of-answer">${listRandomWords[4][0]}</button>
       </div>
     </div>
   `;
+  const fragmentButton = document.createDocumentFragment();
+  const buttonsWrapper = windowGame.querySelector('.row-buttons-choice-wrapper');
+  listRandomWords.forEach((el, index) => {
+    const button = document.createElement('div');
+    button.classList.add('col');
+    console.log(el, el[index], index);
+    button.innerHTML = `
+      <div class="col">
+        <button  type="button" data-id="${el[1]}" class="btn btn-light btn-choice-of-answer">${el[0]}</button>
+      </div>
+    `;
+    fragmentButton.append(button);
+  });
+  buttonsWrapper?.append(fragmentButton);
   await playAudio(audio);
   const buttonAudio = document.getElementById('playAudio');
   buttonAudio?.addEventListener('click', () => playAudio(audio));
