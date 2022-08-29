@@ -22,12 +22,7 @@ async function markLearned(e: Event) {
   await setWordStatus(wordId, WordStatus.learned);
   target.disabled = false;
 
-  if (isUserChapter) {
-    target.dispatchEvent(new Event('deleteWordCard', { bubbles: true }));
-    return;
-  }
-
-  target.dispatchEvent(new Event('updateWordCard', { bubbles: true }));
+  target.dispatchEvent(new Event(isUserChapter ? 'deleteWordCard' : 'updateWordCard', { bubbles: true }));
 }
 
 function handleEvents(elem: HTMLElement): void {
