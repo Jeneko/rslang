@@ -6,6 +6,11 @@ import getStudyBookPagination from 'components/study-book-pagination/study-book-
 import { registerToUseHTML, emptyUserChapterHTML } from './study-book-words-list-html';
 import './study-book-words-list.css';
 
+const enum ChapterStatus {
+  HardList = 'Hard list',
+  LearnComplete = 'Learn Complete',
+}
+
 function updateChapterInfo(wordsList: HTMLElement): void {
   const { isUserChapter } = state.getState();
   const wordsCards = wordsList.querySelectorAll('.word-card');
@@ -27,13 +32,13 @@ function updateChapterStatus(wordsList: HTMLElement): void {
 
   if (badgesHard.length === wordsCards.length) {
     wordsList.classList.add('study-book-words-list--hard');
-    chapterStatus.textContent = '| Hard list';
+    chapterStatus.textContent = `| ${ChapterStatus.HardList}`;
     return;
   }
 
   if (badgesLearned.length === wordsCards.length) {
     wordsList.classList.add('study-book-words-list--learned');
-    chapterStatus.textContent = '| Learn Complete';
+    chapterStatus.textContent = `| ${ChapterStatus.LearnComplete}`;
     return;
   }
 
