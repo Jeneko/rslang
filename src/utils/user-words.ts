@@ -1,9 +1,5 @@
-import {
-  getWord, getWords, getAllUserWords, updateUserWord, createUserWord, getAggregatedWords,
-} from 'API/index';
-import {
-  WordStatus, UserWordOptions, UserWord, WordWithUserWord,
-} from 'types/index';
+import { getWord, getWords, getAllUserWords, updateUserWord, createUserWord, getAggregatedWords } from 'API/index';
+import { WordStatus, UserWordOptions, UserWord, WordWithUserWord } from 'types/index';
 
 const OPTIONAL_DEFAULTS: UserWordOptions = {
   guessedInRow: 0,
@@ -61,7 +57,7 @@ export async function setWordOptional(wordId: string, optional: Partial<UserWord
 }
 
 export async function getWordsWithUserData(group: number, page: number): Promise<WordWithUserWord[]> {
-  const words = await getWords(group, page) as WordWithUserWord[];
+  const words = (await getWords(group, page)) as WordWithUserWord[];
   const userWords = await getAllUserWords();
 
   const wordsWithUserData = words.map((word) => {
@@ -74,7 +70,7 @@ export async function getWordsWithUserData(group: number, page: number): Promise
 }
 
 export async function getWordWithUserData(id: string): Promise<WordWithUserWord> {
-  const word = await getWord(id) as WordWithUserWord;
+  const word = (await getWord(id)) as WordWithUserWord;
   const userWords = await getAllUserWords();
   const userWord = userWords.find((curUserWord) => curUserWord.wordId === word.id);
 
@@ -93,5 +89,7 @@ export async function getAllUserWordsWithData(): Promise<WordWithUserWord[]> {
       return el;
     });
     return tmp;
-  } catch { return []; }
+  } catch {
+    return [];
+  }
 }

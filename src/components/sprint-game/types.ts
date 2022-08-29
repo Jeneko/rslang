@@ -1,4 +1,4 @@
-import { Word } from 'types/index';
+import { ResponseUserWord, Word } from 'types/index';
 
 export type CurrentWord = {
   word: number;
@@ -16,6 +16,7 @@ export type SprintState = {
   rightAnswers: number[];
   wrongAnswers: number[];
   words: Word[];
+  userWords: ResponseUserWord[];
   wordsIndexes: number[];
   randomWords: CurrentWord;
   timer: number;

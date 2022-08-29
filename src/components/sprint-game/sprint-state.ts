@@ -6,6 +6,7 @@ export const sprintState: SprintState = {
   rightAnswers: [],
   wrongAnswers: [],
   words: [],
+  userWords: [],
   wordsIndexes: [],
   randomWords: {
     word: 0,

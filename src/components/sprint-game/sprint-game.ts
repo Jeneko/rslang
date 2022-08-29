@@ -1,4 +1,5 @@
-import { PageName } from 'types/index';
+import { getAllUserWords } from 'API/index';
+import { PageName, WordStatus } from 'types/index';
 import { getAuth } from 'utils/auth';
 import * as state from 'utils/state';
 import { renderModal, generateWords } from './modal-lvl';
@@ -88,10 +89,19 @@ export const sprintHandler = (elem: HTMLElement): void => {
 };
 
 const createGame = async (lvl: number, currentPage: number, elem: HTMLElement) => {
+  const allWords = await generateWords(Number(lvl), currentPage);
   const auth = getAuth();
-  console.log(auth);
-  // if (auth) {};
-  sprintState.words = await generateWords(Number(lvl), currentPage);
+
+  if (auth) {
+    sprintState.userWords = await getAllUserWords();
+    const wordsForGame = sprintState.userWords
+      .filter((word) => word.difficulty === WordStatus.learned)
+      .map((word) => word.wordId);
+    sprintState.words = allWords.filter((word) => !wordsForGame.includes(word.id));
+  } else {
+    sprintState.words = allWords;
+  }
+
   sprintState.wordsIndexes = sprintState.words.map((_, i) => i);
   setDefaultSprintState();
   sprintState.randomWords = chooseWords(sprintState.wordsIndexes);

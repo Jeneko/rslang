@@ -1,5 +1,6 @@
 import { sprintState } from './sprint-state';
 import { CurrentWord, Points } from './types';
+import { createUpdateRightWord, createUpdateWrongWord } from './user-words';
 
 export const renderGame = (randomWords: CurrentWord): string => `
   <div class="points">
@@ -41,15 +42,18 @@ const randomNumber = (max: number): number => Math.round(Math.random() * max);
 export const deleteShownWord = (wordsInd: number[], shownWord: number): number[] => wordsInd.filter((i) => i !== shownWord);
 
 export const isCurrentTranslate = (randomWords: CurrentWord, depend: boolean): void => {
+  const { id } = sprintState.words[randomWords.word];
   if (depend) {
     sprintState.earnedPoints += sprintState.rewordPoints;
     sprintState.rightAnswers.push(randomWords.word);
     sprintState.session.count += 1;
     sprintState.session.session = sprintState.session.count;
     sessionCounter();
+    createUpdateRightWord(id);
   } else {
     sprintState.wrongAnswers.push(randomWords.word);
     setDefaultSession();
+    createUpdateWrongWord(id);
   }
 };
 
