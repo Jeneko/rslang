@@ -1,15 +1,20 @@
-import { getWords, getWord, getAggregatedWords } from 'API/index';
+import {
+  getWords, getWord, getAggregatedWords, getUserStatistic, updateUserStatistic, updateUserWord,
+} from 'API/index';
 import { updateState, getState } from 'utils/state';
-import { Word } from 'types/index';
+import {
+  Word, WordWithUserWord, GameStatistic, WordStatus, WordsStatistic,
+} from 'types/index';
 import { GameState } from 'game.types';
 import controlGameWindow from 'components/audio-call-game/menuDifficultyLevel/controlGameWindow/controlGameWindow';
 import createMenuGame from 'components/audio-call-game/createMenuGame';
-import { getAllUserWordsWithData } from 'utils/user-words';
+import { getAllUserWordsWithData, setWordOptional } from 'utils/user-words';
 import { getAuth } from 'utils/auth';
+import audioImage from 'assets/speaker-icon.svg';
+import getTodayStat from 'utils/statistic';
 import generateWindowGame from './generateWindowGame/generateWindowGame';
 import showCurrentWordInfo from './addEventsForChoiceButtons/showCurrentWordInfo/showCurrentWordInfo';
 import hiddenAllButtons from './addEventsForChoiceButtons/disableAllButtonsChoice/disableAllButtonsChoice';
-import audioImage from '../../../../../assets/speaker-icon.svg';
 import playAudio from './playAudio/playAudio';
 
 const MAX_PAGE_NUM = 30;
@@ -52,6 +57,7 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
       currentLevel: +(buttonCheck.dataset.level as String),
       counterStreakForGame: 0,
       longestStreakForGame: 0,
+      newWords: 0,
     };
     if (buttonCheck.classList.contains('btn-select-level') || buttonCheck.classList.contains('btn-play-again')) {
       const currentLevel = (buttonCheck.dataset.level);
@@ -106,10 +112,13 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
       currentLevel: +currentPage,
       counterStreakForGame: 0,
       longestStreakForGame: 0,
+      newWords: 0,
     };
     controlGameWindow();
     updateState('indexWord', 0);
     const listWords = await getAuthWords(currentChapter, currentPage);
+    state.newWords = await checkNewWords(listWords as WordWithUserWord[]);
+    console.log(listWords);
     console.log(listWords, listWords.length);
     await generateWindowGame(listWords[0], listWords, state);
     windowGameBlock?.append(blockButtonNextQuestion);
@@ -205,6 +214,10 @@ function showResult(modalResultGame: HTMLElement, gameState: GameState) {
   const blockListWrong = modalResultGame.querySelector('.list-group-wrong') as HTMLElement;
   const { correctAnswers, wrongAnswers } = gameState;
 
+  if (getAuth()) {
+    sendDataToServer(correctAnswers as WordWithUserWord[], wrongAnswers as WordWithUserWord[], gameState);
+  }
+
   getAllAnswersForGame(correctAnswers, blockListCorrect);
   getAllAnswersForGame(wrongAnswers, blockListWrong);
 
@@ -241,7 +254,6 @@ export async function checkNextQuestion(e: Event, buttonNextQuestion: HTMLElemen
 async function getAuthWords(currentLevel: string | number, currentPage: string | number): Promise<Word[]> {
   const words: Word[] = [];
   async function getMoreWords(level: number, page: number) {
-    console.log('cicle');
     const filter = `{"$and":[{"userWord.difficulty": {"$not": {"$eq": "learned"}}},{"page":${level}},{"group": ${page}}]}`;
     const resp = await getAggregatedWords(filter, 20);
     let result = resp[0].paginatedResults;
@@ -258,6 +270,73 @@ async function getAuthWords(currentLevel: string | number, currentPage: string |
     }
   }
   await getMoreWords(+currentLevel, +currentPage);
-  console.log(words.flat(), words.flat().length, 'words');
   return words.flat();
+}
+
+async function checkNewWords(array: WordWithUserWord[]) {
+  let acc = 0;
+  for (let i = 0; i < array.length; i += 1) {
+    const el = array[i];
+    if (el.userWord) {
+      console.log('el empty', el.userWord.difficulty, acc);
+      if (!el.userWord.optional.guessedWrong && !el.userWord.optional.guessedRight) {
+        acc += 1;
+      }
+    } else {
+      console.log(el.userWord, el, acc);
+      const defaultOptional = {
+        guessedInRow: 0,
+        guessedRight: 0,
+        guessedWrong: 0,
+      };
+      acc += 1;
+      setWordOptional(el._id as string, defaultOptional);
+    }
+  }
+  return acc;
+}
+
+async function sendDataToServer(correctAnswersList: WordWithUserWord[], wrongAnswersList: WordWithUserWord[], gameState: GameState) {
+  const userStatistics = await getUserStatistic();
+  console.log('statistics get');
+  let learnedWords = 0;
+  const gameStatistics = getTodayStat<GameStatistic>(userStatistics, 'audiocall');
+  const wordStatistics = getTodayStat<WordsStatistic>(userStatistics, 'words');
+  correctAnswersList.forEach((el) => {
+    const optional = {
+      difficulty: el.userWord.difficulty,
+      optional: {
+        guessedRight: el.userWord.optional.guessedRight + 1,
+        guessedWrong: el.userWord.optional.guessedWrong,
+        guessedInRow: el.userWord.optional.guessedInRow += 1,
+      },
+    };
+    if (el.userWord.optional.guessedInRow >= 3) {
+      optional.difficulty = WordStatus.learned;
+      learnedWords += 1;
+    }
+    console.log(el._id, optional);
+    updateUserWord(el._id as string, optional);
+    console.log('update correct send');
+  });
+  wrongAnswersList.forEach((el) => {
+    const optional = {
+      difficulty: el.userWord.difficulty,
+      optional: {
+        guessedRight: el.userWord.optional.guessedRight,
+        guessedWrong: el.userWord.optional.guessedWrong += 1,
+        guessedInRow: el.userWord.optional.guessedInRow = 0,
+      },
+    };
+    if (el.userWord.difficulty === WordStatus.learned) {
+      optional.difficulty = WordStatus.hard;
+    }
+    console.log(el._id, optional);
+    updateUserWord(el._id as string, optional);
+    console.log('update wrong send');
+  });
+  gameStatistics.newWordsQty += gameState.newWords;
+  wordStatistics.learnedWordsQty += learnedWords;
+  await updateUserStatistic(userStatistics);
+  console.log('update stat');
 }

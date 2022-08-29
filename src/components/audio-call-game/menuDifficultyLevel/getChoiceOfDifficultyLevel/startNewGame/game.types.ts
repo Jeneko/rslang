@@ -6,4 +6,5 @@ export type GameState = {
   currentLevel: number;
   counterStreakForGame: number;
   longestStreakForGame: number;
+  newWords: number;
 }
