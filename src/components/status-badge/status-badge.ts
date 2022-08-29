@@ -13,12 +13,7 @@ async function markDefault(e: Event) {
   await setWordStatus(wordId, WordStatus.default);
   target.disabled = false;
 
-  if (isUserChapter) {
-    target.dispatchEvent(new Event('deleteWordCard', { bubbles: true }));
-    return;
-  }
-
-  target.dispatchEvent(new Event('updateWordCard', { bubbles: true }));
+  target.dispatchEvent(new Event(isUserChapter ? 'deleteWordCard' : 'updateWordCard', { bubbles: true }));
 }
 
 function handleEvents(elem: HTMLButtonElement): void {
