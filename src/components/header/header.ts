@@ -7,20 +7,6 @@ function highlightActiveMenuItem(elem: HTMLElement): void {
   elem.querySelector(`[href="#${page}"]`)?.classList.add('active-page');
 }
 
-function handleEvents(elem: HTMLElement): void {
-  elem.onclick = async (e) => {
-    e.preventDefault();
-    const target = e.target as HTMLLinkElement;
-
-    // Click on links
-    if (target.classList.contains('load-page-link')) {
-      const link = target.getAttribute('href') as string;
-      state.updateState('page', link.slice(1));
-      elem.dispatchEvent(new Event('loadPage', { bubbles: true }));
-    }
-  };
-}
-
 export default function getHeader(): HTMLElement {
   const elem = document.createElement('header');
   elem.className = 'header';
@@ -65,7 +51,6 @@ export default function getHeader(): HTMLElement {
   authMenu.replaceWith(getAuthMenu());
 
   highlightActiveMenuItem(elem);
-  handleEvents(elem);
 
   return elem;
 }
