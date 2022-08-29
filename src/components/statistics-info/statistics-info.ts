@@ -1,14 +1,15 @@
 export default async function getStatPage() {
   const page = document.createElement('div');
+  page.classList.add('container');
   page.innerHTML = `
     <h1 class="page-heading"><span class="page-heading__rslang">RSLang</span> Statistics<h1>
   `;
-  const windowsStatistics = getWindowsStatistics();
+  const windowsStatistics = await getWindowsStatistics();
   page.append(windowsStatistics);
   return page;
 }
 
-function getWindowsStatistics() {
+async function getWindowsStatistics() {
   const windowsStatistics = document.createElement('div');
   windowsStatistics.innerHTML = `
     <section class="statistics-window statistics-window-for-day">
@@ -59,16 +60,8 @@ function getWindowsStatistics() {
       </div>
     <section>
     <section class="statistics-window statistics-window-for-all-time statistics-window--hidden">
-
+      <h2 class="display-2">Statistics for all time</h2>
     <section>
   `;
   return windowsStatistics;
 }
-
-// function handleEventForButtonsStatistics(wrapper: HTMLElement) {
-//   const buttonStatisticsForDay = wrapper.querySelector('.button-statistics-for-day');
-//   const buttonStatisticsForAllTime = wrapper.querySelector('.button-statistics-for-all-time');
-//   buttonStatisticsForAllTime?.addEventListener('click', () => {
-
-//   });
-// }
