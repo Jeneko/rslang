@@ -1,5 +1,6 @@
+import { getAuth } from 'utils/auth';
 import { sprintState } from './sprint-state';
-import { CurrentWord, Points } from './types';
+import { CurrentWord, DeleteWord, Points } from './types';
 import { createUpdateRightWord, createUpdateWrongWord } from './user-words';
 
 export const renderGame = (randomWords: CurrentWord): string => `
@@ -20,11 +21,11 @@ export const renderGame = (randomWords: CurrentWord): string => `
 `;
 
 export const loadingBar = `
-<div class="d-flex justify-content-center">
-  <div class="spinner-border" role="status">
-    <span class="visually-hidden">Loading...</span>
+  <div class="d-flex justify-content-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
   </div>
-</div>
 `;
 
 export const chooseWords = (wordsIndexes: number[]): CurrentWord => {
@@ -39,21 +40,26 @@ export const chooseWords = (wordsIndexes: number[]): CurrentWord => {
 
 const randomNumber = (max: number): number => Math.round(Math.random() * max);
 
-export const deleteShownWord = (wordsInd: number[], shownWord: number): number[] => wordsInd.filter((i) => i !== shownWord);
+export const deleteShownWord: DeleteWord = (wordsInd, shownWord) => wordsInd.filter((i) => i !== shownWord);
 
 export const isCurrentTranslate = (randomWords: CurrentWord, depend: boolean): void => {
   const { id } = sprintState.words[randomWords.word];
+  const auth = getAuth();
   if (depend) {
     sprintState.earnedPoints += sprintState.rewordPoints;
     sprintState.rightAnswers.push(randomWords.word);
     sprintState.session.count += 1;
     sprintState.session.session = sprintState.session.count;
     sessionCounter();
-    createUpdateRightWord(id);
+    if (auth) {
+      createUpdateRightWord(id);
+    }
   } else {
     sprintState.wrongAnswers.push(randomWords.word);
     setDefaultSession();
-    createUpdateWrongWord(id);
+    if (auth) {
+      createUpdateWrongWord(id);
+    }
   }
 };
 
@@ -69,23 +75,14 @@ export const modalResults = (): string => `
   <h3 class="result-points">${sprintState.earnedPoints} points</h3>
   <h5>Right answers:</h5>
   <ul class="results__unordered-list">
-  ${sprintState.rightAnswers
-    .map(
-      (wordIndex) => `<li class="results__list-true">${sprintState.words[wordIndex].word} - ${sprintState.words[wordIndex].wordTranslate}</li>`,
-    )
-    .join('')}
+  ${sprintState.rightAnswers.map((wordIndex) => `<li class="results__list-true">${sprintState.words[wordIndex].word} - ${sprintState.words[wordIndex].wordTranslate}</li>`).join('')}
   </ul>
   <h5>Wrong answers:</h5>
   <ul class="results__unordered-list">
-  ${sprintState.wrongAnswers
-    .map(
-      (wordIndex) => `<li class="results__list-false">${sprintState.words[wordIndex].word} - ${sprintState.words[wordIndex].wordTranslate}</li>`,
-    )
-    .join('')}
-  </ul>
-  <button class="results__close-button btn-close"></button>
-</div>
-
+  ${sprintState.wrongAnswers.map((wordIndex) => `<li class="results__list-false">${sprintState.words[wordIndex].word} - ${sprintState.words[wordIndex].wordTranslate}</li>`).join('')}
+    </ul>
+    <button class="results__close-button btn-close"></button>
+  </div>
 `;
 
 export const timer = (): void => {
