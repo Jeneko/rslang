@@ -1,3 +1,27 @@
 .audio-call-page {
   background-color: var(--bs-cyan);
 }
+
+.current-word {
+  height: 400px;
+}
+
+.button-text-round {
+  display: block;
+  margin: 0 auto;
+}
+
+.level-menu--hidden {
+  display: none;
+}
+
+.current-word-info--hidden {
+  display: none;
+}
+
+.current-word {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

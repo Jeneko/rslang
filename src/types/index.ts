@@ -1,7 +1,9 @@
 export type State = {
   page: PageName;
+  isUserChapter: boolean;
   studyBookChapter: number;
   studyBookPage: number;
+  indexWord: number;
   // TODO: add other state data we may need (like paginations and stuff)
 };
 
@@ -21,6 +23,8 @@ export enum Endpoints {
   words = 'words',
   users = 'users',
   signin = 'signin',
+  tokens = 'tokens',
+  aggregatedWords = 'aggregatedWords',
   // TODO: add other endpoints
 }
 
@@ -37,10 +41,19 @@ export enum AlertType {
 
 export enum StatusCode {
   ok = 200,
+  noContent = 204,
   expectationFailed = 417,
   unprocessableEntity = 422,
+  badRequest = 400,
+  unauthorized = 401,
   notFound = 404,
   forbidden = 403,
+}
+
+export enum WordStatus {
+  default = 'default',
+  learned = 'learned',
+  hard = 'hard',
 }
 
 export interface Word {
@@ -60,10 +73,37 @@ export interface Word {
   textExampleTranslate: string;
 }
 
+export interface AggregatedResults {
+  paginatedResults: WordWithUserWord[];
+  totalCount: { count: number }[];
+}
+
 export interface User {
   email: string;
   id: string;
   name: string;
+}
+
+export interface UserWord {
+  difficulty: WordStatus;
+  optional: UserWordOptions;
+}
+
+export interface WordWithUserWord extends Word {
+  _id?: string;
+  userWord: UserWord;
+}
+
+export interface UserWordOptions {
+  guessedRight: number;
+  guessedWrong: number;
+  guessedInRow: number;
+  // TODO: add other options if needed
+}
+
+export interface ResponseUserWord extends UserWord {
+  id: string;
+  wordId: string;
 }
 
 export interface ResponseError {
