@@ -3,15 +3,15 @@ import {
   Statistic, WordsStatistic, GameStatistic, StatisticOptions,
 } from 'types/index';
 
-const MS_IN_DAY = 24 * 60 * 60 * 1000;
-
 export default function getTodayStat<T extends GameStatistic | WordsStatistic>(statistic: Statistic, type: keyof StatisticOptions): T {
   // Check date
-  const curDate = Date.now();
-  const lastDate = statistic.optional[type].stat[statistic.optional[type].stat.length - 1].date;
+  const curDate = new Date();
+  const lastDate = new Date(statistic.optional[type].stat[statistic.optional[type].stat.length - 1].date);
 
   // If last stat is current day stat - return last stat
-  if (curDate - lastDate < MS_IN_DAY) {
+  if (curDate.getFullYear() === lastDate.getFullYear()
+    && curDate.getMonth() === lastDate.getMonth()
+    && curDate.getDate() === lastDate.getDate()) {
     return statistic.optional[type].stat[statistic.optional[type].stat.length - 1] as T;
   }
 
@@ -21,14 +21,14 @@ export default function getTodayStat<T extends GameStatistic | WordsStatistic>(s
   // TODO: find a good way to get rid of switch
   switch (type) {
     case 'words':
-      newStat = { ...DEFAULT_WORDS_STAT, date: curDate };
+      newStat = { ...DEFAULT_WORDS_STAT, date: curDate.getTime() };
       statistic.optional[type].stat.push(newStat);
       break;
 
     case 'audiocall':
     case 'sprint':
     default:
-      newStat = { ...DEFAULT_GAME_STAT, date: curDate };
+      newStat = { ...DEFAULT_GAME_STAT, date: curDate.getTime() };
       statistic.optional[type].stat.push(newStat);
   }
 
