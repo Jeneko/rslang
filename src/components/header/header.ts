@@ -4,11 +4,7 @@ import './header.css';
 
 function highlightActiveMenuItem(elem: HTMLElement): void {
   const { page } = state.getState();
-  const activePage = elem.querySelector(`[href="#${page}"]`) as HTMLButtonElement;
-
-  if (activePage) {
-    activePage.classList.add('active-page');
-  }
+  elem.querySelector(`[href="#${page}"]`)?.classList.add('active-page');
 }
 
 function handleEvents(elem: HTMLElement): void {
