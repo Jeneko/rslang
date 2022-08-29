@@ -50,6 +50,8 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
       correctAnswers: [],
       wrongAnswers: [],
       currentLevel: +(buttonCheck.dataset.level as String),
+      counterStreakForGame: 0,
+      longestStreakForGame: 0,
     };
     if (buttonCheck.classList.contains('btn-select-level') || buttonCheck.classList.contains('btn-play-again')) {
       const currentLevel = (buttonCheck.dataset.level);
@@ -102,6 +104,8 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
       correctAnswers: [],
       wrongAnswers: [],
       currentLevel: +currentPage,
+      counterStreakForGame: 0,
+      longestStreakForGame: 0,
     };
     controlGameWindow();
     updateState('indexWord', 0);
@@ -170,6 +174,7 @@ function getModalResultGame(gameState: GameState) {
   modalResultGame.classList.add('popup-winner-audio-call');
   modalResultGame.innerHTML = `
   <div id="modal-winner" class="modal-body">
+    <h3>Your longest string of guessed ${gameState.longestStreakForGame} words!</h3>
     <h3>Correct answers (${gameState.correctAnswers.length})</h3>
     <ul class="list-group list-group-correct">
     </ul>

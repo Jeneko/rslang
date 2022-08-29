@@ -80,6 +80,10 @@ export async function wordDistribution(currentButton: HTMLElement, currentWord: 
   console.log(buttonWord, currentWord);
   if (buttonWord === currentWord) {
     gameState.correctAnswers.push(word);
+    gameState.counterStreakForGame += 1;
+    if (gameState.counterStreakForGame > gameState.longestStreakForGame) {
+      gameState.longestStreakForGame = gameState.counterStreakForGame;
+    }
     currentIcon.classList.add('correct-icon-audiocall');
     currentIcon.textContent = CHECKICON;
     currentButton.prepend(currentIcon);
@@ -87,6 +91,7 @@ export async function wordDistribution(currentButton: HTMLElement, currentWord: 
     currentButton.classList.remove('btn-light');
   } else {
     gameState.wrongAnswers.push(word);
+    gameState.counterStreakForGame = 0;
     currentIcon.classList.add('wrong-icon-audiocall');
     currentIcon.textContent = WRONGICON;
     currentButton.prepend(currentIcon);
