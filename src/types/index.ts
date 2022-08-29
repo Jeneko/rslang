@@ -57,25 +57,26 @@ export enum WordStatus {
 }
 
 export interface Statistic {
+  id?: string;
   learnedWords: number;
   optional: StatisticOptions;
 }
 
 export interface StatisticOptions {
-  words: WordsStatistic[];
-  sprint: GameStatistic[];
-  audiocall: GameStatistic[];
+  words: { stat: WordsStatistic[] };
+  sprint: { stat: GameStatistic[] };
+  audiocall: { stat: GameStatistic[] };
 }
 
 export interface GameStatistic {
-  date: Date;
+  date: number; // ms
   newWordsQty: number;
   longestRow: number;
   rightAnswers: number;
 }
 
 export interface WordsStatistic {
-  date: Date;
+  date: number; // ms
   newWordsQty: number;
   learnedWordsQty: number;
   rightAnswers: number;

@@ -7,13 +7,15 @@ import {
 export const SOURCE = 'https://team51-learnwords.herokuapp.com';
 export const WORDS_PER_PAGE_DEFAULTS = 20;
 
-export const DEFAULT_WORDS_STAT: Omit<WordsStatistic, 'date'> = {
+export const DEFAULT_WORDS_STAT: WordsStatistic = {
+  date: 0,
   learnedWordsQty: 0,
   newWordsQty: 0,
   rightAnswers: 0,
 };
 
-export const DEFAULT_GAME_STAT: Omit<GameStatistic, 'date'> = {
+export const DEFAULT_GAME_STAT: GameStatistic = {
+  date: 0,
   longestRow: 0,
   newWordsQty: 0,
   rightAnswers: 0,
@@ -263,9 +265,9 @@ async function authFetch(url: RequestInfo | URL, options?: RequestInit | undefin
   return response;
 }
 
-export async function getUserStatistic(): Promise<Statistic | false> {
+export async function getUserStatistic(): Promise<Statistic> {
   const curAuth = auth.getAuth();
-  if (!curAuth) return false;
+  if (!curAuth) throw new Error('Can\'t get statistic: No Auth found');
 
   const url = `${SOURCE}/${Endpoints.users}/${curAuth.userId}/${Endpoints.statistics}`;
 
@@ -284,7 +286,11 @@ export async function getUserStatistic(): Promise<Statistic | false> {
 
 export async function updateUserStatistic(statistic: Statistic): Promise<Statistic> {
   const curAuth = auth.getAuth();
-  if (!curAuth) throw new Error('Can\'t get statistic: No Auth found');
+  if (!curAuth) throw new Error('Can\'t update statistic: No Auth found');
+
+  // We must do this because server doesn't allow this prop in JSON object,
+  // but getUserStatistic returns object with this param so we must delete it
+  delete statistic.id;
 
   const url = `${SOURCE}/${Endpoints.users}/${curAuth.userId}/${Endpoints.statistics}`;
   const options = {
@@ -297,8 +303,8 @@ export async function updateUserStatistic(statistic: Statistic): Promise<Statist
 
   // Handle bad responses
   if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(errorText);
+    const error = await response.json();
+    console.log(error);
   }
 
   const result = await response.json() as Statistic;
@@ -338,9 +344,9 @@ function createNewUserStatistic(): Statistic {
   const newStatistic: Statistic = {
     learnedWords: 0,
     optional: {
-      words: [{ ...DEFAULT_WORDS_STAT, date: new Date() }],
-      sprint: [{ ...DEFAULT_GAME_STAT, date: new Date() }],
-      audiocall: [{ ...DEFAULT_GAME_STAT, date: new Date() }],
+      words: { stat: [{ ...DEFAULT_WORDS_STAT, date: Date.now() }] },
+      sprint: { stat: [{ ...DEFAULT_GAME_STAT, date: Date.now() }] },
+      audiocall: { stat: [{ ...DEFAULT_GAME_STAT, date: Date.now() }] },
     },
   };
 
