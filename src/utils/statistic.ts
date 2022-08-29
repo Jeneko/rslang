@@ -1,9 +1,11 @@
-import { DEFAULT_WORDS_STAT, DEFAULT_GAME_STAT } from 'API/index';
+import {
+  DEFAULT_WORDS_STAT, DEFAULT_GAME_STAT, getUserStatistic, updateUserStatistic,
+} from 'API/index';
 import {
   Statistic, WordsStatistic, GameStatistic, StatisticOptions,
 } from 'types/index';
 
-export default function getTodayStat<T extends GameStatistic | WordsStatistic>(statistic: Statistic, type: keyof StatisticOptions): T {
+export function getTodayStat<T extends GameStatistic | WordsStatistic>(statistic: Statistic, type: keyof StatisticOptions): T {
   // Check date
   const curDate = new Date();
   const lastDate = new Date(statistic.optional[type].stat[statistic.optional[type].stat.length - 1].date);
@@ -33,4 +35,14 @@ export default function getTodayStat<T extends GameStatistic | WordsStatistic>(s
   }
 
   return newStat as T;
+}
+
+export async function updateLearnedStatistic(delta: number): Promise<void> {
+  const userStat = await getUserStatistic();
+  const wordStat = getTodayStat<WordsStatistic>(userStat, 'words');
+
+  userStat.learnedWords = userStat.learnedWords + delta < 0 ? 0 : userStat.learnedWords + delta;
+  wordStat.learnedWordsQty = wordStat.learnedWordsQty + delta < 0 ? 0 : wordStat.learnedWordsQty + delta;
+
+  await updateUserStatistic(userStat);
 }

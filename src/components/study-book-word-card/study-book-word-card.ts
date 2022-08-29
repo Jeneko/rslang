@@ -24,6 +24,7 @@ function handleEvents(elem: HTMLElement, wordId: string): void {
 export default function getStudyBookWordCard(word: WordWithUserWord): HTMLElement {
   const curAuth = getAuth();
   const elem = document.createElement('article');
+  elem.dataset.status = word.userWord.difficulty;
   elem.className = 'word-card';
 
   elem.innerHTML = `

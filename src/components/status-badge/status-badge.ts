@@ -1,4 +1,5 @@
 import * as state from 'utils/state';
+import { updateLearnedStatistic } from 'utils/statistic';
 import { WordWithUserWord, WordStatus } from 'types/index';
 import { setWordStatus } from 'utils/user-words';
 import crossIconUrl from './cross.svg';
@@ -8,9 +9,13 @@ async function markDefault(e: Event) {
   const { isUserChapter } = state.getState();
   const target = e.currentTarget as HTMLButtonElement;
   const wordId = target.dataset.id as string;
+  const wordCard = target.closest('.word-card') as HTMLElement;
 
   target.disabled = true;
   await setWordStatus(wordId, WordStatus.default);
+  if (wordCard.dataset.status === WordStatus.learned) {
+    await updateLearnedStatistic(-1);
+  }
   target.disabled = false;
 
   target.dispatchEvent(new Event(isUserChapter ? 'deleteWordCard' : 'updateWordCard', { bubbles: true }));
