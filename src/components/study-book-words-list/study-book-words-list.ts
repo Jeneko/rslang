@@ -54,10 +54,9 @@ function handleEvents(elem: HTMLElement): void {
 
 export default async function getStudyBookWordsList(): Promise<HTMLElement> {
   const curAuth = auth.getAuth();
-  const curState = state.getState();
-  const curChapter = Number(curState.studyBookChapter) + 1;
-  const curPage = Number(curState.studyBookPage) + 1;
-  const { isUserChapter } = curState;
+  const { studyBookChapter, studyBookPage, isUserChapter } = state.getState();
+  const curChapter = Number(studyBookChapter) + 1;
+  const curPage = Number(studyBookPage) + 1;
 
   const elem = document.createElement('div');
   elem.className = 'study-book-words-list';
@@ -78,7 +77,7 @@ export default async function getStudyBookWordsList(): Promise<HTMLElement> {
   // Get apropriate set of words
   const words = isUserChapter
     ? await getAllUserWordsWithData()
-    : await getWordsWithUserData(curState.studyBookChapter, curState.studyBookPage);
+    : await getWordsWithUserData(studyBookChapter, studyBookPage);
 
   // Fill words list with words
   if (words.length) {
