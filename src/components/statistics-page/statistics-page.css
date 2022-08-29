@@ -1,0 +1,20 @@
+.statistic-info-wrapper {
+    text-align: center;
+}
+
+.statistic-info-of-day {
+    font-weight: 700;
+}
+
+.statistics-window > * {
+    margin-top: 40px;
+}
+
+.card-title-statistics {
+    margin-bottom: 60px;
+    font-weight: 600;
+}
+
+.card-text-statistics {
+    font-weight: 500;
+}
