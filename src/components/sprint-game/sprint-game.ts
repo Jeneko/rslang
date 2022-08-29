@@ -1,4 +1,5 @@
 import { PageName } from 'types/index';
+import { getAuth } from 'utils/auth';
 import * as state from 'utils/state';
 import { renderModal, generateWords } from './modal-lvl';
 import {
@@ -87,6 +88,9 @@ export const sprintHandler = (elem: HTMLElement): void => {
 };
 
 const createGame = async (lvl: number, currentPage: number, elem: HTMLElement) => {
+  const auth = getAuth();
+  console.log(auth);
+  // if (auth) {};
   sprintState.words = await generateWords(Number(lvl), currentPage);
   sprintState.wordsIndexes = sprintState.words.map((_, i) => i);
   setDefaultSprintState();
