@@ -6,7 +6,7 @@
     font-weight: 700;
 }
 
-.statistics-window > * {
+.statistics-section > * {
     margin-top: 40px;
 }
 
@@ -17,4 +17,8 @@
 
 .card-text-statistics {
     font-weight: 500;
+}
+
+.statistics-window {
+    min-height: 80vh;
 }
