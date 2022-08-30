@@ -65,7 +65,12 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
       if (currentLevel) {
         const randomPage = Math.trunc(Math.random() * MAX_PAGE_NUM);
         updateState('indexWord', 0);
-        const listWords = +currentLevel === 6 ? await getAllUserWordsWithData() : await getWords(+currentLevel, randomPage);
+        let listWords;
+        if (getAuth()) {
+          listWords = getAuth() && +currentLevel !== 6 ? await getAuthWords(+currentLevel, randomPage) : await getAllUserWordsWithData();
+        } else {
+          listWords = await getWords(+currentLevel, randomPage);
+        }
         console.log(listWords);
         if (listWords.length === 0) {
           if (document.querySelector('.info-no-auth')) {
@@ -116,7 +121,8 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
     };
     controlGameWindow();
     updateState('indexWord', 0);
-    const listWords = await getAuthWords(currentChapter, currentPage);
+
+    const listWords = getAuth() ? await getAuthWords(currentChapter, currentPage) : await getWords(currentChapter, currentPage);
     state.newWords = await checkNewWords(listWords as WordWithUserWord[]);
     console.log(listWords);
     console.log(listWords, listWords.length);
@@ -337,6 +343,8 @@ async function sendDataToServer(correctAnswersList: WordWithUserWord[], wrongAns
   });
   gameStatistics.newWordsQty += gameState.newWords;
   wordStatistics.learnedWordsQty += learnedWords;
+  wordStatistics.newWordsQty += gameState.newWords;
+  wordStatistics.rightAnswers += correctAnswersList.length;
   await updateUserStatistic(userStatistics);
   console.log('update stat');
 }
