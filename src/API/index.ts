@@ -115,10 +115,10 @@ export async function updateToken(): Promise<void> {
 
   const response = await fetch(url, options);
 
-  // Handle bad response
-  if (response.status === StatusCode.forbidden) {
-    const errorText = await response.text();
-    throw new Error(errorText);
+  // If can't get new token - logout and reload
+  if (!response.ok) {
+    auth.deleteAuth();
+    window.location.reload();
   }
 
   const newTokens = await response.json() as Pick<Auth, 'token' | 'refreshToken'>;
