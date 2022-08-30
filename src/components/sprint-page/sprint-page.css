@@ -1,8 +1,13 @@
+.sprint-game {
+  height: calc(100vh - 3.5rem);
+}
+
 .sprint {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  margin-top: 4rem;
 }
 
 .modal-lvl,

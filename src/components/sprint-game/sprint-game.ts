@@ -4,14 +4,21 @@ import { getAuth } from 'utils/auth';
 import * as state from 'utils/state';
 import { renderModal, generateWords } from './modal-lvl';
 import {
-  chooseWords, deleteShownWord, isCurrentTranslate, loadingBar, modalResults, renderGame, timer, updateGame,
+  chooseWords,
+  deleteShownWord,
+  isCurrentTranslate,
+  loadingBar,
+  modalResults,
+  renderGame,
+  timer,
+  updateGame,
 } from './sprint-game-window';
 import { sprintState, setDefaultSprintState } from './sprint-state';
 import statistic from './statistic';
 
 export default async function getSprintGame(): Promise<HTMLDivElement> {
   const elem = document.createElement('div');
-  elem.className = 'sprint-game';
+  elem.className = 'sprint-game container';
   elem.innerHTML = renderModal;
   if (state.getState().page === PageName.studyBook) {
     const gameWindow = elem.querySelector('.sprint') as HTMLElement;
@@ -110,12 +117,16 @@ const createGame = async (lvl: number, currentPage: number, elem: HTMLElement): 
 const getWordsForRegisterMember = async (lvl: number, currentPage: number): Promise<void> => {
   sprintState.userWords = await getAllUserWords();
   if (lvl === 6) {
-    const hardWordsId = sprintState.userWords.filter((word) => word.difficulty === WordStatus.hard).map((word) => word.wordId);
+    const hardWordsId = sprintState.userWords
+      .filter((word) => word.difficulty === WordStatus.hard)
+      .map((word) => word.wordId);
     const hardWord = Promise.all(hardWordsId.map((id) => getWord(id)));
     sprintState.words = await hardWord;
   } else {
     const allWords = await generateWords(Number(lvl), currentPage);
-    const wordsForGame = sprintState.userWords.filter((word) => word.difficulty === WordStatus.learned).map((word) => word.wordId);
+    const wordsForGame = sprintState.userWords
+      .filter((word) => word.difficulty === WordStatus.learned)
+      .map((word) => word.wordId);
     sprintState.words = allWords.filter((word) => !wordsForGame.includes(word.id));
   }
 };

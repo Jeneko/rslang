@@ -76,11 +76,19 @@ export const modalResults = (): string => `
   <h3 class="result-points">${sprintState.earnedPoints} points</h3>
   <h5>Right answers:</h5>
   <ul class="results__unordered-list">
-  ${sprintState.rightAnswers.map((wordIndex) => `<li class="results__list-true">${sprintState.words[wordIndex].word} - ${sprintState.words[wordIndex].wordTranslate}</li>`).join('')}
+  ${sprintState.rightAnswers
+    .map(
+      (wordIndex) => `<li class="results__list-true">${sprintState.words[wordIndex].word} - ${sprintState.words[wordIndex].wordTranslate}</li>`,
+    )
+    .join('')}
   </ul>
   <h5>Wrong answers:</h5>
   <ul class="results__unordered-list">
-  ${sprintState.wrongAnswers.map((wordIndex) => `<li class="results__list-false">${sprintState.words[wordIndex].word} - ${sprintState.words[wordIndex].wordTranslate}</li>`).join('')}
+  ${sprintState.wrongAnswers
+    .map(
+      (wordIndex) => `<li class="results__list-false">${sprintState.words[wordIndex].word} - ${sprintState.words[wordIndex].wordTranslate}</li>`,
+    )
+    .join('')}
     </ul>
     <button class="results__close-button btn-close"></button>
   </div>
