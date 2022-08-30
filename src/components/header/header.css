@@ -1,0 +1,5 @@
+.active-page {
+  color: white;
+  background-color: var(--bs-gray-600);;
+  border-radius: 6px;
+}
