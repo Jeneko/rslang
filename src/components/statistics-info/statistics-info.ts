@@ -76,7 +76,7 @@ async function getWindowsStatistics() {
                 Sprint
               </h5>
               <p class="card-text card-text-statistics">Learned <span class="game-statistic-info">${audiocallRightAnswers}</span> words.</p>
-              <p class="card-text card-text-statistics">Correct answers <span class="game-statistic-info">${audiocallNewWords}</span>.</p>
+              <p class="card-text card-text-statistics">New <span class="game-statistic-info">${audiocallNewWords} words.</span>.</p>
               <p class="card-text card-text-statistics">Longest series of correct answers <span class="game-statistic-info">${audiocallLongestRow}</span>.</p>
             </div>
           </div>
@@ -88,7 +88,7 @@ async function getWindowsStatistics() {
                 Audio-call
               </h5>
               <p class="card-text card-text-statistics">Learned <span class="game-statistic-info">${sprintRightAnswers}</span> words.</p>
-              <p class="card-text card-text-statistics">Correct answers <span class="game-statistic-info">${sprintLongestRow}</span>.</p>
+              <p class="card-text card-text-statistics">New <span class="game-statistic-info">${sprintLongestRow}</span> words.</p>
               <p class="card-text card-text-statistics">Longest series of correct answers <span class="game-statistic-info">${sprintNewWords}</span>.</p>
             </div>
           </div>
