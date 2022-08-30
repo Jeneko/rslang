@@ -1,17 +1,13 @@
-import {
-  getWords, getWord, getAggregatedWords, getUserStatistic, updateUserStatistic, updateUserWord,
-} from 'API/index';
+import { getWords, getWord } from 'API/index';
 import { updateState, getState } from 'utils/state';
-import {
-  Word, WordWithUserWord, GameStatistic, WordStatus, WordsStatistic,
-} from 'types/index';
+import { Word, WordWithUserWord } from 'types/index';
 import { GameState } from 'game.types';
-import controlGameWindow from 'components/audio-call-game/menuDifficultyLevel/controlGameWindow/controlGameWindow';
+import controlGameWindow from 'components/audio-call-game/game/controlGameWindow/controlGameWindow';
 import createMenuGame from 'components/audio-call-game/createMenuGame';
 import { getAllUserWordsWithData, setWordOptional } from 'utils/user-words';
 import { getAuth } from 'utils/auth';
 import audioImage from 'assets/speaker-icon.svg';
-import getTodayStat from 'utils/statistic';
+import { sendDataToServer, getAuthWords } from '../sendingToServer/sendingToServer';
 import generateWindowGame from './generateWindowGame/generateWindowGame';
 import showCurrentWordInfo from './addEventsForChoiceButtons/showCurrentWordInfo/showCurrentWordInfo';
 import hiddenAllButtons from './addEventsForChoiceButtons/disableAllButtonsChoice/disableAllButtonsChoice';
@@ -20,22 +16,25 @@ import playAudio from './playAudio/playAudio';
 const MAX_PAGE_NUM = 30;
 
 export async function startNewGame(event: Event | null, startPage: HTMLElement | undefined): Promise<void> {
+  // play for menu level
   if (event) {
     const spinner = getSpinner();
     document.body.append(spinner);
     const statusAuth = getAuth();
     if (!statusAuth && +((event.target as HTMLElement).dataset.level as string) === 6) {
       if (document.querySelector('.info-no-auth')) {
+        spinner.remove();
         return;
       }
       const modalInfo = document.createElement('div');
       modalInfo.innerHTML = `
         <p>
-          Chapter 7 contains the most difficult words user selected manually. Please, Login or Register to start using this chapter.
+          Chapter 7 contains the most difficult words user selected manually. Please, <a class="load-page-link" href="#login">Login</a> or <a class="load-page-link" href="#register">Register</a> to start using this chapter.
         </p>
       `;
       modalInfo.classList.add('container', 'info-no-auth');
       document.body.append(modalInfo);
+      spinner.remove();
       return;
     }
     if (document.querySelector('.info-no-auth')) {
@@ -77,8 +76,10 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
 
         if (listWords.length === 0) {
           if (document.querySelector('.info-no-auth')) {
+            spinner.remove();
             return;
           }
+          spinner.remove();
           const modalInfo = document.createElement('div');
           modalInfo.innerHTML = `
             <p>
@@ -89,6 +90,7 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
           document.body.append(modalInfo);
           return;
         }
+
         await generateWindowGame(listWords[0], listWords, state);
         windowGameBlock?.append(blockButtonNextQuestion);
         addEventsForNextQuestionButton(windowGameBlock, listWords, state);
@@ -96,6 +98,7 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
       }
     }
   } else {
+    // play for study-book
     const spinner = getSpinner();
     document.body.append(spinner);
     let buttonsWrapper = document.querySelector('.button-wrapper-audiocall');
@@ -146,7 +149,7 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
   }
 }
 
-export function addEventsForNextQuestionButton(windowGameBlock: HTMLElement, listWords: Word[], gameState: GameState) {
+export function addEventsForNextQuestionButton(windowGameBlock: HTMLElement, listWords: Word[], gameState: GameState): void {
   const buttonNextQuestion = windowGameBlock.querySelector('.btn-next-question') as HTMLElement;
   buttonNextQuestion.setAttribute('wordchosen', 'false');
   buttonNextQuestion?.addEventListener('click', (e: Event) => {
@@ -178,7 +181,7 @@ export function getNewWindowGame(): HTMLElement {
   return menu;
 }
 
-function getAllAnswersForGame(list: Word[], blockList: HTMLElement) {
+function addAllAnswersForPage(list: Word[], blockList: HTMLElement) {
   const fragment = document.createDocumentFragment();
   list.forEach((el) => {
     const listItem = document.createElement('li');
@@ -193,7 +196,7 @@ function getAllAnswersForGame(list: Word[], blockList: HTMLElement) {
   blockList.append(fragment);
 }
 
-function getModalResultGame(gameState: GameState) {
+function getModalResultGame(gameState: GameState): HTMLDivElement {
   const modalResultGame = document.createElement('div');
   modalResultGame.classList.add('popup-winner-audio-call');
   modalResultGame.innerHTML = `
@@ -211,7 +214,7 @@ function getModalResultGame(gameState: GameState) {
   return modalResultGame;
 }
 
-function playAgainButtonClickHandler(modalResultGame: HTMLElement) {
+function playAgainButtonClickHandler(modalResultGame: HTMLElement): void {
   const buttonPlayAgain = modalResultGame.querySelector('.btn-play-again');
   buttonPlayAgain?.addEventListener('click', () => {
     const gameWindow = document.querySelector('.game-window') as HTMLElement;
@@ -222,7 +225,7 @@ function playAgainButtonClickHandler(modalResultGame: HTMLElement) {
   });
 }
 
-function showResult(modalResultGame: HTMLElement, gameState: GameState) {
+function showResult(modalResultGame: HTMLElement, gameState: GameState): void {
   const buttonNextQuestion = document.querySelector('.btn-next-question');
   const parentModal = document.querySelector('.game-window');
   const blockListCorrect = modalResultGame.querySelector('.list-group-correct') as HTMLElement;
@@ -233,15 +236,16 @@ function showResult(modalResultGame: HTMLElement, gameState: GameState) {
     sendDataToServer(correctAnswers as WordWithUserWord[], wrongAnswers as WordWithUserWord[], gameState);
   }
 
-  getAllAnswersForGame(correctAnswers, blockListCorrect);
-  getAllAnswersForGame(wrongAnswers, blockListWrong);
+  addAllAnswersForPage(correctAnswers, blockListCorrect);
+  addAllAnswersForPage(wrongAnswers, blockListWrong);
 
   buttonNextQuestion?.remove();
   parentModal?.append(modalResultGame);
 }
 
-export async function checkNextQuestion(e: Event, buttonNextQuestion: HTMLElement, listWords: Word[], gameState: GameState) {
+export async function checkNextQuestion(e: Event, buttonNextQuestion: HTMLElement, listWords: Word[], gameState: GameState): Promise<void> {
   const currentIndex = getState().indexWord + 1;
+
   if (currentIndex >= listWords.length && buttonNextQuestion.textContent !== 'I do not know') {
     clearGameWindow();
     const modalGameResult = getModalResultGame(gameState);
@@ -265,36 +269,14 @@ export async function checkNextQuestion(e: Event, buttonNextQuestion: HTMLElemen
   }
 }
 
-async function getAuthWords(currentLevel: string | number, currentPage: string | number): Promise<Word[]> {
-  const words: Word[] = [];
-  async function getMoreWords(level: number, page: number) {
-    const filter = `{"$and":[{"userWord.difficulty": {"$not": {"$eq": "learned"}}},{"page":${level}},{"group": ${page}}]}`;
-    const resp = await getAggregatedWords(filter, 20);
-    let result = resp[0].paginatedResults;
-    if (words.length + result.length > 20) {
-      const length = words.length + result.length - 20;
-      result = result.splice(length);
-    }
-    words.push(...result);
-    if (page === 0) {
-      return;
-    }
-    if (words.length < 20) {
-      await getMoreWords(level, page - 1);
-    }
-  }
-  await getMoreWords(+currentLevel, +currentPage);
-  return words.flat();
-}
-
-async function checkNewWords(array: WordWithUserWord[]) {
-  let acc = 0;
+async function checkNewWords(array: WordWithUserWord[]): Promise<number> {
+  let counterNewWords = 0;
   const promiseArray = [];
   for (let i = 0; i < array.length; i += 1) {
     const el = array[i];
     if (el.userWord) {
       if (!el.userWord.optional.guessedWrong && !el.userWord.optional.guessedRight) {
-        acc += 1;
+        counterNewWords += 1;
       }
     } else {
       const defaultOptional = {
@@ -302,54 +284,12 @@ async function checkNewWords(array: WordWithUserWord[]) {
         guessedRight: 0,
         guessedWrong: 0,
       };
-      acc += 1;
+      counterNewWords += 1;
       promiseArray.push(setWordOptional(el._id as string, defaultOptional));
     }
   }
   await Promise.all(promiseArray);
-  return acc;
-}
-
-async function sendDataToServer(correctAnswersList: WordWithUserWord[], wrongAnswersList: WordWithUserWord[], gameState: GameState) {
-  const userStatistics = await getUserStatistic();
-  const gameStatistics = getTodayStat<GameStatistic>(userStatistics, 'audiocall');
-  const wordStatistics = getTodayStat<WordsStatistic>(userStatistics, 'words');
-  correctAnswersList.forEach((el) => {
-    const optionals = {
-      difficulty: el.userWord ? el.userWord.difficulty : WordStatus.default,
-      optional: {
-        guessedRight: el.userWord ? el.userWord.optional.guessedRight + 1 : 1,
-        guessedWrong: el.userWord ? el.userWord.optional.guessedWrong : 0,
-        guessedInRow: el.userWord ? el.userWord.optional.guessedInRow + 1 : 1,
-      },
-    };
-    if (optionals.optional.guessedInRow >= 3 && optionals.difficulty !== WordStatus.learned) {
-      optionals.difficulty = WordStatus.learned;
-      wordStatistics.learnedWordsQty += 1;
-    }
-    updateUserWord(el._id as string, optionals);
-  });
-  wrongAnswersList.forEach((el) => {
-    const optionals = {
-      difficulty: el.userWord ? el.userWord.difficulty : WordStatus.default,
-      optional: {
-        guessedRight: el.userWord ? el.userWord.optional.guessedRight + 1 : 1,
-        guessedWrong: el.userWord ? el.userWord.optional.guessedWrong + 1 : 1,
-        guessedInRow: 0,
-      },
-    };
-    if (optionals.difficulty === WordStatus.learned) {
-      optionals.difficulty = WordStatus.default;
-      wordStatistics.learnedWordsQty -= 1;
-    }
-    updateUserWord(el._id as string, optionals);
-  });
-  gameStatistics.newWordsQty += gameState.newWords;
-  gameStatistics.longestRow = gameStatistics.longestRow < gameState.longestStreakForGame ? gameState.longestStreakForGame : gameStatistics.longestRow;
-  gameStatistics.rightAnswers += correctAnswersList.length;
-  wordStatistics.newWordsQty += gameState.newWords;
-  wordStatistics.rightAnswers += correctAnswersList.length;
-  await updateUserStatistic(userStatistics);
+  return counterNewWords;
 }
 
 function getSpinner() {

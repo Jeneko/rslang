@@ -70,6 +70,7 @@
 
 .row-buttons-choice-wrapper {
   margin-top: 24px;
+  height: 60px;
 }
 
 .current-word-info {
@@ -119,3 +120,4 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
