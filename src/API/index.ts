@@ -1,10 +1,25 @@
 import * as auth from 'utils/auth';
 import {
-  Endpoints, Word, User, ResponseError, Auth, StatusCode, UserWord, ResponseUserWord, AggregatedResults,
+  Endpoints, Word, User, ResponseError, Auth, StatusCode, UserWord,
+  ResponseUserWord, AggregatedResults, Statistic, WordsStatistic, GameStatistic,
 } from 'types/index';
 
 export const SOURCE = 'https://team51-learnwords.herokuapp.com';
 export const WORDS_PER_PAGE_DEFAULTS = 20;
+
+export const DEFAULT_WORDS_STAT: WordsStatistic = {
+  date: 0,
+  learnedWordsQty: 0,
+  newWordsQty: 0,
+  rightAnswers: 0,
+};
+
+export const DEFAULT_GAME_STAT: GameStatistic = {
+  date: 0,
+  longestRow: 0,
+  newWordsQty: 0,
+  rightAnswers: 0,
+};
 
 export async function getWords(group: number, page: number): Promise<Word[]> {
   const url = `${SOURCE}/${Endpoints.words}?group=${group}&page=${page}`;
@@ -250,6 +265,52 @@ async function authFetch(url: RequestInfo | URL, options?: RequestInit | undefin
   return response;
 }
 
+export async function getUserStatistic(): Promise<Statistic> {
+  const curAuth = auth.getAuth();
+  if (!curAuth) throw new Error('Can\'t get statistic: No Auth found');
+
+  const url = `${SOURCE}/${Endpoints.users}/${curAuth.userId}/${Endpoints.statistics}`;
+
+  const response = await authFetch(url);
+
+  // IF user has no statistic yet
+  if (response.status === StatusCode.notFound) {
+    // Create, save and return default statistic
+    return updateUserStatistic(createNewUserStatistic());
+  }
+
+  const result = await response.json() as Statistic;
+
+  return result;
+}
+
+export async function updateUserStatistic(statistic: Statistic): Promise<Statistic> {
+  const curAuth = auth.getAuth();
+  if (!curAuth) throw new Error('Can\'t update statistic: No Auth found');
+
+  // We must do this because server doesn't allow this prop in JSON object,
+  // but getUserStatistic returns object with this param so we must delete it
+  delete statistic.id;
+
+  const url = `${SOURCE}/${Endpoints.users}/${curAuth.userId}/${Endpoints.statistics}`;
+  const options = {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(statistic),
+  };
+
+  const response = await authFetch(url, options);
+
+  // Handle bad responses
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error);
+  }
+
+  const result = await response.json() as Statistic;
+  return result;
+}
+
 function addAuthToOptions(token: string, options?: RequestInit | undefined) :RequestInit {
   const newHeaders = { ...options?.headers, Authorization: `Bearer ${token}` };
   const optionsWithAuth = { ...options };
@@ -276,4 +337,18 @@ function getFormattedErrorText(errorText: string): string {
   }
 
   return formattedErrorText;
+}
+
+// Create brand new statisic
+function createNewUserStatistic(): Statistic {
+  const newStatistic: Statistic = {
+    learnedWords: 0,
+    optional: {
+      words: { stat: [{ ...DEFAULT_WORDS_STAT, date: Date.now() }] },
+      sprint: { stat: [{ ...DEFAULT_GAME_STAT, date: Date.now() }] },
+      audiocall: { stat: [{ ...DEFAULT_GAME_STAT, date: Date.now() }] },
+    },
+  };
+
+  return newStatistic;
 }

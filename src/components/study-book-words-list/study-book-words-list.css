@@ -3,11 +3,19 @@
   border-radius: 6px;
 }
 
+.study-book-words-list--learned .study-book-chapter-heading {
+  background: var(--bs-green) !important;
+}
+
+.study-book-words-list--hard .study-book-chapter-heading {
+  background: var(--bs-red) !important;
+}
+
 .study-book-words-list ol {
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(auto-fill, minmax(315px, 1fr));
   list-style: none;
-  margin: 0;
+  margin: 2rem 0;
   padding: 0;
 }
