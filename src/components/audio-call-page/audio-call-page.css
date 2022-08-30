@@ -112,3 +112,10 @@
   color: transparent;  
   text-shadow: 0 0 0 white;
 }
+
+.spinner-audiocall {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

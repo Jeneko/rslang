@@ -21,6 +21,8 @@ const MAX_PAGE_NUM = 30;
 
 export async function startNewGame(event: Event | null, startPage: HTMLElement | undefined): Promise<void> {
   if (event) {
+    const spinner = getSpinner();
+    document.body.append(spinner);
     const statusAuth = getAuth();
     if (!statusAuth && +((event.target as HTMLElement).dataset.level as string) === 6) {
       if (document.querySelector('.info-no-auth')) {
@@ -90,9 +92,12 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
         await generateWindowGame(listWords[0], listWords, state);
         windowGameBlock?.append(blockButtonNextQuestion);
         addEventsForNextQuestionButton(windowGameBlock, listWords, state);
+        spinner.remove();
       }
     }
   } else {
+    const spinner = getSpinner();
+    document.body.append(spinner);
     let buttonsWrapper = document.querySelector('.button-wrapper-audiocall');
     if (buttonsWrapper) {
       buttonsWrapper.remove();
@@ -137,6 +142,7 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
     await generateWindowGame(listWords[0], listWords, state);
     windowGameBlock?.append(blockButtonNextQuestion);
     addEventsForNextQuestionButton(windowGameBlock, listWords, state);
+    spinner.remove();
   }
 }
 
@@ -306,7 +312,6 @@ async function checkNewWords(array: WordWithUserWord[]) {
 
 async function sendDataToServer(correctAnswersList: WordWithUserWord[], wrongAnswersList: WordWithUserWord[], gameState: GameState) {
   const userStatistics = await getUserStatistic();
-  let learnedWords = 0;
   const gameStatistics = getTodayStat<GameStatistic>(userStatistics, 'audiocall');
   const wordStatistics = getTodayStat<WordsStatistic>(userStatistics, 'words');
   correctAnswersList.forEach((el) => {
@@ -320,7 +325,7 @@ async function sendDataToServer(correctAnswersList: WordWithUserWord[], wrongAns
     };
     if (optionals.optional.guessedInRow >= 3 && optionals.difficulty !== WordStatus.learned) {
       optionals.difficulty = WordStatus.learned;
-      learnedWords += 1;
+      wordStatistics.learnedWordsQty += 1;
     }
     updateUserWord(el._id as string, optionals);
   });
@@ -335,14 +340,26 @@ async function sendDataToServer(correctAnswersList: WordWithUserWord[], wrongAns
     };
     if (optionals.difficulty === WordStatus.learned) {
       optionals.difficulty = WordStatus.default;
+      wordStatistics.learnedWordsQty -= 1;
     }
     updateUserWord(el._id as string, optionals);
   });
   gameStatistics.newWordsQty += gameState.newWords;
   gameStatistics.longestRow = gameStatistics.longestRow < gameState.longestStreakForGame ? gameState.longestStreakForGame : gameStatistics.longestRow;
   gameStatistics.rightAnswers += correctAnswersList.length;
-  wordStatistics.learnedWordsQty += learnedWords;
   wordStatistics.newWordsQty += gameState.newWords;
   wordStatistics.rightAnswers += correctAnswersList.length;
   await updateUserStatistic(userStatistics);
+}
+
+function getSpinner() {
+  const spinner = document.createElement('div');
+  spinner.classList.add('spinner-audiocall');
+  spinner.innerHTML = `
+  <button class="btn btn-primary" type="button" disabled>
+    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    Loading...
+  </button>
+  `;
+  return spinner;
 }
