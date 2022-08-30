@@ -38,8 +38,8 @@ export const sprintHandler = (elem: HTMLElement): void => {
       const isRandom = sprintState.randomWords.word === sprintState.randomWords.random;
       isCurrentTranslate(sprintState.randomWords, classList.contains('btn-true') ? isRandom : !isRandom);
       sprintState.wordsIndexes = deleteShownWord(sprintState.wordsIndexes, sprintState.randomWords.word);
-      sprintState.randomWords = chooseWords(sprintState.wordsIndexes);
       if (sprintState.wordsIndexes.length) {
+        sprintState.randomWords = chooseWords(sprintState.wordsIndexes);
         updateGame(sprintState.randomWords, elem);
       } else {
         gameWindow.innerHTML = modalResults();
@@ -99,7 +99,7 @@ const createGame = async (lvl: number, currentPage: number, elem: HTMLElement): 
 
 const getWordsForRegisterMember = async (lvl: number, currentPage: number): Promise<void> => {
   sprintState.userWords = await getAllUserWords();
-  if (lvl === 7) {
+  if (lvl === 6) {
     const hardWordsId = sprintState.userWords.filter((word) => word.difficulty === WordStatus.hard).map((word) => word.wordId);
     const hardWord = Promise.all(hardWordsId.map((id) => getWord(id)));
     sprintState.words = await hardWord;

@@ -1,5 +1,9 @@
-import { getWord, getWords, getAllUserWords, updateUserWord, createUserWord, getAggregatedWords } from 'API/index';
-import { WordStatus, UserWordOptions, UserWord, WordWithUserWord } from 'types/index';
+import {
+  getWord, getWords, getAllUserWords, updateUserWord, createUserWord, getAggregatedWords,
+} from 'API/index';
+import {
+  WordStatus, UserWordOptions, UserWord, WordWithUserWord,
+} from 'types/index';
 
 const OPTIONAL_DEFAULTS: UserWordOptions = {
   guessedInRow: 0,
