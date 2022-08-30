@@ -55,7 +55,7 @@ async function getWindowsStatistics() {
           <div class="statistic-info-wrapper">
             <p class="statistic-info-of-day display-3">${wordsNew}</p>
             <h5 class="card-title display-5">
-              Correct answers
+              New words
             </h5>
           </div>
         </div>
@@ -63,7 +63,7 @@ async function getWindowsStatistics() {
           <div class="statistic-info-wrapper">
             <p class="statistic-info-of-day display-3">${wordsRightAnswers}</p>
             <h5 class="card-title display-5">
-              Correct answers
+              Right answers
             </h5>
           </div>
         </div>

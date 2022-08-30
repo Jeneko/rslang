@@ -1,0 +1,28 @@
+.word-stat-container {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.word-stat {
+  cursor: default;
+  color: white;
+  padding: 2px 0.25rem;
+  min-width: 30px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1;
+  border-radius: 4px;
+}
+
+.word-stat--wrong {
+  background-color: var(--bs-red);
+}
+
+.word-stat--right {
+  background-color: var(--bs-green);
+}
+
+.word-stat--row {
+  background-color: var(--bs-gray-700);
+}

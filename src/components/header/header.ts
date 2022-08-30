@@ -1,18 +1,10 @@
 import * as state from 'utils/state';
 import getAuthMenu from 'components/auth-menu/auth-menu';
+import './header.css';
 
-function handleEvents(elem: HTMLElement): void {
-  elem.onclick = async (e) => {
-    e.preventDefault();
-    const target = e.target as HTMLLinkElement;
-
-    // Click on links
-    if (target.classList.contains('load-page-link')) {
-      const link = target.getAttribute('href') as string;
-      state.updateState('page', link.slice(1));
-      elem.dispatchEvent(new Event('loadPage', { bubbles: true }));
-    }
-  };
+function highlightActiveMenuItem(elem: HTMLElement): void {
+  const { page } = state.getState();
+  elem.querySelector(`[href="#${page}"]`)?.classList.add('active-page');
 }
 
 export default function getHeader(): HTMLElement {
@@ -21,8 +13,7 @@ export default function getHeader(): HTMLElement {
 
   elem.innerHTML = `
     <nav class="navbar navbar-expand-lg bg-light">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">RSLang</a>
+      <div class="container">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -60,7 +51,7 @@ export default function getHeader(): HTMLElement {
   const authMenu = elem.querySelector('.auth-menu') as HTMLElement;
   authMenu.replaceWith(getAuthMenu());
 
-  handleEvents(elem);
+  highlightActiveMenuItem(elem);
 
   return elem;
 }

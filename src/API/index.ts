@@ -304,7 +304,7 @@ export async function updateUserStatistic(statistic: Statistic): Promise<Statist
   // Handle bad responses
   if (!response.ok) {
     const error = await response.json();
-    console.log(error);
+    throw new Error(error);
   }
 
   const result = await response.json() as Statistic;

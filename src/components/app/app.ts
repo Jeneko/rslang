@@ -10,6 +10,18 @@ import getAudioCallPage from 'components/audio-call-page/audio-call-page';
 import getTeamPage from 'components/team-page/team-page';
 import getStatisticsPage from 'components/statistics-page/statistics-page';
 
+function handleLinks(e: Event): void {
+  const target = e.target as HTMLElement;
+  const loadPageLink = target.closest('.load-page-link');
+
+  if (loadPageLink) {
+    e.preventDefault();
+    const href = loadPageLink.getAttribute('href') as string;
+    state.updateState('page', href.slice(1));
+    loadPage();
+  }
+}
+
 async function loadPage(): Promise<void> {
   const curPage = state.getState().page;
   document.body.innerHTML = '';
@@ -52,6 +64,8 @@ function handleEvents(): void {
   document.addEventListener('loadPage', loadPage);
   // Auth update
   document.addEventListener('authUpdate', loadPage);
+  // Click on links
+  document.addEventListener('click', handleLinks);
 }
 
 export default function startApp(): void {
