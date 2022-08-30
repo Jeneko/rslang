@@ -24,6 +24,10 @@ async function getWindowsStatistics(): Promise<HTMLElement> {
   const lengthSprint = allStatSprint.length;
   const lengthWords = allStatWords.length;
 
+  console.log(allStatAudiocall, allStatSprint, allStatWords);
+  console.log(lengthAudiocall, lengthSprint, lengthWords);
+  console.log(allStatSprint[lengthSprint]);
+
   const statisticsForTodayWords = getTodayStat<WordsStatistic>(respStatistics, 'words');
   const statisticsForTodaySprint = getTodayStat<GameStatistic>(respStatistics, 'sprint');
   const statisticsForTodayAudioCall = getTodayStat<GameStatistic>(respStatistics, 'audiocall');
@@ -66,7 +70,7 @@ async function getWindowsStatistics(): Promise<HTMLElement> {
                 </div>
                 <div class="statistics-card-pagination d-flex justify-content-center align-items-center">
                   <button type="button" class="btn btn-primary btn-sm button-left"><</button>
-                    <span data-dateindex="${lengthWords}" class="card-statistics-date">${convertDate(allStatWords[lengthWords].date)}</span>
+                    <span data-dateindex="${lengthWords - 1}" class="card-statistics-date">${convertDate(allStatWords[lengthWords - 1].date)}</span>
                   <button disabled type="button" class="btn btn-primary btn-sm button-right">></button>
                 </div>
               </div>
@@ -85,7 +89,7 @@ async function getWindowsStatistics(): Promise<HTMLElement> {
               </div>
               <div class="statistics-card-pagination d-flex justify-content-center align-items-center">
                 <button type="button" class="btn btn-primary btn-sm button-left"><</button>
-                  <span data-dateindex="${lengthAudiocall}" class="card-statistics-date card-statistics-audiocall-date">${convertDate(allStatAudiocall[lengthAudiocall].date)}</span>
+                  <span data-dateindex="${lengthAudiocall - 1}" class="card-statistics-date card-statistics-audiocall-date">${convertDate(allStatAudiocall[lengthAudiocall - 1].date)}</span>
                 <button disabled type="button" class="btn btn-primary btn-sm button-right">></button>
               </div>
             </div>
@@ -104,7 +108,7 @@ async function getWindowsStatistics(): Promise<HTMLElement> {
               </div>
                 <div class="statistics-card-pagination d-flex justify-content-center align-items-center">
                 <button type="button" class="btn btn-primary btn-sm button-left"><</button>
-                  <span data-dateindex="${lengthSprint}" class="card-statistics-date card-statistics-sprint-date">${convertDate(allStatSprint[lengthSprint].date)}</span>
+                  <span data-dateindex="${lengthSprint - 1}" class="card-statistics-date card-statistics-sprint-date">${convertDate(allStatSprint[lengthSprint - 1].date)}</span>
                 <button disabled type="button" class="btn btn-primary btn-sm button-right">></button>
               </div>
             </div>
@@ -113,6 +117,8 @@ async function getWindowsStatistics(): Promise<HTMLElement> {
       </div>
     <section>
   `;
+
+  console.log(allStatSprint, allStatAudiocall, allStatSprint[lengthSprint - 1], convertDate(allStatSprint[lengthSprint - 1].date));
 
   const cardWords = windowsStatistics.querySelector('.card-body-words') as HTMLElement;
   const cardAudioCall = windowsStatistics.querySelector('.card-body-audiocall') as HTMLElement;
