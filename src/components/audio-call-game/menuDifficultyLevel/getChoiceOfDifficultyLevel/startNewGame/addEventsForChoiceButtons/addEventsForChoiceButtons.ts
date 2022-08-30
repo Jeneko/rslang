@@ -11,7 +11,6 @@ export default function addEventsForChoiceButtons(currentWord: string, gameState
   const buttonsChoiceWrapper = document.querySelector('.row-buttons-choice-wrapper');
   const buttonsChoice = document.querySelectorAll('.btn-choice-of-answer');
   buttonsChoiceWrapper?.addEventListener('click', async (e: Event) => checkAnswer(e, 'click', buttonsChoice, currentWord, gameState, correctWord));
-  console.log(currentWord, 'current');
 }
 
 async function checkAnswer(e: Event, eventExecutor: string, buttonsChoice: NodeListOf<Element>, currentWord: string, gameState: GameState, correctWord: Word) {
@@ -36,9 +35,7 @@ function getCheckButton(e: Event, eventExecutor: string): HTMLElement | null {
   if (eventExecutor === 'key') {
     const valuesKeyTargets = ['Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5'];
     const keyTarget = (e as KeyboardEvent).code;
-    console.log(keyTarget);
     if (keyTarget === 'Enter') {
-      console.log('enter');
       const buttonNextQuestion = document.querySelector('.btn-next-question');
       const event = new Event('checkNextQuestion');
       buttonNextQuestion?.dispatchEvent(event);
@@ -77,7 +74,6 @@ export async function wordDistribution(currentButton: HTMLElement, currentWord: 
 
   const currentIcon = document.createElement('span');
   const word = correctWord;
-  console.log(buttonWord, currentWord);
   if (buttonWord === currentWord) {
     gameState.correctAnswers.push(word);
     gameState.counterStreakForGame += 1;

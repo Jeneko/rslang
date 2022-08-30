@@ -16,6 +16,9 @@ export default function createMenuGame(previousBookStudy: boolean): HTMLElement 
         <li><button class="btn btn-primary btn-select-level" data-level="5">6</button></li>
         <li><button class="btn btn-danger btn-select-level" data-level="6">7</button></li>
       </ol>
+      <p>
+        Controls in the game: you can play with both the mouse and the keyboard. <br>Use the answer keys from 1 to 5 to control, to press the next question key or I don’t know, use the enter key
+      <p>
     </div>
       <div class="game-window game-window--hidden"></div>
   </div>

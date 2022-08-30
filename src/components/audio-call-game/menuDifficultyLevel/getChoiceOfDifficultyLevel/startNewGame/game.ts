@@ -69,10 +69,8 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
         if (getAuth()) {
           listWords = getAuth() && +currentLevel !== 6 ? await getAuthWords(+currentLevel, randomPage) : await getAllUserWordsWithData();
           state.newWords = await checkNewWords(listWords as WordWithUserWord[]);
-          console.log('AUTH LIST');
         } else {
           listWords = await getWords(+currentLevel, randomPage);
-          console.log('NO AUTH LIST');
         }
 
         if (listWords.length === 0) {
@@ -82,7 +80,7 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
           const modalInfo = document.createElement('div');
           modalInfo.innerHTML = `
             <p>
-              You do not have hard words!
+              You do not have hard words! Learn more in the  <a class="load-page-link" href="#study-book">study book</a>!
             </p>
           `;
           modalInfo.classList.add('container', 'info-empty-hard-words');
@@ -124,21 +122,26 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
     };
     controlGameWindow();
     updateState('indexWord', 0);
+    let listWords;
 
-    const listWords = getAuth() ? await getAuthWords(currentChapter, currentPage) : await getWords(currentChapter, currentPage);
+    if (currentChapter === 6 && getAuth()) {
+      listWords = await getAllUserWordsWithData();
+      checkNewWords(listWords);
+    } else if (getAuth()) {
+      listWords = await getAuthWords(currentChapter, currentPage);
+    } else {
+      listWords = await getWords(currentChapter, currentPage);
+    }
+
     state.newWords = await checkNewWords(listWords as WordWithUserWord[]);
-    console.log(listWords);
-    console.log(listWords, listWords.length);
     await generateWindowGame(listWords[0], listWords, state);
     windowGameBlock?.append(blockButtonNextQuestion);
     addEventsForNextQuestionButton(windowGameBlock, listWords, state);
-    console.log(windowGameBlock);
   }
 }
 
 export function addEventsForNextQuestionButton(windowGameBlock: HTMLElement, listWords: Word[], gameState: GameState) {
   const buttonNextQuestion = windowGameBlock.querySelector('.btn-next-question') as HTMLElement;
-  console.log(buttonNextQuestion, 'button next');
   buttonNextQuestion.setAttribute('wordchosen', 'false');
   buttonNextQuestion?.addEventListener('click', (e: Event) => {
     checkNextQuestion(e, buttonNextQuestion, listWords, gameState);
@@ -162,12 +165,10 @@ export function getNewWindowGame(): HTMLElement {
     menu.append(createMenuGame(true));
     startNewGame(null, menu);
   } else {
-    console.log('no-auth');
     menu.append(createMenuGame(false));
     const menuLevels = menu.querySelector('.btn-wrapper');
     menuLevels?.addEventListener('click', (e: Event) => startNewGame(e, undefined));
   }
-  console.log(menu);
   return menu;
 }
 
@@ -179,7 +180,6 @@ function getAllAnswersForGame(list: Word[], blockList: HTMLElement) {
     listItem.innerHTML = `<button class="button-audio-result"><img class="button-audio-image" src="${audioImage}"></button> ${el.word} | ${el.wordTranslate}`;
     const buttonAudio = listItem.querySelector('.button-audio-result');
     buttonAudio?.addEventListener('click', () => {
-      console.log(el, el.audio);
       playAudio(el.audio);
     });
     fragment.append(listItem);
@@ -235,10 +235,8 @@ function showResult(modalResultGame: HTMLElement, gameState: GameState) {
 }
 
 export async function checkNextQuestion(e: Event, buttonNextQuestion: HTMLElement, listWords: Word[], gameState: GameState) {
-  console.log('event work');
-  buttonNextQuestion.textContent = 'I do not know';
   const currentIndex = getState().indexWord + 1;
-  if (currentIndex >= listWords.length) {
+  if (currentIndex >= listWords.length && buttonNextQuestion.textContent !== 'I do not know') {
     clearGameWindow();
     const modalGameResult = getModalResultGame(gameState);
     playAgainButtonClickHandler(modalGameResult);
@@ -253,6 +251,7 @@ export async function checkNextQuestion(e: Event, buttonNextQuestion: HTMLElemen
     const word = await getWord(wordId as string);
     gameState.wrongAnswers.push(word);
   } else {
+    buttonNextQuestion.textContent = 'I do not know';
     buttonNextQuestion.setAttribute('wordchosen', 'false');
     clearGameWindow();
     generateWindowGame(listWords[currentIndex], listWords, gameState);
@@ -288,12 +287,10 @@ async function checkNewWords(array: WordWithUserWord[]) {
   for (let i = 0; i < array.length; i += 1) {
     const el = array[i];
     if (el.userWord) {
-      console.log('el empty', el.userWord.difficulty, acc);
       if (!el.userWord.optional.guessedWrong && !el.userWord.optional.guessedRight) {
         acc += 1;
       }
     } else {
-      console.log(el.userWord, el, acc);
       const defaultOptional = {
         guessedInRow: 0,
         guessedRight: 0,
@@ -303,13 +300,12 @@ async function checkNewWords(array: WordWithUserWord[]) {
       promiseArray.push(setWordOptional(el._id as string, defaultOptional));
     }
   }
-  Promise.all(promiseArray).then(() => console.log('promise all'));
+  await Promise.all(promiseArray);
   return acc;
 }
 
 async function sendDataToServer(correctAnswersList: WordWithUserWord[], wrongAnswersList: WordWithUserWord[], gameState: GameState) {
   const userStatistics = await getUserStatistic();
-  console.log('statistics get');
   let learnedWords = 0;
   const gameStatistics = getTodayStat<GameStatistic>(userStatistics, 'audiocall');
   const wordStatistics = getTodayStat<WordsStatistic>(userStatistics, 'words');
@@ -322,13 +318,11 @@ async function sendDataToServer(correctAnswersList: WordWithUserWord[], wrongAns
         guessedInRow: el.userWord ? el.userWord.optional.guessedInRow + 1 : 1,
       },
     };
-    if (optionals.optional.guessedInRow >= 3) {
+    if (optionals.optional.guessedInRow >= 3 && optionals.difficulty !== WordStatus.learned) {
       optionals.difficulty = WordStatus.learned;
       learnedWords += 1;
     }
-    console.log(el._id, optionals);
     updateUserWord(el._id as string, optionals);
-    console.log('update correct send');
   });
   wrongAnswersList.forEach((el) => {
     const optionals = {
@@ -339,18 +333,16 @@ async function sendDataToServer(correctAnswersList: WordWithUserWord[], wrongAns
         guessedInRow: 0,
       },
     };
-    if (el.userWord.difficulty === WordStatus.learned) {
-      optionals.difficulty = WordStatus.hard;
+    if (optionals.difficulty === WordStatus.learned) {
+      optionals.difficulty = WordStatus.default;
     }
-    console.log(el._id, optionals);
     updateUserWord(el._id as string, optionals);
-    console.log('update wrong send');
   });
   gameStatistics.newWordsQty += gameState.newWords;
   gameStatistics.longestRow = gameStatistics.longestRow < gameState.longestStreakForGame ? gameState.longestStreakForGame : gameStatistics.longestRow;
+  gameStatistics.rightAnswers += correctAnswersList.length;
   wordStatistics.learnedWordsQty += learnedWords;
   wordStatistics.newWordsQty += gameState.newWords;
   wordStatistics.rightAnswers += correctAnswersList.length;
   await updateUserStatistic(userStatistics);
-  console.log('update stat');
 }

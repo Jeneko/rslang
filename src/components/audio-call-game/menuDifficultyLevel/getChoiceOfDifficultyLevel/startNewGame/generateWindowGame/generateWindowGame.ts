@@ -1,20 +1,20 @@
 import { SOURCE } from 'API/index';
-import { Word } from 'types/index';
+import { Word, WordWithUserWord } from 'types/index';
 import imageAudio from 'assets/speaker-icon.svg';
 import getRandomWords from './getRandomWords/getRandomWords';
 import addEventsForChoiceButtons, { addEventsForKeyboard } from '../addEventsForChoiceButtons/addEventsForChoiceButtons';
 import playAudio from '../playAudio/playAudio';
 import { GameState } from '../game.types';
 
-export default async function generateWindowGame(currentWord: Word, arrayWords: Word[], gameState: GameState): Promise<void> {
+export default async function generateWindowGame(currentWord: Word | WordWithUserWord, arrayWords: Word[], gameState: GameState): Promise<void> {
   const windowGame = document.querySelector('.game-window') as HTMLElement;
 
   const {
-    audio, word, image, transcription, wordTranslate, id,
+    audio, word, image, transcription, wordTranslate,
   } = currentWord;
+  const id = currentWord.id ? currentWord.id : (currentWord as WordWithUserWord)._id;
   const imageResponse = `${SOURCE}/${image}`;
   const listRandomWords = getRandomWords(currentWord, arrayWords);
-  console.log(arrayWords, arrayWords.length, 'ArrayWords');
   windowGame.innerHTML = `
     <div class="container text-center">
       <div class="row">
@@ -36,10 +36,9 @@ export default async function generateWindowGame(currentWord: Word, arrayWords: 
   `;
   const fragmentButton = document.createDocumentFragment();
   const buttonsWrapper = windowGame.querySelector('.row-buttons-choice-wrapper');
-  listRandomWords.forEach((el, index) => {
+  listRandomWords.forEach((el) => {
     const button = document.createElement('div');
     button.classList.add('col');
-    console.log(el, el[index], index);
     button.innerHTML = `
       <div class="col">
         <button  type="button" data-id="${el[1]}" class="btn btn-light btn-choice-of-answer">${el[0]}</button>
