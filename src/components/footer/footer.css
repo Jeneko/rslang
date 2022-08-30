@@ -1,6 +1,7 @@
 .footer {
   padding: 1rem 0;
-  background: linear-gradient(to right, #5aa5fd 0%, #0074fc 100%);
+  background: var(--bs-body-bg);
+  color: var(--bs-body-color);
 }
 
 .footer-rsschool {
@@ -9,9 +10,15 @@
   display: inline-block;
   height: 1.5rem;
   width: 4rem;
+  filter: invert(13%) sepia(17%) saturate(349%) hue-rotate(168deg) brightness(39%) contrast(100%);
 }
 
-.link-light {
+.link-dark {
   text-decoration: none;
   margin-left: 1rem;
+}
+
+.link-dark:hover {
+  filter: invert(13%) sepia(17%) saturate(349%) hue-rotate(168deg) brightness(0%) contrast(100%);
+  transition: 0.5s;
 }
