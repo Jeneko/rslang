@@ -6,10 +6,15 @@ export const createUpdateRightWord = async (id: string) => {
   const word = sprintState.userWords.find((currWord) => currWord.wordId === id);
 
   if (word) {
-    word.difficulty = word.optional.guessedInRow >= 2 ? WordStatus.learned : word.difficulty;
-    word.optional.guessedRight += 1;
-    word.optional.guessedInRow += 1;
-    await updateUserWord(id, word);
+    const wordData: UserWord = {
+      difficulty: word.optional.guessedInRow >= 2 ? WordStatus.learned : word.difficulty,
+      optional: {
+        guessedRight: (word.optional.guessedRight += 1),
+        guessedWrong: word.optional.guessedWrong,
+        guessedInRow: (word.optional.guessedInRow += 1),
+      },
+    };
+    await updateUserWord(id, wordData);
   } else {
     const wordData: UserWord = {
       difficulty: WordStatus.default,
@@ -27,10 +32,15 @@ export const createUpdateWrongWord = async (id: string) => {
   const word = sprintState.userWords.find((currWord) => currWord.wordId === id);
 
   if (word) {
-    word.difficulty = word.difficulty === WordStatus.hard ? WordStatus.hard : WordStatus.default;
-    word.optional.guessedWrong += 1;
-    word.optional.guessedInRow = 0;
-    await updateUserWord(id, word);
+    const wordData: UserWord = {
+      difficulty: word.difficulty === WordStatus.hard ? WordStatus.hard : WordStatus.default,
+      optional: {
+        guessedRight: word.optional.guessedRight,
+        guessedWrong: (word.optional.guessedWrong += 1),
+        guessedInRow: (word.optional.guessedInRow = 0),
+      },
+    };
+    await updateUserWord(id, wordData);
   } else {
     const wordData: UserWord = {
       difficulty: WordStatus.default,

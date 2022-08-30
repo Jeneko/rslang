@@ -1,5 +1,6 @@
 import { getAuth } from 'utils/auth';
 import { sprintState } from './sprint-state';
+import statistic from './statistic';
 import { CurrentWord, DeleteWord, Points } from './types';
 import { createUpdateRightWord, createUpdateWrongWord } from './user-words';
 
@@ -42,7 +43,7 @@ const randomNumber = (max: number): number => Math.round(Math.random() * max);
 
 export const deleteShownWord: DeleteWord = (wordsInd, shownWord) => wordsInd.filter((i) => i !== shownWord);
 
-export const isCurrentTranslate = (randomWords: CurrentWord, depend: boolean): void => {
+export const isCurrentTranslate = (randomWords: CurrentWord, depend: boolean) => {
   const { id } = sprintState.words[randomWords.word];
   const auth = getAuth();
   if (depend) {
@@ -91,6 +92,10 @@ export const timer = (): void => {
     sprintState.timer -= 1;
     if (sprintState.timer <= 0) {
       (document.querySelector('.sprint') as HTMLElement).innerHTML = modalResults();
+      const auth = getAuth();
+      if (auth) {
+        statistic();
+      }
     } else {
       setTimeout(timer, 1000);
     }

@@ -3,10 +3,9 @@ import { PageName, WordStatus } from 'types/index';
 import { getAuth } from 'utils/auth';
 import * as state from 'utils/state';
 import { renderModal, generateWords } from './modal-lvl';
-import {
-  chooseWords, deleteShownWord, isCurrentTranslate, loadingBar, modalResults, renderGame, timer, updateGame,
-} from './sprint-game-window';
+import { chooseWords, deleteShownWord, isCurrentTranslate, loadingBar, modalResults, renderGame, timer, updateGame } from './sprint-game-window';
 import { sprintState, setDefaultSprintState } from './sprint-state';
+import statistic from './statistic';
 
 export default async function getSprintGame(): Promise<HTMLDivElement> {
   const elem = document.createElement('div');
@@ -43,6 +42,10 @@ export const sprintHandler = (elem: HTMLElement): void => {
         updateGame(sprintState.randomWords, elem);
       } else {
         gameWindow.innerHTML = modalResults();
+        const auth = getAuth();
+        if (auth) {
+          statistic();
+        }
       }
     }
     if (classList.contains('results__close-button')) {
