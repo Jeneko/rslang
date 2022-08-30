@@ -13,7 +13,7 @@ export const renderGame = (randomWords: CurrentWord): string => `
     <div class="session">🤨</div>
     <p class="english-word">${sprintState.words[randomWords.word].word}</p>
     <p class="russian-word">${sprintState.words[randomWords.random].wordTranslate}</p>
-    <div class="choose-buttons">
+    <div class="choose-buttons" tabindex="-1">
       <button class="btn chooseBtn btn-primary btn-true" >True</button>
       <button class="btn chooseBtn btn-primary btn-false" >False</button>
     </div>

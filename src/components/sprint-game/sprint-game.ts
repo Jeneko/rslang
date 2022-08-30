@@ -3,7 +3,9 @@ import { PageName, WordStatus } from 'types/index';
 import { getAuth } from 'utils/auth';
 import * as state from 'utils/state';
 import { renderModal, generateWords } from './modal-lvl';
-import { chooseWords, deleteShownWord, isCurrentTranslate, loadingBar, modalResults, renderGame, timer, updateGame } from './sprint-game-window';
+import {
+  chooseWords, deleteShownWord, isCurrentTranslate, loadingBar, modalResults, renderGame, timer, updateGame,
+} from './sprint-game-window';
 import { sprintState, setDefaultSprintState } from './sprint-state';
 import statistic from './statistic';
 
@@ -26,6 +28,10 @@ export const sprintHandler = (elem: HTMLElement): void => {
   elem.addEventListener('click', async (event: MouseEvent) => {
     const { classList } = event.target as Element;
     const gameWindow = elem.querySelector('.sprint') as HTMLElement;
+
+    if (elem.querySelector('.choose-buttons')) {
+      (elem.querySelector('.choose-buttons') as HTMLElement).focus();
+    }
 
     if (classList.contains('btn-lvl')) {
       gameWindow.innerHTML = loadingBar;
@@ -53,7 +59,7 @@ export const sprintHandler = (elem: HTMLElement): void => {
     }
   });
 
-  document.addEventListener('keyup', (event: KeyboardEvent) => {
+  elem.addEventListener('keyup', (event: KeyboardEvent) => {
     const leftButton = elem.querySelector('.btn-true') as HTMLButtonElement;
     const rightButton = elem.querySelector('.btn-false') as HTMLButtonElement;
 
@@ -69,7 +75,7 @@ export const sprintHandler = (elem: HTMLElement): void => {
     }
   });
 
-  document.addEventListener('keydown', (event: KeyboardEvent) => {
+  elem.addEventListener('keydown', (event: KeyboardEvent) => {
     const leftButton = elem.querySelector('.btn-true') as HTMLButtonElement;
     const rightButton = elem.querySelector('.btn-false') as HTMLButtonElement;
 
@@ -97,6 +103,7 @@ const createGame = async (lvl: number, currentPage: number, elem: HTMLElement): 
   setDefaultSprintState();
   sprintState.randomWords = chooseWords(sprintState.wordsIndexes);
   elem.innerHTML = renderGame(sprintState.randomWords);
+  (elem.querySelector('.choose-buttons') as HTMLElement).focus();
   timer();
 };
 

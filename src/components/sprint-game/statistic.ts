@@ -1,5 +1,7 @@
 import { getAllUserWords, getUserStatistic, updateUserStatistic } from 'API/index';
-import { GameStatistic, ResponseUserWord, WordsStatistic, WordStatus } from 'types/index';
+import {
+  GameStatistic, ResponseUserWord, WordsStatistic, WordStatus,
+} from 'types/index';
 import getTodayStat from 'utils/statistic';
 import { sprintState } from './sprint-state';
 

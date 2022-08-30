@@ -18,6 +18,10 @@
   border: 1px solid var(--bs-gray-200);
 }
 
+.choose-buttons:focus {
+  outline: none;
+}
+
 .timer {
   margin-top: 2rem;
   font-size: 4rem;
