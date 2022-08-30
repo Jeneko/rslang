@@ -317,9 +317,9 @@ async function sendDataToServer(correctAnswersList: WordWithUserWord[], wrongAns
     const optionals = {
       difficulty: el.userWord ? el.userWord.difficulty : WordStatus.default,
       optional: {
-        guessedRight: el.userWord ? el.userWord.optional.guessedRight : 1,
+        guessedRight: el.userWord ? el.userWord.optional.guessedRight + 1 : 1,
         guessedWrong: el.userWord ? el.userWord.optional.guessedWrong : 0,
-        guessedInRow: el.userWord ? el.userWord.optional.guessedInRow : 1,
+        guessedInRow: el.userWord ? el.userWord.optional.guessedInRow + 1 : 1,
       },
     };
     if (optionals.optional.guessedInRow >= 3) {
@@ -334,9 +334,9 @@ async function sendDataToServer(correctAnswersList: WordWithUserWord[], wrongAns
     const optionals = {
       difficulty: el.userWord ? el.userWord.difficulty : WordStatus.default,
       optional: {
-        guessedRight: el.userWord ? el.userWord.optional.guessedRight : 0,
-        guessedWrong: el.userWord ? el.userWord.optional.guessedWrong : 1,
-        guessedInRow: el.userWord ? el.userWord.optional.guessedInRow : 0,
+        guessedRight: el.userWord ? el.userWord.optional.guessedRight + 1 : 1,
+        guessedWrong: el.userWord ? el.userWord.optional.guessedWrong + 1 : 1,
+        guessedInRow: 0,
       },
     };
     if (el.userWord.difficulty === WordStatus.learned) {
@@ -347,6 +347,7 @@ async function sendDataToServer(correctAnswersList: WordWithUserWord[], wrongAns
     console.log('update wrong send');
   });
   gameStatistics.newWordsQty += gameState.newWords;
+  gameStatistics.longestRow = gameStatistics.longestRow < gameState.longestStreakForGame ? gameState.longestStreakForGame : gameStatistics.longestRow;
   wordStatistics.learnedWordsQty += learnedWords;
   wordStatistics.newWordsQty += gameState.newWords;
   wordStatistics.rightAnswers += correctAnswersList.length;
