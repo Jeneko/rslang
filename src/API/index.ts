@@ -340,7 +340,7 @@ function getFormattedErrorText(errorText: string): string {
 }
 
 // Create brand new statisic
-function createNewUserStatistic(): Statistic {
+export function createNewUserStatistic(): Statistic {
   const newStatistic: Statistic = {
     learnedWords: 0,
     optional: {

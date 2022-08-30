@@ -1,5 +1,7 @@
 import * as auth from 'utils/auth';
-import { createUser, loginUser } from 'API/index';
+import {
+  createUser, loginUser, updateUserStatistic, createNewUserStatistic,
+} from 'API/index';
 import { AlertType } from 'types/index';
 import { outputAlert, outputResponseErrors, clearAlerts } from 'components/alert-message/alert-message';
 
@@ -18,7 +20,6 @@ function eventHandler(elem: HTMLElement): void {
 
     clearAlerts(elem);
 
-    // TODO: show spinner while creating user
     submitBtn.disabled = true;
     const creationResult = await createUser(name.value, email.value, password.value);
     submitBtn.disabled = false;
@@ -36,6 +37,7 @@ function eventHandler(elem: HTMLElement): void {
     }
 
     auth.saveAuth(loginResult);
+    updateUserStatistic(createNewUserStatistic());
     elem.dispatchEvent(new Event('authUpdate', { bubbles: true }));
   };
 }
