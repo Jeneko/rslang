@@ -19,6 +19,21 @@
     font-weight: 500;
 }
 
-.statistics-window {
-    min-height: 80vh;
+.statistics-no-auth-user-info {
+    margin-top: 40px;
+}
+
+.spinner-statistics {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.statistics-card-pagination {
+    margin-top: 40px;
+}
+
+.card-statistics-date {
+    padding: 0px 14px;
 }

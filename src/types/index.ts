@@ -145,3 +145,8 @@ export interface Auth {
   userId: string;
   name: string;
 }
+
+export enum StatusCardStatistics {
+  Game = 'game',
+  Word = 'word',
+}
