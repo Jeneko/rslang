@@ -2,6 +2,7 @@ import getStatPage from 'components/statistics-info/statistics-info-for-the-day'
 import getFooter from 'components/footer/footer';
 import { getAuth } from 'utils/auth';
 import statisticsInfoAllDays from 'components/statistics-info/statistics-info-all-days';
+import getSpinner from 'components/load-spinner/load-spinner';
 import './statistics-page.css';
 
 export default async function getStatisticsPage() {
@@ -16,18 +17,6 @@ export default async function getStatisticsPage() {
   elem.append(getFooter());
   elem.classList.add('statistics-page');
   spinner.remove();
-  return elem;
-}
-
-function getSpinner() {
-  const elem = document.createElement('div');
-  elem.innerHTML = `
-  <button class="btn btn-primary" type="button" disabled>
-    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-    Loading...
-  </button>
-  `;
-  elem.classList.add('spinner-statistics');
   return elem;
 }
 
