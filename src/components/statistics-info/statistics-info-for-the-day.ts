@@ -103,7 +103,7 @@ async function getWindowsStatistics(): Promise<HTMLElement> {
                 Sprint
               </h5>
               <div class="card-text-wrapper">
-                <p class="card-text card-text-statistics">Percent correctly answers <span class="game-statistic-info-right-answers">${sprintPercentRightAnswers}</span>.</p>
+                <p class="card-text card-text-statistics">Percent correctly answers <span class="game-statistic-info-right-answers">${sprintPercentRightAnswers}</span> %.</p>
                 <p class="card-text card-text-statistics">New <span class="game-statistic-info-new-words">${sprintLongestRow}</span> words.</p>
                 <p class="card-text card-text-statistics">Longest series of correct answers <span class="game-statistic-info-longest-row">${sprintNewWords}</span>.</p>
               </div>
@@ -158,8 +158,10 @@ function handleEventPaginationButtons(allStatObject: WordsStatistic[] | GameStat
 
     if (key === StatusCardStatistics.Game) {
       currentLearn = ((allStatObject[newIndex] as GameStatistic).longestRow).toString();
+      const { wrongAnswers } = allStatObject[newIndex];
+      const percentCorrectAnswers = getPercentAgeOfCorrectAnswers(currentRightAnswers, wrongAnswers);
 
-      learnWords.textContent = currentLearn;
+      learnWords.textContent = percentCorrectAnswers.toString();
       newWords.textContent = currentNewWords;
       rightAnswers.textContent = currentRightAnswers;
     } else if (key === StatusCardStatistics.Word) {
@@ -191,7 +193,10 @@ function handleEventPaginationButtons(allStatObject: WordsStatistic[] | GameStat
 
     if (key === StatusCardStatistics.Game) {
       currentLearn = ((allStatObject[newIndex] as GameStatistic).longestRow).toString();
-      learnWords.textContent = currentLearn;
+      const { wrongAnswers } = allStatObject[newIndex];
+      const percentCorrectAnswers = getPercentAgeOfCorrectAnswers(currentRightAnswers, wrongAnswers);
+
+      learnWords.textContent = percentCorrectAnswers.toString();
       newWords.textContent = currentNewWords;
       rightAnswers.textContent = currentRightAnswers;
     } else if (key === StatusCardStatistics.Word) {
@@ -215,5 +220,8 @@ function handleEventPaginationButtons(allStatObject: WordsStatistic[] | GameStat
 
 function getPercentAgeOfCorrectAnswers(correct: string | number, wrong: string | number): number {
   const sum = +correct + +wrong;
+  if (sum === 0) {
+    return sum;
+  }
   return Math.trunc((+correct / sum) * +wrong);
 }
