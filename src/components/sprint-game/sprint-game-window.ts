@@ -88,18 +88,18 @@ export const modalResults = (): string => `
 `;
 
 export const timer = (): void => {
-  if (document.querySelector('.time')) {
-    (document.querySelector('.time') as HTMLElement).innerHTML = sprintState.timer.toString();
+  const timeElem = document.querySelector('.time');
+  if (timeElem) {
+    timeElem.innerHTML = sprintState.timer.toString();
     sprintState.timer -= 1;
     if (sprintState.timer <= 0) {
       (document.querySelector('.sprint') as HTMLElement).innerHTML = modalResults();
-      const auth = getAuth();
-      if (auth) {
+      if (getAuth()) {
         statistic();
       }
-    } else {
-      setTimeout(timer, 1000);
+      return;
     }
+    setTimeout(timer, 1000);
   }
 };
 
