@@ -1,4 +1,4 @@
-import getTodayStat from 'utils/statistic';
+import { getTodayStat } from 'utils/statistic';
 import { getUserStatistic } from 'API/index';
 import { WordsStatistic, GameStatistic, StatusCardStatistics } from 'types/index';
 
@@ -35,12 +35,15 @@ async function getWindowsStatistics(): Promise<HTMLElement> {
   const audiocallRightAnswers = statisticsForTodayAudioCall.rightAnswers;
   const audiocallLongestRow = statisticsForTodayAudioCall.longestRow;
   const audiocallNewWords = statisticsForTodayAudioCall.newWordsQty;
-  // const audiocallPercentRightAnswers = getPercentAgeOfCorrectAnswers(audiocallRightAnswers, audiocallLongestRow);
+  const audiocallWrongAnswers = statisticsForTodayAudioCall.wrongAnswers;
+  console.log(audiocallRightAnswers, audiocallWrongAnswers);
+  const audiocallPercentRightAnswers = getPercentAgeOfCorrectAnswers(audiocallRightAnswers, audiocallWrongAnswers);
 
   const sprintRightAnswers = statisticsForTodaySprint.rightAnswers;
   const sprintLongestRow = statisticsForTodaySprint.longestRow;
   const sprintNewWords = statisticsForTodaySprint.newWordsQty;
-  // const sprintPercentRightAnswers = getPercentAgeOfCorrectAnswers(sprintRightAnswers, audiocallLongestRow);
+  const sprintWrongAnswers = statisticsForTodaySprint.wrongAnswers;
+  const sprintPercentRightAnswers = getPercentAgeOfCorrectAnswers(sprintRightAnswers, sprintWrongAnswers);
 
   const windowsStatistics = document.createElement('div');
   windowsStatistics.classList.add('statistics-block');
@@ -81,7 +84,7 @@ async function getWindowsStatistics(): Promise<HTMLElement> {
                 Audio-call
               </h5>
               <div class="card-text-wrapper">
-                <p class="card-text card-text-statistics">Guessed correctly <span class="game-statistic-info-right-answers">${audiocallRightAnswers}</span> words.</p>
+                <p class="card-text card-text-statistics">Percent correctly answers <span class="game-statistic-info-right-answers">${audiocallPercentRightAnswers}</span> %.</p>
                 <p class="card-text card-text-statistics">New <span class="game-statistic-info-new-words">${audiocallNewWords}</span> words.</p>
                 <p class="card-text card-text-statistics">Longest series of correct answers <span class="game-statistic-info-longest-row">${audiocallLongestRow}</span>.</p>
               </div>
@@ -100,7 +103,7 @@ async function getWindowsStatistics(): Promise<HTMLElement> {
                 Sprint
               </h5>
               <div class="card-text-wrapper">
-                <p class="card-text card-text-statistics">Guessed correctly <span class="game-statistic-info-right-answers">${sprintRightAnswers}</span> words.</p>
+                <p class="card-text card-text-statistics">Percent correctly answers <span class="game-statistic-info-right-answers">${sprintPercentRightAnswers}</span>.</p>
                 <p class="card-text card-text-statistics">New <span class="game-statistic-info-new-words">${sprintLongestRow}</span> words.</p>
                 <p class="card-text card-text-statistics">Longest series of correct answers <span class="game-statistic-info-longest-row">${sprintNewWords}</span>.</p>
               </div>
@@ -210,7 +213,7 @@ function handleEventPaginationButtons(allStatObject: WordsStatistic[] | GameStat
   });
 }
 
-// function getPercentAgeOfCorrectAnswers(correct: number, wrong: number) {
-//   const sum = correct + wrong;
-//   return Math.trunc((correct / sum) * wrong);
-// }
+function getPercentAgeOfCorrectAnswers(correct: string | number, wrong: string | number): number {
+  const sum = +correct + +wrong;
+  return Math.trunc((+correct / sum) * +wrong);
+}
