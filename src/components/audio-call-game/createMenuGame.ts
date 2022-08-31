@@ -17,7 +17,9 @@ export default function createMenuGame(previousBookStudy: boolean): HTMLElement 
         <li><button class="btn btn-danger btn-select-level" data-level="6">7</button></li>
       </ol>
       <p>
-        Controls in the game: you can play with both the mouse and the keyboard. <br>Use the answer keys from 1 to 5 to control, to press the next question key or I don’t know, use the enter key
+        Controls in the game: you can play with both the mouse and the keyboard. <br>
+        Use the answer keys from 1 to 5 to control, to press the next question key or I don’t know, use the enter key.<br>
+        Also when you press the spacebar you will hear the given word.
       <p>
     </div>
       <div class="game-window game-window--hidden"></div>

@@ -50,6 +50,7 @@ export default async function generateWindowGame(currentWord: Word | WordWithUse
   await playAudio(audio);
   const buttonAudio = document.getElementById('playAudio');
   buttonAudio?.addEventListener('click', () => playAudio(audio));
+  buttonAudio?.addEventListener('play', () => playAudio(audio));
   addEventsForChoiceButtons(wordTranslate, gameState, currentWord);
   addEventsForKeyboard(wordTranslate, gameState, currentWord);
 }
