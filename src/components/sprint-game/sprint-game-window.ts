@@ -41,7 +41,7 @@ export const chooseWords = (wordsIndexes: number[]): CurrentWord => {
 
 const randomNumber = (max: number): number => Math.round(Math.random() * max);
 
-export const deleteShownWord: DeleteWord = (wordsInd, shownWord) => wordsInd.filter((i) => i !== shownWord);
+export const subtractShownWordIdx: DeleteWord = (wordsIdx, shownWordIdx) => wordsIdx.filter((i) => i !== shownWordIdx);
 
 export const isCurrentTranslate = (randomWords: CurrentWord, depend: boolean) => {
   const { id } = sprintState.words[randomWords.curWordIdx];

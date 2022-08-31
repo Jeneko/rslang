@@ -23,7 +23,7 @@ export type SprintState = {
   session: Session;
 };
 
-export type DeleteWord = (wordsInd: number[], shownWord: number) => number[];
+export type DeleteWord = (wordsIdx: number[], shownWordIdx: number) => number[];
 
 export enum Points {
   small = 10,

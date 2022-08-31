@@ -5,7 +5,7 @@ import * as state from 'utils/state';
 import { renderModal, generateWords } from './modal-lvl';
 import {
   chooseWords,
-  deleteShownWord,
+  subtractShownWordIdx,
   isCurrentTranslate,
   loadingBar,
   modalResults,
@@ -49,7 +49,7 @@ export const sprintHandler = (elem: HTMLElement): void => {
     if (classList.contains('chooseBtn')) {
       const isRandom = sprintState.randomWords.curWordIdx === sprintState.randomWords.randomIdx;
       isCurrentTranslate(sprintState.randomWords, classList.contains('btn-true') ? isRandom : !isRandom);
-      sprintState.wordsIndexes = deleteShownWord(sprintState.wordsIndexes, sprintState.randomWords.curWordIdx);
+      sprintState.wordsIndexes = subtractShownWordIdx(sprintState.wordsIndexes, sprintState.randomWords.curWordIdx);
       if (sprintState.wordsIndexes.length) {
         sprintState.randomWords = chooseWords(sprintState.wordsIndexes);
         updateGame(sprintState.randomWords, elem);
