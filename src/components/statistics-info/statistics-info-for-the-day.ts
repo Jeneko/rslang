@@ -26,7 +26,7 @@ async function getWindowsStatistics(): Promise<HTMLElement> {
 
   console.log(allStatAudiocall, allStatSprint, allStatWords);
   console.log(lengthAudiocall, lengthSprint, lengthWords);
-  console.log(allStatSprint[lengthSprint]);
+  console.log(allStatSprint[lengthSprint - 1]);
 
   const statisticsForTodayWords = getTodayStat<WordsStatistic>(respStatistics, 'words');
   const statisticsForTodaySprint = getTodayStat<GameStatistic>(respStatistics, 'sprint');
@@ -83,7 +83,7 @@ async function getWindowsStatistics(): Promise<HTMLElement> {
                 Audio-call
               </h5>
               <div class="card-text-wrapper">
-                <p class="card-text card-text-statistics">Learned <span class="game-statistic-info-right-answers">${audiocallRightAnswers}</span> words.</p>
+                <p class="card-text card-text-statistics">Guessed correctly <span class="game-statistic-info-right-answers">${audiocallRightAnswers}</span> words.</p>
                 <p class="card-text card-text-statistics">New <span class="game-statistic-info-new-words">${audiocallNewWords}</span> words.</p>
                 <p class="card-text card-text-statistics">Longest series of correct answers <span class="game-statistic-info-longest-row">${audiocallLongestRow}</span>.</p>
               </div>
@@ -102,7 +102,7 @@ async function getWindowsStatistics(): Promise<HTMLElement> {
                 Sprint
               </h5>
               <div class="card-text-wrapper">
-                <p class="card-text card-text-statistics">Learned <span class="game-statistic-info-right-answers">${sprintRightAnswers}</span> words.</p>
+                <p class="card-text card-text-statistics">Guessed correctly <span class="game-statistic-info-right-answers">${sprintRightAnswers}</span> words.</p>
                 <p class="card-text card-text-statistics">New <span class="game-statistic-info-new-words">${sprintLongestRow}</span> words.</p>
                 <p class="card-text card-text-statistics">Longest series of correct answers <span class="game-statistic-info-longest-row">${sprintNewWords}</span>.</p>
               </div>
@@ -143,6 +143,10 @@ function handleEventPaginationButtons(allStatObject: WordsStatistic[] | GameStat
   const learnWords = cardBody.querySelector('.game-statistic-info-learned') as HTMLElement || cardBody.querySelector('.game-statistic-info-longest-row') as HTMLElement;
   const newWords = cardBody.querySelector('.game-statistic-info-new-words') as HTMLElement;
   const rightAnswers = cardBody.querySelector('.game-statistic-info-right-answers') as HTMLElement;
+
+  if (allStatObject.length >= 1) {
+    buttonLeft.setAttribute('disabled', 'true');
+  }
 
   buttonLeft.addEventListener('click', () => {
     const currentDateIndex = dataTable.dataset.dateindex as string;
