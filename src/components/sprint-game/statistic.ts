@@ -2,7 +2,7 @@ import { getAllUserWords, getUserStatistic, updateUserStatistic } from 'API/inde
 import {
   GameStatistic, ResponseUserWord, WordsStatistic, WordStatus,
 } from 'types/index';
-import getTodayStat from 'utils/statistic';
+import { getTodayStat } from 'utils/statistic';
 import { sprintState } from './sprint-state';
 
 export default async (): Promise<void> => {
