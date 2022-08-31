@@ -14,6 +14,7 @@ export default async (): Promise<void> => {
   const learnedWords = getLearnedWordsNumber(userWords);
   const newWordsQty = getNewWordsQty(userWords);
   const rightAnswers = sprintState.rightAnswers.length;
+  const wrongAnswers = sprintState.wrongAnswers.length;
   const longestRow = sprintState.session.session;
 
   userStat.learnedWords = userStat.learnedWords + learnedWords < 0 ? 0 : userStat.learnedWords + learnedWords;
@@ -21,10 +22,12 @@ export default async (): Promise<void> => {
   wordStat.newWordsQty += newWordsQty;
   wordStat.learnedWordsQty = wordStat.learnedWordsQty + learnedWords < 0 ? 0 : wordStat.learnedWordsQty + learnedWords;
   wordStat.rightAnswers += rightAnswers;
+  wordStat.wrongAnswers += wrongAnswers;
 
   gameStat.longestRow = gameStat.longestRow > longestRow ? gameStat.longestRow : longestRow;
   gameStat.newWordsQty += newWordsQty;
   gameStat.rightAnswers += rightAnswers;
+  gameStat.wrongAnswers += wrongAnswers;
 
   await updateUserStatistic(userStat);
 };
