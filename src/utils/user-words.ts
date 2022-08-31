@@ -60,6 +60,28 @@ export async function setWordOptional(wordId: string, optional: Partial<UserWord
   });
 }
 
+export async function setWordStatusAndOptional(wordId: string, difficulty: WordStatus, optional: Partial<UserWordOptions>): Promise<void> {
+  const userWords = await getAllUserWords();
+  const userWord = userWords.find((word) => word.wordId === wordId);
+
+  // If user word exists
+  if (userWord) {
+    const updatedUserWord = {
+      difficulty,
+      optional: { ...userWord.optional, ...optional },
+    };
+    await updateUserWord(wordId, updatedUserWord);
+
+    return;
+  }
+
+  // If user word does not exist
+  await createUserWord(wordId, {
+    difficulty,
+    optional: { ...OPTIONAL_DEFAULTS, ...optional },
+  });
+}
+
 export async function getWordsWithUserData(group: number, page: number): Promise<WordWithUserWord[]> {
   const words = (await getWords(group, page)) as WordWithUserWord[];
   const userWords = await getAllUserWords();
