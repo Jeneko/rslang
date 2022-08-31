@@ -10,15 +10,9 @@
   display: inline-block;
   height: 1.5rem;
   width: 4rem;
-  filter: invert(13%) sepia(17%) saturate(349%) hue-rotate(168deg) brightness(39%) contrast(100%);
 }
 
 .link-dark {
   text-decoration: none;
   margin-left: 1rem;
-}
-
-.link-dark:hover {
-  filter: invert(13%) sepia(17%) saturate(349%) hue-rotate(168deg) brightness(0%) contrast(100%);
-  transition: 0.5s;
 }
