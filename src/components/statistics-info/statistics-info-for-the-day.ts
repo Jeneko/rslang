@@ -16,6 +16,10 @@ export default async function getStatPage(): Promise<HTMLElement> {
 async function getWindowsStatistics(): Promise<HTMLElement> {
   const respStatistics = await getUserStatistic();
 
+  const statisticsForTodayWords = getTodayStat<WordsStatistic>(respStatistics, 'words');
+  const statisticsForTodaySprint = getTodayStat<GameStatistic>(respStatistics, 'sprint');
+  const statisticsForTodayAudioCall = getTodayStat<GameStatistic>(respStatistics, 'audiocall');
+
   const allStatAudiocall = respStatistics.optional.audiocall.stat;
   const allStatSprint = respStatistics.optional.sprint.stat;
   const allStatWords = respStatistics.optional.words.stat;
@@ -23,14 +27,6 @@ async function getWindowsStatistics(): Promise<HTMLElement> {
   const lengthAudiocall = allStatAudiocall.length;
   const lengthSprint = allStatSprint.length;
   const lengthWords = allStatWords.length;
-
-  console.log(allStatAudiocall, allStatSprint, allStatWords);
-  console.log(lengthAudiocall, lengthSprint, lengthWords);
-  console.log(allStatSprint[lengthSprint - 1]);
-
-  const statisticsForTodayWords = getTodayStat<WordsStatistic>(respStatistics, 'words');
-  const statisticsForTodaySprint = getTodayStat<GameStatistic>(respStatistics, 'sprint');
-  const statisticsForTodayAudioCall = getTodayStat<GameStatistic>(respStatistics, 'audiocall');
 
   const wordsLearned = statisticsForTodayWords.learnedWordsQty;
   const wordsNew = statisticsForTodayWords.newWordsQty;
@@ -47,7 +43,7 @@ async function getWindowsStatistics(): Promise<HTMLElement> {
   const windowsStatistics = document.createElement('div');
   windowsStatistics.classList.add('statistics-block');
   windowsStatistics.innerHTML = `
-    <section class="statistics-section statistics-section-for-day">
+    <section class="statistics-section statistics-section-for-day container text-center">
       <h2 class="display-2">Statistics for words</h2>
         <div class="statistic-info-wrapper">
         <p class="statistic-info-of-day display-3">${respStatistics.learnedWords}</p>
@@ -56,8 +52,8 @@ async function getWindowsStatistics(): Promise<HTMLElement> {
         </h5>
       </div>
       <h2 class="display-2">Statistics for the day</h2>
-      <div class="row gap-3">
-        <div class="col d-flex justify-content-center">
+      <div class="row align-items-end justify-content-center">
+        <div class="card-block col-xxl-4 col-xl-4 col-lg-12 col-md-12 col-sm-12">
             <div class="card" style="width: 20rem;">
               <div class="card-body d-flex justify-content-between flex-column card-body-words">
                 <h5 class="card-title card-title-statistics display-6">
@@ -76,7 +72,7 @@ async function getWindowsStatistics(): Promise<HTMLElement> {
               </div>
             </div>
           </div>
-        <div class="col d-flex justify-content-center">
+        <div class="card-block col-xxl-4 col-xl-4 col-lg-12 col-md-12 col-sm-12">
           <div class="card" style="width: 20rem;">
             <div class="card-body d-flex justify-content-between flex-column card-body-audiocall">
               <h5 class="card-title card-title-statistics display-6">
@@ -95,7 +91,7 @@ async function getWindowsStatistics(): Promise<HTMLElement> {
             </div>
           </div>
         </div>
-        <div class="col d-flex justify-content-center">
+        <div class="card-block col-xxl-4 col-xl-4 col-lg-12 col-md-12 col-sm-12">
           <div class="card" style="width: 20rem;">
             <div class="card-body d-flex justify-content-between flex-column card-body-sprint">
               <h5 class="card-title card-title-statistics display-6">
@@ -117,8 +113,6 @@ async function getWindowsStatistics(): Promise<HTMLElement> {
       </div>
     <section>
   `;
-
-  console.log(allStatSprint, allStatAudiocall, allStatSprint[lengthSprint - 1], convertDate(allStatSprint[lengthSprint - 1].date));
 
   const cardWords = windowsStatistics.querySelector('.card-body-words') as HTMLElement;
   const cardAudioCall = windowsStatistics.querySelector('.card-body-audiocall') as HTMLElement;

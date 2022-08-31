@@ -37,3 +37,18 @@
 .card-statistics-date {
     padding: 0px 14px;
 }
+
+.card-statistics-date {
+    min-width: 100px;
+}
+
+.card-block {
+    margin-top: 15px;
+}
+
+@media (max-width: 1199.98px) {
+    .card-block {
+        display: flex;
+        justify-content: center;
+    }
+}
