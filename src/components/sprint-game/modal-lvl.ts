@@ -1,6 +1,5 @@
 import { getWords } from 'API/index';
 import { Word } from 'types/index';
-// import { Word } from 'types/index';
 
 export const renderModal = `
     <h1 class="page-heading">
