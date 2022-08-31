@@ -14,8 +14,8 @@ export const renderGame = (randomWords: CurrentWord): string => `
     <p class="english-word">${sprintState.words[randomWords.word].word}</p>
     <p class="russian-word">${sprintState.words[randomWords.random].wordTranslate}</p>
     <div class="choose-buttons" tabindex="-1">
-      <button class="btn chooseBtn btn-primary btn-true" >True</button>
-      <button class="btn chooseBtn btn-primary btn-false" >False</button>
+      <button class="btn chooseBtn btn-primary btn-true">True</button>
+      <button class="btn chooseBtn btn-primary btn-false">False</button>
     </div>
   </div>
   <div class="timer"><span class="time"></span></div>
@@ -32,10 +32,10 @@ export const loadingBar = `
 export const chooseWords = (wordsIndexes: number[]): CurrentWord => {
   const firstWordIndex = randomNumber(wordsIndexes.length - 1);
   const secondWordIndex = randomNumber(wordsIndexes.length - 1);
-  const random = [wordsIndexes[firstWordIndex], wordsIndexes[secondWordIndex]];
+  const randomIndexes = [wordsIndexes[firstWordIndex], wordsIndexes[secondWordIndex]];
   return {
     word: wordsIndexes[firstWordIndex],
-    random: random[Math.round(Math.random())],
+    random: randomIndexes[Math.round(Math.random())],
   };
 };
 
@@ -78,7 +78,8 @@ export const modalResults = (): string => `
   <ul class="results__unordered-list">
   ${sprintState.rightAnswers
     .map(
-      (wordIndex) => `<li class="results__list-true">${sprintState.words[wordIndex].word} - ${sprintState.words[wordIndex].wordTranslate}</li>`,
+      (wordIndex) =>
+        `<li class="results__list-true">${sprintState.words[wordIndex].word} - ${sprintState.words[wordIndex].wordTranslate}</li>`
     )
     .join('')}
   </ul>
@@ -86,7 +87,8 @@ export const modalResults = (): string => `
   <ul class="results__unordered-list">
   ${sprintState.wrongAnswers
     .map(
-      (wordIndex) => `<li class="results__list-false">${sprintState.words[wordIndex].word} - ${sprintState.words[wordIndex].wordTranslate}</li>`,
+      (wordIndex) =>
+        `<li class="results__list-false">${sprintState.words[wordIndex].word} - ${sprintState.words[wordIndex].wordTranslate}</li>`
     )
     .join('')}
     </ul>
@@ -111,7 +113,8 @@ export const timer = (): void => {
 };
 
 const sessionCounter = () => {
-  sprintState.session.session = sprintState.session.count > sprintState.session.session ? sprintState.session.count : sprintState.session.session;
+  sprintState.session.session =
+    sprintState.session.count > sprintState.session.session ? sprintState.session.count : sprintState.session.session;
 
   if (sprintState.session.count === 3) {
     sprintState.rewordPoints = Points.medium;
