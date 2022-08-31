@@ -220,7 +220,7 @@ function handleEventPaginationButtons(allStatObject: WordsStatistic[] | GameStat
 
 function getPercentAgeOfCorrectAnswers(correct: string | number, wrong: string | number): number {
   const sum = +correct + +wrong;
-  if (sum === 0) {
+  if (sum === 0 || Number.isNaN(sum)) {
     return sum;
   }
   return Math.trunc((+correct / sum) * +wrong);
