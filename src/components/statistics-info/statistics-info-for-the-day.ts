@@ -190,12 +190,12 @@ function handleEventPaginationButtons(allStatObject: WordsStatistic[] | GameStat
     const currentRightAnswers = (allStatObject[newIndex].rightAnswers).toString();
     let currentLearn;
 
-    if (key === 'game') {
+    if (key === StatusCardStatistics.Game) {
       currentLearn = ((allStatObject[newIndex] as GameStatistic).longestRow).toString();
       learnWords.textContent = currentLearn;
       newWords.textContent = currentNewWords;
       rightAnswers.textContent = currentRightAnswers;
-    } else if (key === 'word') {
+    } else if (key === StatusCardStatistics.Word) {
       currentLearn = ((allStatObject[newIndex] as WordsStatistic).learnedWordsQty).toString();
       learnWords.textContent = currentLearn;
       newWords.textContent = currentNewWords;
