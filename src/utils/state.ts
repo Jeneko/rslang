@@ -2,11 +2,14 @@ import { State, PageName } from 'types/index';
 
 const SALT = '_team51_k23hiahsf3';
 const STATE_NAME = `state${SALT}`;
+const USER_CHAPTER = 6;
 
 const DEFAULT_STATE: State = {
   page: PageName.main,
+  isUserChapter: false,
   studyBookChapter: 0,
   studyBookPage: 0,
+  indexWord: 0,
   // TODO: add other states data we may need (like paginations and stuff)
 };
 
@@ -25,5 +28,7 @@ export function saveState(state: State): void {
 
 export function updateState(key: string, value: string | number): void {
   const state = getState();
-  saveState({ ...state, [key]: value });
+  const newState = { ...state, [key]: value };
+  newState.isUserChapter = state.studyBookChapter === USER_CHAPTER;
+  saveState(newState);
 }
