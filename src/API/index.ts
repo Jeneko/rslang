@@ -12,6 +12,7 @@ export const DEFAULT_WORDS_STAT: WordsStatistic = {
   learnedWordsQty: 0,
   newWordsQty: 0,
   rightAnswers: 0,
+  wrongAnswers: 0,
 };
 
 export const DEFAULT_GAME_STAT: GameStatistic = {
@@ -19,6 +20,7 @@ export const DEFAULT_GAME_STAT: GameStatistic = {
   longestRow: 0,
   newWordsQty: 0,
   rightAnswers: 0,
+  wrongAnswers: 0,
 };
 
 export async function getWords(group: number, page: number): Promise<Word[]> {

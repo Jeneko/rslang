@@ -73,6 +73,7 @@ export interface GameStatistic {
   newWordsQty: number;
   longestRow: number;
   rightAnswers: number;
+  wrongAnswers: number;
 }
 
 export interface WordsStatistic {
@@ -80,6 +81,7 @@ export interface WordsStatistic {
   newWordsQty: number;
   learnedWordsQty: number;
   rightAnswers: number;
+  wrongAnswers: number;
 }
 
 export interface Word {
