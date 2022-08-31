@@ -15,7 +15,7 @@ function updateChapterInfo(wordsList: HTMLElement): void {
   const { isUserChapter } = state.getState();
   const wordsCards = wordsList.querySelectorAll('.word-card');
 
-  if (wordsCards.length && isUserChapter) {
+  if (!wordsCards.length && isUserChapter) {
     const chapterInfo = wordsList.querySelector('.study-book-chapter-info') as HTMLElement;
     chapterInfo.innerHTML = emptyUserChapterHTML;
   }
