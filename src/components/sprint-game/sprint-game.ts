@@ -47,9 +47,9 @@ export const sprintHandler = (elem: HTMLElement): void => {
       createGame(Number(lvl), 30, gameWindow);
     }
     if (classList.contains('chooseBtn')) {
-      const isRandom = sprintState.randomWords.word === sprintState.randomWords.random;
+      const isRandom = sprintState.randomWords.curWordIdx === sprintState.randomWords.randomIdx;
       isCurrentTranslate(sprintState.randomWords, classList.contains('btn-true') ? isRandom : !isRandom);
-      sprintState.wordsIndexes = deleteShownWord(sprintState.wordsIndexes, sprintState.randomWords.word);
+      sprintState.wordsIndexes = deleteShownWord(sprintState.wordsIndexes, sprintState.randomWords.curWordIdx);
       if (sprintState.wordsIndexes.length) {
         sprintState.randomWords = chooseWords(sprintState.wordsIndexes);
         updateGame(sprintState.randomWords, elem);

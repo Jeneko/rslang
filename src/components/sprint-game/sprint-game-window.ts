@@ -11,8 +11,8 @@ export const renderGame = (randomWords: CurrentWord): string => `
   </div>
   <div class="choose-words">
     <div class="session">🤨</div>
-    <p class="english-word">${sprintState.words[randomWords.word].word}</p>
-    <p class="russian-word">${sprintState.words[randomWords.random].wordTranslate}</p>
+    <p class="english-word">${sprintState.words[randomWords.curWordIdx].word}</p>
+    <p class="russian-word">${sprintState.words[randomWords.randomIdx].wordTranslate}</p>
     <div class="choose-buttons" tabindex="-1">
       <button class="btn chooseBtn btn-primary btn-true">True</button>
       <button class="btn chooseBtn btn-primary btn-false">False</button>
@@ -34,8 +34,8 @@ export const chooseWords = (wordsIndexes: number[]): CurrentWord => {
   const secondWordIndex = randomNumber(wordsIndexes.length - 1);
   const randomIndexes = [wordsIndexes[firstWordIndex], wordsIndexes[secondWordIndex]];
   return {
-    word: wordsIndexes[firstWordIndex],
-    random: randomIndexes[Math.round(Math.random())],
+    curWordIdx: wordsIndexes[firstWordIndex],
+    randomIdx: randomIndexes[Math.round(Math.random())],
   };
 };
 
@@ -44,11 +44,11 @@ const randomNumber = (max: number): number => Math.round(Math.random() * max);
 export const deleteShownWord: DeleteWord = (wordsInd, shownWord) => wordsInd.filter((i) => i !== shownWord);
 
 export const isCurrentTranslate = (randomWords: CurrentWord, depend: boolean) => {
-  const { id } = sprintState.words[randomWords.word];
+  const { id } = sprintState.words[randomWords.curWordIdx];
   const auth = getAuth();
   if (depend) {
     sprintState.earnedPoints += sprintState.rewordPoints;
-    sprintState.rightAnswers.push(randomWords.word);
+    sprintState.rightAnswers.push(randomWords.curWordIdx);
     sprintState.session.count += 1;
     sprintState.session.session = sprintState.session.count;
     sessionCounter();
@@ -56,7 +56,7 @@ export const isCurrentTranslate = (randomWords: CurrentWord, depend: boolean) =>
       createUpdateRightWord(id);
     }
   } else {
-    sprintState.wrongAnswers.push(randomWords.word);
+    sprintState.wrongAnswers.push(randomWords.curWordIdx);
     setDefaultSession();
     if (auth) {
       createUpdateWrongWord(id);
@@ -67,8 +67,9 @@ export const isCurrentTranslate = (randomWords: CurrentWord, depend: boolean) =>
 export const updateGame = (randomWords: CurrentWord, elem: HTMLElement): void => {
   (elem.querySelector('.earned-points') as HTMLElement).innerHTML = sprintState.earnedPoints.toString();
   (elem.querySelector('.reword-points') as HTMLElement).innerHTML = `+${sprintState.rewordPoints}`;
-  (elem.querySelector('.english-word') as HTMLElement).innerHTML = sprintState.words[randomWords.word].word;
-  (elem.querySelector('.russian-word') as HTMLElement).innerHTML = sprintState.words[randomWords.random].wordTranslate;
+  (elem.querySelector('.english-word') as HTMLElement).innerHTML = sprintState.words[randomWords.curWordIdx].word;
+  (elem.querySelector('.russian-word') as HTMLElement).innerHTML =
+    sprintState.words[randomWords.randomIdx].wordTranslate;
 };
 
 export const modalResults = (): string => `

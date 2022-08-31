@@ -9,8 +9,8 @@ export const sprintState: SprintState = {
   userWords: [],
   wordsIndexes: [],
   randomWords: {
-    word: 0,
-    random: 0,
+    curWordIdx: 0,
+    randomIdx: 0,
   },
   timer: 60,
   session: {

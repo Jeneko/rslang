@@ -1,8 +1,8 @@
 import { ResponseUserWord, Word } from 'types/index';
 
 export type CurrentWord = {
-  word: number;
-  random: number;
+  curWordIdx: number;
+  randomIdx: number;
 };
 
 export type Session = {
