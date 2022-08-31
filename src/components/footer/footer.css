@@ -1,6 +1,6 @@
 .footer {
   padding: 1rem 0;
-  background: var(--bs-body-bg);
+  background: rgba(var(--bs-light-rgb), var(--bs-bg-opacity));
   color: var(--bs-body-color);
 }
 
