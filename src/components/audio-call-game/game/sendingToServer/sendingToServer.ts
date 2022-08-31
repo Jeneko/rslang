@@ -44,6 +44,7 @@ export async function sendDataToServer(correctAnswersList: WordWithUserWord[], w
   gameStatistics.newWordsQty += gameState.newWords;
   gameStatistics.longestRow = gameStatistics.longestRow < gameState.longestStreakForGame ? gameState.longestStreakForGame : gameStatistics.longestRow;
   gameStatistics.rightAnswers += correctAnswersList.length;
+  gameStatistics.wrongAnswers += wrongAnswersList.length;
   wordStatistics.newWordsQty += gameState.newWords;
   wordStatistics.rightAnswers += correctAnswersList.length;
   await updateUserStatistic(userStatistics);
