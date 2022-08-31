@@ -1,4 +1,5 @@
 import * as auth from 'utils/auth';
+import * as state from 'utils/state';
 import {
   Endpoints, Word, User, ResponseError, Auth, StatusCode, UserWord,
   ResponseUserWord, AggregatedResults, Statistic, WordsStatistic, GameStatistic,
@@ -115,9 +116,10 @@ export async function updateToken(): Promise<void> {
 
   const response = await fetch(url, options);
 
-  // If can't get new token - logout and reload
+  // If can't get new token - logout and show login page after reload
   if (!response.ok) {
     auth.deleteAuth();
+    state.updateState('page', 'login');
     window.location.reload();
   }
 
