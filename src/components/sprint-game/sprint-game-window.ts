@@ -1,3 +1,4 @@
+import { Word } from 'types/index';
 import { getAuth } from 'utils/auth';
 import { sprintState } from './sprint-state';
 import statistic from './statistic';
@@ -68,30 +69,19 @@ export const updateGame = (randomWords: CurrentWord, elem: HTMLElement): void =>
   (elem.querySelector('.earned-points') as HTMLElement).innerHTML = sprintState.earnedPoints.toString();
   (elem.querySelector('.reword-points') as HTMLElement).innerHTML = `+${sprintState.rewordPoints}`;
   (elem.querySelector('.english-word') as HTMLElement).innerHTML = sprintState.words[randomWords.curWordIdx].word;
-  (elem.querySelector('.russian-word') as HTMLElement).innerHTML =
-    sprintState.words[randomWords.randomIdx].wordTranslate;
+  (elem.querySelector('.russian-word') as HTMLElement).innerHTML = sprintState.words[randomWords.randomIdx].wordTranslate;
 };
 
 export const modalResults = (): string => `
-<div class="results">
-  <h3 class="result-points">${sprintState.earnedPoints} points</h3>
-  <h5>Right answers:</h5>
-  <ul class="results__unordered-list">
-  ${sprintState.rightAnswers
-    .map(
-      (wordIndex) =>
-        `<li class="results__list-true">${sprintState.words[wordIndex].word} - ${sprintState.words[wordIndex].wordTranslate}</li>`
-    )
-    .join('')}
-  </ul>
-  <h5>Wrong answers:</h5>
-  <ul class="results__unordered-list">
-  ${sprintState.wrongAnswers
-    .map(
-      (wordIndex) =>
-        `<li class="results__list-false">${sprintState.words[wordIndex].word} - ${sprintState.words[wordIndex].wordTranslate}</li>`
-    )
-    .join('')}
+ <div class="results">
+    <h3 class="result-points">${sprintState.earnedPoints} points</h3>
+    <h5>Right answers:</h5>
+    <ul class="results__unordered-list">
+    ${renderResultList(sprintState.rightAnswers, sprintState.words)}
+    </ul>
+    <h5>Wrong answers:</h5>
+    <ul class="results__unordered-list">
+    ${renderResultList(sprintState.wrongAnswers, sprintState.words)}
     </ul>
     <button class="results__close-button btn-close"></button>
   </div>
@@ -114,8 +104,7 @@ export const timer = (): void => {
 };
 
 const sessionCounter = () => {
-  sprintState.session.session =
-    sprintState.session.count > sprintState.session.session ? sprintState.session.count : sprintState.session.session;
+  sprintState.session.session = sprintState.session.count > sprintState.session.session ? sprintState.session.count : sprintState.session.session;
 
   if (sprintState.session.count === 3) {
     sprintState.rewordPoints = Points.medium;
@@ -132,3 +121,11 @@ const setDefaultSession = () => {
   sprintState.rewordPoints = Points.small;
   (document.querySelector('.session') as HTMLElement).textContent = '🤨';
 };
+
+const renderResultList = (resultIdx: number[], wordsArr: Word[]) => resultIdx
+  .map(
+    (wordIndex) => `<li class="results__list-true">
+  ${wordsArr[wordIndex].word} - ${wordsArr[wordIndex].wordTranslate}
+  </li>`,
+  )
+  .join('');

@@ -28,7 +28,6 @@ const handleMiniGamesMenu = (elem: HTMLElement) => {
       const { link } = target.dataset;
       document.body.innerHTML = '';
       document.body.append(getHeader());
-      console.log(link);
       if (link === PageName.sprint) {
         document.body.append(await getSprintPage());
       }
