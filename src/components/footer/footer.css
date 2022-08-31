@@ -1,6 +1,7 @@
 .footer {
   padding: 1rem 0;
-  background: linear-gradient(to right, #5aa5fd 0%, #0074fc 100%);
+  background: var(--bs-body-bg);
+  color: var(--bs-body-color);
 }
 
 .footer-rsschool {
@@ -11,7 +12,7 @@
   width: 4rem;
 }
 
-.link-light {
+.link-dark {
   text-decoration: none;
   margin-left: 1rem;
 }
