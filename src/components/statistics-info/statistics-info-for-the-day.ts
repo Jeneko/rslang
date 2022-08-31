@@ -144,7 +144,7 @@ function handleEventPaginationButtons(allStatObject: WordsStatistic[] | GameStat
   const newWords = cardBody.querySelector('.game-statistic-info-new-words') as HTMLElement;
   const rightAnswers = cardBody.querySelector('.game-statistic-info-right-answers') as HTMLElement;
 
-  if (allStatObject.length >= 1) {
+  if (allStatObject.length <= 1) {
     buttonLeft.setAttribute('disabled', 'true');
   }
 
