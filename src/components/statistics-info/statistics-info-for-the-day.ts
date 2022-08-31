@@ -35,15 +35,17 @@ async function getWindowsStatistics(): Promise<HTMLElement> {
   const audiocallRightAnswers = statisticsForTodayAudioCall.rightAnswers;
   const audiocallLongestRow = statisticsForTodayAudioCall.longestRow;
   const audiocallNewWords = statisticsForTodayAudioCall.newWordsQty;
+  // const audiocallPercentRightAnswers = getPercentAgeOfCorrectAnswers(audiocallRightAnswers, audiocallLongestRow);
 
   const sprintRightAnswers = statisticsForTodaySprint.rightAnswers;
   const sprintLongestRow = statisticsForTodaySprint.longestRow;
   const sprintNewWords = statisticsForTodaySprint.newWordsQty;
+  // const sprintPercentRightAnswers = getPercentAgeOfCorrectAnswers(sprintRightAnswers, audiocallLongestRow);
 
   const windowsStatistics = document.createElement('div');
   windowsStatistics.classList.add('statistics-block');
   windowsStatistics.innerHTML = `
-    <section class="statistics-section statistics-section-for-day container text-center">
+    <section class="statistics-section statistics-section-for-day">
       <h2 class="display-2">Statistics for words</h2>
         <div class="statistic-info-wrapper">
         <p class="statistic-info-of-day display-3">${respStatistics.learnedWords}</p>
@@ -207,3 +209,8 @@ function handleEventPaginationButtons(allStatObject: WordsStatistic[] | GameStat
     }
   });
 }
+
+// function getPercentAgeOfCorrectAnswers(correct: number, wrong: number) {
+//   const sum = correct + wrong;
+//   return Math.trunc((correct / sum) * wrong);
+// }
