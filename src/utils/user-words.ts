@@ -60,11 +60,7 @@ export async function setWordOptional(wordId: string, optional: Partial<UserWord
   });
 }
 
-export async function setWordStatusAndOptional(
-  wordId: string,
-  difficulty: WordStatus,
-  optional: Partial<UserWordOptions>,
-): Promise<void> {
+export async function setWordStatusAndOptional(wordId: string, difficulty: WordStatus, optional: Partial<UserWordOptions>): Promise<void> {
   const userWords = await getAllUserWords();
   const userWord = userWords.find((word) => word.wordId === wordId);
 
@@ -87,7 +83,7 @@ export async function setWordStatusAndOptional(
 }
 
 export async function getWordsWithUserData(group: number, page: number): Promise<WordWithUserWord[]> {
-  const words = (await getWords(group, page)) as WordWithUserWord[];
+  const words = await getWords(group, page) as WordWithUserWord[];
   const userWords = await getAllUserWords();
 
   const wordsWithUserData = words.map((word) => {
@@ -100,7 +96,7 @@ export async function getWordsWithUserData(group: number, page: number): Promise
 }
 
 export async function getWordWithUserData(id: string): Promise<WordWithUserWord> {
-  const word = (await getWord(id)) as WordWithUserWord;
+  const word = await getWord(id) as WordWithUserWord;
   const userWords = await getAllUserWords();
   const userWord = userWords.find((curUserWord) => curUserWord.wordId === word.id);
 
@@ -119,7 +115,5 @@ export async function getAllUserWordsWithData(): Promise<WordWithUserWord[]> {
       return el;
     });
     return tmp;
-  } catch {
-    return [];
-  }
+  } catch { return []; }
 }
