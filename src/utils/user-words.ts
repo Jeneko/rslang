@@ -5,7 +5,7 @@ import {
   WordStatus, UserWordOptions, UserWord, WordWithUserWord,
 } from 'types/index';
 
-const OPTIONAL_DEFAULTS: UserWordOptions = {
+export const OPTIONAL_DEFAULTS: UserWordOptions = {
   guessedInRow: 0,
   guessedRight: 0,
   guessedWrong: 0,
