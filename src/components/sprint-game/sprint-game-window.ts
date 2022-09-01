@@ -44,7 +44,7 @@ const randomNumber = (max: number): number => Math.round(Math.random() * max);
 
 export const subtractShownWordIdx: DeleteWord = (wordsIdx, shownWordIdx) => wordsIdx.filter((i) => i !== shownWordIdx);
 
-export const isCurrentTranslate = (randomWords: CurrentWord, depend: boolean) => {
+export const currentTranslateCheck = (randomWords: CurrentWord, depend: boolean) => {
   const { id } = sprintState.words[randomWords.curWordIdx];
   const auth = getAuth();
   if (depend) {
