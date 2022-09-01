@@ -69,5 +69,5 @@ export async function getAuthWords(currentLevel: string | number, currentPage: s
     }
   }
   await getMoreWords(+currentLevel, +currentPage);
-  return words.flat();
+  return words.flat(Infinity);
 }

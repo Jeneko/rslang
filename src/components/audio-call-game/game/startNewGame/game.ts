@@ -18,6 +18,7 @@ const MAX_PAGE_NUM = 30;
 export async function startNewGame(event: Event | null, startPage: HTMLElement | undefined): Promise<void> {
   // play for menu level
   if (event) {
+    const level = +((event.target as HTMLElement).dataset.level as string);
     const spinner = getSpinner();
     document.body.append(spinner);
     const statusAuth = getAuth();
@@ -37,6 +38,14 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
       spinner.remove();
       return;
     }
+    if (level === 6 && statusAuth) {
+      const listWords = await getAllUserWordsWithData();
+      if (listWords.length === 0) {
+        spinner.remove();
+        addTitleNoHardWords();
+        return;
+      }
+    }
     if (document.querySelector('.info-no-auth')) {
       document.querySelector('.info-no-auth')?.remove();
     }
@@ -45,6 +54,7 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
     if (buttonsWrapper) {
       buttonsWrapper?.remove();
     }
+    checkNoWardsTitle();
     const blockButtonNextQuestion = document.createElement('div');
     blockButtonNextQuestion.classList.add('button-wrapper-audiocall');
     blockButtonNextQuestion.innerHTML = `
@@ -62,7 +72,6 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
     };
     if (buttonCheck.classList.contains('btn-select-level') || buttonCheck.classList.contains('btn-play-again')) {
       const currentLevel = (buttonCheck.dataset.level);
-      controlGameWindow();
       if (currentLevel) {
         const randomPage = Math.trunc(Math.random() * MAX_PAGE_NUM);
         updateState('indexWord', 0);
@@ -79,21 +88,18 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
             spinner.remove();
             return;
           }
+          const noHardWordsTitle = document.querySelector('.no-hard-words-info');
+          if (noHardWordsTitle) {
+            return;
+          }
           spinner.remove();
-          const modalInfo = document.createElement('div');
-          modalInfo.innerHTML = `
-            <p>
-              You do not have hard words! Learn more in the  <a class="load-page-link" href="#study-book">study book</a>!
-            </p>
-          `;
-          modalInfo.classList.add('container', 'info-empty-hard-words');
-          document.body.append(modalInfo);
           return;
         }
 
         await generateWindowGame(listWords[0], listWords, state);
         windowGameBlock?.append(blockButtonNextQuestion);
         addEventsForNextQuestionButton(windowGameBlock, listWords, state);
+        controlGameWindow();
         spinner.remove();
       }
     }
@@ -128,7 +134,6 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
       longestStreakForGame: 0,
       newWords: 0,
     };
-    controlGameWindow();
     updateState('indexWord', 0);
     let listWords;
 
@@ -145,6 +150,7 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
     await generateWindowGame(listWords[0], listWords, state);
     windowGameBlock?.append(blockButtonNextQuestion);
     addEventsForNextQuestionButton(windowGameBlock, listWords, state);
+    controlGameWindow();
     spinner.remove();
   }
 }
@@ -302,4 +308,26 @@ function getSpinner() {
   </button>
   `;
   return spinner;
+}
+
+function addTitleNoHardWords() {
+  const elem = document.querySelector('.no-hard-words-info');
+  if (elem) {
+    return;
+  }
+  const modalInfo = document.createElement('div');
+  modalInfo.innerHTML = `
+    <p class="no-hard-words-info">
+      You do not have hard words! Learn more in the  <a class="load-page-link" href="#study-book">study book</a>!
+    </p>
+    `;
+  modalInfo.classList.add('container', 'info-empty-hard-words');
+  document.body.append(modalInfo);
+}
+
+function checkNoWardsTitle() {
+  const elem = document.querySelector('.no-hard-words-info');
+  if (elem) {
+    elem.remove();
+  }
 }
