@@ -39,6 +39,9 @@
 }
 
 .card-statistics-date {
+    display: inline-block;
+    text-align: center;
+    vertical-align: center;
     min-width: 100px;
 }
 
