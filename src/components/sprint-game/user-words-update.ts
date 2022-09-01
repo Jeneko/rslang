@@ -2,7 +2,7 @@ import { createUserWord, updateUserWord } from 'API/index';
 import { WordStatus } from 'types/index';
 import { sprintState } from './sprint-state';
 
-export default async (id: string, typeOfUnswear: boolean) => {
+export default async (id: string, isAnswerCorrect: boolean) => {
   const word = sprintState.userWords.find((currWord) => currWord.wordId === id);
   const userWord = {
     difficulty: WordStatus.default,
@@ -18,7 +18,7 @@ export default async (id: string, typeOfUnswear: boolean) => {
     userWord.optional = word.optional;
   }
 
-  if (typeOfUnswear) {
+  if (isAnswerCorrect) {
     userWord.difficulty = userWord.optional.guessedInRow >= 2 ? WordStatus.learned : userWord.difficulty;
     userWord.optional.guessedRight += 1;
     userWord.optional.guessedInRow += 1;
