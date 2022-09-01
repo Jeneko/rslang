@@ -24,7 +24,7 @@ function handleLinks(e: Event): void {
 async function loadPage(): Promise<void> {
   const curPage = state.getState().page;
 
-  const mapper: Record<PageName, () => Promise<Element>> = {
+  const getPage: Record<PageName, () => Promise<Element>> = {
     [PageName.main]: () => Promise.resolve(getMainPage()),
     [PageName.studyBook]: () => getStudyBookPage(),
     [PageName.audioCall]: () => getAudioCallPage(),
@@ -35,7 +35,7 @@ async function loadPage(): Promise<void> {
     [PageName.login]: () => Promise.resolve(getLoginPage()),
   };
 
-  const pageElement = await mapper[curPage]();
+  const pageElement = await getPage[curPage]();
 
   document.body.innerHTML = '';
   document.body.append(getHeader());
