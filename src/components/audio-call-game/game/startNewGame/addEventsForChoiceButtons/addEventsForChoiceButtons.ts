@@ -1,11 +1,11 @@
 import { Word } from 'types/index';
 import showCurrentWordInfo from './showCurrentWordInfo/showCurrentWordInfo';
 import { GameState } from '../game.types';
-import hiddenAllButtons from './disableAllButtonsChoice/disableAllButtonsChoice';
+import hiddenAllButtons from './hideAnswerButtons/hideAnswerButtons';
 
-export const CHECKICON = '\u2713';
-export const WRONGICON = '\u2716';
-const nextQuestion = 'Next question';
+export const CHECK_ICON = '\u2713';
+export const WRONG_ICON = '\u2716';
+const NEXT_QUESTION = 'Next question';
 
 export default function addEventsForChoiceButtons(currentWord: string, gameState: GameState, correctWord: Word): void {
   const buttonsChoiceWrapper = document.querySelector('.row-buttons-choice-wrapper');
@@ -28,34 +28,30 @@ async function checkAnswer(e: Event, eventExecutor: string, buttonsChoice: NodeL
   wordDistribution(currentButton, currentWord, gameState, correctWord);
 
   showCurrentWordInfo();
-  buttonNextQuestion.textContent = nextQuestion;
+  buttonNextQuestion.textContent = NEXT_QUESTION;
 }
 
 function getCheckButton(e: Event, eventExecutor: string): HTMLElement | null {
+  const buttonNextQuestion = document.querySelector('.btn-next-question') as HTMLElement;
   if (eventExecutor === 'key') {
     const valuesKeyTargets = ['Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5'];
     const keyTarget = (e as KeyboardEvent).code;
     console.log(keyTarget);
     if (keyTarget === 'Enter') {
-      const buttonNextQuestion = document.querySelector('.btn-next-question');
-      const event = new Event('checkNextQuestion');
-      buttonNextQuestion?.dispatchEvent(event);
+      buttonNextQuestion?.dispatchEvent(new Event('checkNextQuestion'));
     } else if (keyTarget === 'Space') {
       const button = document.querySelector('.button-audio');
-      const event = new Event('play');
-      button?.dispatchEvent(event);
+      button?.dispatchEvent(new Event('play'));
     }
     if (valuesKeyTargets.includes(keyTarget)) {
       const numberButton = valuesKeyTargets.indexOf(keyTarget);
       const allButtons = document.querySelectorAll('.btn-choice-of-answer');
       const currentButton = allButtons[numberButton];
-      const buttonNextQuestion = document.querySelector('.btn-next-question');
-      buttonNextQuestion?.setAttribute('wordchosen', 'true');
+      buttonNextQuestion.dataset.wordchosen = 'true';
       return currentButton as HTMLElement;
     }
   } else if (eventExecutor === 'click') {
-    const buttonNextQuestion = document.querySelector('.btn-next-question');
-    buttonNextQuestion?.setAttribute('wordchosen', 'true');
+    buttonNextQuestion.dataset.wordchosen = 'true';
     return e.target as HTMLElement;
   }
 
@@ -86,7 +82,7 @@ export async function wordDistribution(currentButton: HTMLElement, currentWord: 
       gameState.longestStreakForGame = gameState.counterStreakForGame;
     }
     currentIcon.classList.add('correct-icon-audiocall');
-    currentIcon.textContent = CHECKICON;
+    currentIcon.textContent = CHECK_ICON;
     currentButton.prepend(currentIcon);
     currentButton.classList.add('btn-success');
     currentButton.classList.remove('btn-light');
@@ -94,7 +90,7 @@ export async function wordDistribution(currentButton: HTMLElement, currentWord: 
     gameState.wrongAnswers.push(word);
     gameState.counterStreakForGame = 0;
     currentIcon.classList.add('wrong-icon-audiocall');
-    currentIcon.textContent = WRONGICON;
+    currentIcon.textContent = WRONG_ICON;
     currentButton.prepend(currentIcon);
     currentButton.classList.remove('btn-light');
     currentButton.classList.add('btn-danger');

@@ -7,24 +7,27 @@ import createMenuGame from 'components/audio-call-game/createMenuGame';
 import { getAllUserWordsWithData, setWordOptional } from 'utils/user-words';
 import { getAuth } from 'utils/auth';
 import audioImage from 'assets/speaker-icon.svg';
+import { showLoadSpinner } from 'components/load-spinner/load-spinner';
 import { sendDataToServer, getAuthWords } from '../sendingToServer/sendingToServer';
 import generateWindowGame from './generateWindowGame/generateWindowGame';
 import showCurrentWordInfo from './addEventsForChoiceButtons/showCurrentWordInfo/showCurrentWordInfo';
-import hiddenAllButtons from './addEventsForChoiceButtons/disableAllButtonsChoice/disableAllButtonsChoice';
+import hiddenAllButtons from './addEventsForChoiceButtons/hideAnswerButtons/hideAnswerButtons';
 import playAudio from './playAudio/playAudio';
 
 const MAX_PAGE_NUM = 30;
+const USER_LEVEL = 6;
+const NEXT_QUESTION = 'Next question';
+const I_DO_NOT_KNOW = 'I do not know';
 
 export async function startNewGame(event: Event | null, startPage: HTMLElement | undefined): Promise<void> {
   // play for menu level
   if (event) {
     const level = +((event.target as HTMLElement).dataset.level as string);
-    const spinner = getSpinner();
-    document.body.append(spinner);
+    showLoadSpinner(true);
     const statusAuth = getAuth();
-    if (!statusAuth && +((event.target as HTMLElement).dataset.level as string) === 6) {
+    if (!statusAuth && +((event.target as HTMLElement).dataset.level as string) === USER_LEVEL) {
       if (document.querySelector('.info-no-auth')) {
-        spinner.remove();
+        showLoadSpinner(false);
         return;
       }
       const modalInfo = document.createElement('div');
@@ -35,13 +38,13 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
       `;
       modalInfo.classList.add('container', 'info-no-auth');
       document.body.append(modalInfo);
-      spinner.remove();
+      showLoadSpinner(false);
       return;
     }
-    if (level === 6 && statusAuth) {
+    if (level === USER_LEVEL && statusAuth) {
       const listWords = await getAllUserWordsWithData();
       if (listWords.length === 0) {
-        spinner.remove();
+        showLoadSpinner(false);
         addTitleNoHardWords();
         return;
       }
@@ -55,11 +58,8 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
       buttonsWrapper?.remove();
     }
     checkNoWardsTitle();
-    const blockButtonNextQuestion = document.createElement('div');
-    blockButtonNextQuestion.classList.add('button-wrapper-audiocall');
-    blockButtonNextQuestion.innerHTML = `
-    <button type="button" class="btn btn-primary btn-next-question btn--hidden">I do not know</button>
-    `;
+
+    const blockButtonNextQuestion = getButtonNextQuestion();
 
     const windowGameBlock = document.querySelector('.audio-call-game') as HTMLElement;
     const state: GameState = {
@@ -77,22 +77,22 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
         updateState('indexWord', 0);
         let listWords;
         if (getAuth()) {
-          listWords = getAuth() && +currentLevel !== 6 ? await getAuthWords(+currentLevel, randomPage) : await getAllUserWordsWithData();
+          listWords = +currentLevel !== USER_LEVEL ? await getAuthWords(+currentLevel, randomPage) : await getAllUserWordsWithData();
           state.newWords = await checkNewWords(listWords as WordWithUserWord[]);
         } else {
           listWords = await getWords(+currentLevel, randomPage);
         }
 
-        if (listWords.length === 0) {
+        if (!listWords.length) {
           if (document.querySelector('.info-no-auth')) {
-            spinner.remove();
+            showLoadSpinner(false);
             return;
           }
           const noHardWordsTitle = document.querySelector('.no-hard-words-info');
           if (noHardWordsTitle) {
             return;
           }
-          spinner.remove();
+          showLoadSpinner(false);
           return;
         }
 
@@ -100,13 +100,12 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
         windowGameBlock?.append(blockButtonNextQuestion);
         addEventsForNextQuestionButton(windowGameBlock, listWords, state);
         controlGameWindow();
-        spinner.remove();
+        showLoadSpinner(false);
       }
     }
   } else {
     // play for study-book
-    const spinner = getSpinner();
-    document.body.append(spinner);
+    showLoadSpinner(true);
     let buttonsWrapper = document.querySelector('.button-wrapper-audiocall');
     if (buttonsWrapper) {
       buttonsWrapper.remove();
@@ -119,11 +118,7 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
     if (buttonsWrapper) {
       buttonsWrapper?.remove();
     }
-    const blockButtonNextQuestion = document.createElement('div');
-    blockButtonNextQuestion.classList.add('button-wrapper-audiocall');
-    blockButtonNextQuestion.innerHTML = `
-    <button type="button" class="btn btn-primary btn-next-question btn--hidden">I do not know</button>
-    `;
+    const blockButtonNextQuestion = getButtonNextQuestion();
 
     const windowGameBlock = startPage?.querySelector('.audio-call-game') as HTMLElement;
     const state: GameState = {
@@ -137,7 +132,7 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
     updateState('indexWord', 0);
     let listWords;
 
-    if (currentChapter === 6 && getAuth()) {
+    if (currentChapter === USER_LEVEL && getAuth()) {
       listWords = await getAllUserWordsWithData();
       checkNewWords(listWords);
     } else if (getAuth()) {
@@ -151,13 +146,13 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
     windowGameBlock?.append(blockButtonNextQuestion);
     addEventsForNextQuestionButton(windowGameBlock, listWords, state);
     controlGameWindow();
-    spinner.remove();
+    showLoadSpinner(false);
   }
 }
 
 export function addEventsForNextQuestionButton(windowGameBlock: HTMLElement, listWords: Word[], gameState: GameState): void {
   const buttonNextQuestion = windowGameBlock.querySelector('.btn-next-question') as HTMLElement;
-  buttonNextQuestion.setAttribute('wordchosen', 'false');
+  buttonNextQuestion.dataset.wordchosen = 'false';
   buttonNextQuestion?.addEventListener('click', (e: Event) => {
     checkNextQuestion(e, buttonNextQuestion, listWords, gameState);
   });
@@ -167,15 +162,19 @@ export function addEventsForNextQuestionButton(windowGameBlock: HTMLElement, lis
 }
 
 export function clearGameWindow(): void {
-  const gameWindow = document.querySelector('.game-window');
-  while (gameWindow?.firstChild) {
-    gameWindow.firstChild.remove();
+  const gameWindow = document.querySelector('.game-window') as HTMLElement;
+  if (gameWindow) {
+    gameWindow.innerHTML = '';
   }
 }
 
 export function getNewWindowGame(): HTMLElement {
   const previousPage = getState().page;
-  const menu = document.querySelector('.audio-call-page') as HTMLElement || document.createElement('div') as HTMLElement;
+  let menu = document.querySelector('.audio-call-page') as HTMLElement;
+  if (!menu) {
+    menu = document.createElement('div');
+    menu.classList.add('audio-call-page');
+  }
   if (previousPage === 'study-book') {
     menu.append(createMenuGame(true));
     startNewGame(null, menu);
@@ -202,20 +201,20 @@ function addAllAnswersForPage(list: Word[], blockList: HTMLElement) {
   blockList.append(fragment);
 }
 
-function getModalResultGame(gameState: GameState): HTMLDivElement {
+function getModalResultGame(gameState: GameState): HTMLElement {
   const modalResultGame = document.createElement('div');
   modalResultGame.classList.add('popup-winner-audio-call');
   modalResultGame.innerHTML = `
-  <div id="modal-winner" class="modal-body">
-    <h3>Your longest string of guessed ${gameState.longestStreakForGame} words!</h3>
-    <h3>Correct answers (${gameState.correctAnswers.length})</h3>
-    <ul class="list-group list-group-correct">
-    </ul>
-    <h3>Wrong answers (${gameState.wrongAnswers.length})</h3>
-    <ul class="list-group list-group-wrong">
-    </ul>
-    <button type="button" data-level="${gameState.currentLevel}" class="btn btn-play-again btn-primary">Play again</button>
-  </div>
+    <div id="modal-winner" class="modal-body">
+      <h3>Your longest string of guessed ${gameState.longestStreakForGame} words!</h3>
+      <h3>Correct answers (${gameState.correctAnswers.length})</h3>
+      <ul class="list-group list-group-correct">
+      </ul>
+      <h3>Wrong answers (${gameState.wrongAnswers.length})</h3>
+      <ul class="list-group list-group-wrong">
+      </ul>
+      <button type="button" data-level="${gameState.currentLevel}" class="btn btn-play-again btn-primary">Play again</button>
+    </div>
   `;
   return modalResultGame;
 }
@@ -223,10 +222,9 @@ function getModalResultGame(gameState: GameState): HTMLDivElement {
 function playAgainButtonClickHandler(modalResultGame: HTMLElement): void {
   const buttonPlayAgain = modalResultGame.querySelector('.btn-play-again');
   buttonPlayAgain?.addEventListener('click', () => {
-    const gameWindow = document.querySelector('.game-window') as HTMLElement;
     const wrapper = document.querySelector('.audio-call-page') as HTMLElement;
     wrapper.innerHTML = '';
-    gameWindow.innerHTML = '';
+    clearGameWindow();
     getNewWindowGame();
   });
 }
@@ -252,23 +250,25 @@ function showResult(modalResultGame: HTMLElement, gameState: GameState): void {
 export async function checkNextQuestion(e: Event, buttonNextQuestion: HTMLElement, listWords: Word[], gameState: GameState): Promise<void> {
   const currentIndex = getState().indexWord + 1;
 
-  if (currentIndex >= listWords.length && buttonNextQuestion.textContent !== 'I do not know') {
+  if (currentIndex >= listWords.length && buttonNextQuestion.dataset.status === 'false') {
     clearGameWindow();
     const modalGameResult = getModalResultGame(gameState);
     playAgainButtonClickHandler(modalGameResult);
     showResult(modalGameResult, gameState);
     updateState('indexWord', currentIndex);
-  } else if (buttonNextQuestion.getAttribute('wordchosen') === 'false') {
+  } else if (buttonNextQuestion.dataset.wordchosen === 'false') {
     hiddenAllButtons();
     showCurrentWordInfo();
-    buttonNextQuestion.textContent = 'Next question';
-    buttonNextQuestion.setAttribute('wordchosen', 'true');
+    buttonNextQuestion.textContent = NEXT_QUESTION;
+    buttonNextQuestion.dataset.wordchosen = 'true';
+    buttonNextQuestion.dataset.status = 'true';
     const wordId = (document.querySelector('.current-word-info') as HTMLElement).dataset.id as string;
-    const word = await getWord(wordId as string);
+    const word = await getWord(wordId);
     gameState.wrongAnswers.push(word);
   } else {
-    buttonNextQuestion.textContent = 'I do not know';
-    buttonNextQuestion.setAttribute('wordchosen', 'false');
+    buttonNextQuestion.textContent = I_DO_NOT_KNOW;
+    buttonNextQuestion.dataset.status = 'false';
+    buttonNextQuestion.dataset.wordchosen = 'false';
     clearGameWindow();
     generateWindowGame(listWords[currentIndex], listWords, gameState);
     updateState('indexWord', currentIndex);
@@ -298,18 +298,6 @@ async function checkNewWords(array: WordWithUserWord[]): Promise<number> {
   return counterNewWords;
 }
 
-function getSpinner() {
-  const spinner = document.createElement('div');
-  spinner.classList.add('spinner-audiocall');
-  spinner.innerHTML = `
-  <button class="btn btn-primary" type="button" disabled>
-    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-    Loading...
-  </button>
-  `;
-  return spinner;
-}
-
 function addTitleNoHardWords() {
   const elem = document.querySelector('.no-hard-words-info');
   if (elem) {
@@ -330,4 +318,13 @@ function checkNoWardsTitle() {
   if (elem) {
     elem.remove();
   }
+}
+
+function getButtonNextQuestion() {
+  const blockButtonNextQuestion = document.createElement('div');
+  blockButtonNextQuestion.classList.add('button-wrapper-audiocall');
+  blockButtonNextQuestion.innerHTML = `
+    <button type="button" data-status="false" class="btn btn-primary btn-next-question btn--hidden">${I_DO_NOT_KNOW}</button>
+  `;
+  return blockButtonNextQuestion;
 }

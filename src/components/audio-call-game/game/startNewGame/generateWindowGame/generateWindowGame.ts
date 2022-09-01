@@ -37,14 +37,12 @@ export default async function generateWindowGame(currentWord: Word | WordWithUse
   const fragmentButton = document.createDocumentFragment();
   const buttonsWrapper = windowGame.querySelector('.row-buttons-choice-wrapper');
   listRandomWords.forEach((el) => {
-    const button = document.createElement('div');
-    button.classList.add('col');
-    button.innerHTML = `
-      <div class="col">
+    const answerVariant = document.createElement('div');
+    answerVariant.classList.add('col');
+    answerVariant.innerHTML = `
         <button  type="button" data-id="${el[1]}" class="btn btn-light btn-choice-of-answer">${el[0]}</button>
-      </div>
     `;
-    fragmentButton.append(button);
+    fragmentButton.append(answerVariant);
   });
   buttonsWrapper?.append(fragmentButton);
   await playAudio(audio);

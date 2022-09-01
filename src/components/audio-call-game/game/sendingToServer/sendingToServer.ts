@@ -7,6 +7,8 @@ import {
 import getTodayStat from 'utils/statistic';
 import { GameState } from '../startNewGame/game.types';
 
+const NUMBER_FOR_LEARNED_WORD = 3;
+
 export async function sendDataToServer(correctAnswersList: WordWithUserWord[], wrongAnswersList: WordWithUserWord[], gameState: GameState): Promise<void> {
   const userStatistics = await getUserStatistic();
   const gameStatistics = getTodayStat<GameStatistic>(userStatistics, 'audiocall');
@@ -20,7 +22,7 @@ export async function sendDataToServer(correctAnswersList: WordWithUserWord[], w
         guessedInRow: el.userWord ? el.userWord.optional.guessedInRow + 1 : 1,
       },
     };
-    if (optionals.optional.guessedInRow >= 3 && optionals.difficulty !== WordStatus.learned) {
+    if (optionals.optional.guessedInRow >= NUMBER_FOR_LEARNED_WORD && optionals.difficulty !== WordStatus.learned) {
       optionals.difficulty = WordStatus.learned;
       wordStatistics.learnedWordsQty += 1;
     }
@@ -30,7 +32,7 @@ export async function sendDataToServer(correctAnswersList: WordWithUserWord[], w
     const optionals = {
       difficulty: el.userWord ? el.userWord.difficulty : WordStatus.default,
       optional: {
-        guessedRight: el.userWord ? el.userWord.optional.guessedRight + 1 : 1,
+        guessedRight: el.userWord ? el.userWord.optional.guessedRight : 0,
         guessedWrong: el.userWord ? el.userWord.optional.guessedWrong + 1 : 1,
         guessedInRow: 0,
       },
@@ -61,10 +63,8 @@ export async function getAuthWords(currentLevel: string | number, currentPage: s
       result = result.splice(length);
     }
     words.push(...result);
-    if (page === 0) {
-      return;
-    }
-    if (words.length < 20) {
+
+    if (page > 0 && words.length < 20) {
       await getMoreWords(level, page - 1);
     }
   }
