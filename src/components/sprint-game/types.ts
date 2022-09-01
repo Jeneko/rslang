@@ -7,7 +7,7 @@ export type CurrentWord = {
 
 export type Session = {
   count: number;
-  session: number;
+  longestRow: number;
 };
 
 export type SprintState = {

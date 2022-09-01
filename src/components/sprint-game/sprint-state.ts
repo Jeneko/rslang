@@ -15,7 +15,7 @@ export const sprintState: SprintState = {
   timer: 60,
   session: {
     count: 0,
-    session: 0,
+    longestRow: 0,
   },
 };
 
@@ -26,5 +26,5 @@ export const setDefaultSprintState = () => {
   sprintState.rewordPoints = 10;
   sprintState.timer = 60;
   sprintState.session.count = 0;
-  sprintState.session.session = 0;
+  sprintState.session.longestRow = 0;
 };

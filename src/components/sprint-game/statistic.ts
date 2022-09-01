@@ -1,7 +1,5 @@
 import { getAllUserWords, getUserStatistic, updateUserStatistic } from 'API/index';
-import {
-  GameStatistic, ResponseUserWord, WordsStatistic, WordStatus,
-} from 'types/index';
+import { GameStatistic, ResponseUserWord, WordsStatistic, WordStatus } from 'types/index';
 import { getTodayStat } from 'utils/statistic';
 import { sprintState } from './sprint-state';
 
@@ -15,7 +13,7 @@ export default async (): Promise<void> => {
   const newWordsQty = getNewWordsQty(userWords);
   const rightAnswers = sprintState.rightAnswers.length;
   const wrongAnswers = sprintState.wrongAnswers.length;
-  const longestRow = sprintState.session.session;
+  const { longestRow } = sprintState.session;
 
   userStat.learnedWords = userStat.learnedWords + learnedWords < 0 ? 0 : userStat.learnedWords + learnedWords;
 
@@ -32,7 +30,8 @@ export default async (): Promise<void> => {
   await updateUserStatistic(userStat);
 };
 
-const getLearnedWords = (wordArray: ResponseUserWord[]): ResponseUserWord[] => wordArray.filter((word) => word.difficulty === WordStatus.learned);
+const getLearnedWords = (wordArray: ResponseUserWord[]): ResponseUserWord[] =>
+  wordArray.filter((word) => word.difficulty === WordStatus.learned);
 
 const getLearnedWordsNumber = (userWords: ResponseUserWord[]): number => {
   const learnedWordsBeforeGame = getLearnedWords(sprintState.userWords);

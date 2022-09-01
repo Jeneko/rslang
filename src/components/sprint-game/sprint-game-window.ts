@@ -51,7 +51,7 @@ export const isCurrentTranslate = (randomWords: CurrentWord, depend: boolean) =>
     sprintState.earnedPoints += sprintState.rewordPoints;
     sprintState.rightAnswers.push(randomWords.curWordIdx);
     sprintState.session.count += 1;
-    sprintState.session.session = sprintState.session.count;
+    sprintState.session.longestRow = sprintState.session.count;
     sessionCounter();
     if (auth) {
       createUpdateRightWord(id);
@@ -69,7 +69,8 @@ export const updateGame = (randomWords: CurrentWord, elem: HTMLElement): void =>
   (elem.querySelector('.earned-points') as HTMLElement).innerHTML = sprintState.earnedPoints.toString();
   (elem.querySelector('.reword-points') as HTMLElement).innerHTML = `+${sprintState.rewordPoints}`;
   (elem.querySelector('.english-word') as HTMLElement).innerHTML = sprintState.words[randomWords.curWordIdx].word;
-  (elem.querySelector('.russian-word') as HTMLElement).innerHTML = sprintState.words[randomWords.randomIdx].wordTranslate;
+  (elem.querySelector('.russian-word') as HTMLElement).innerHTML =
+    sprintState.words[randomWords.randomIdx].wordTranslate;
 };
 
 export const modalResults = (): string => `
@@ -104,7 +105,8 @@ export const timer = (): void => {
 };
 
 const sessionCounter = () => {
-  sprintState.session.session = sprintState.session.count > sprintState.session.session ? sprintState.session.count : sprintState.session.session;
+  sprintState.session.longestRow =
+    sprintState.session.count > sprintState.session.longestRow ? sprintState.session.count : sprintState.session.longestRow;
 
   if (sprintState.session.count === 3) {
     sprintState.rewordPoints = Points.medium;
@@ -122,10 +124,11 @@ const setDefaultSession = () => {
   (document.querySelector('.session') as HTMLElement).textContent = '🤨';
 };
 
-const renderResultList = (resultIdx: number[], wordsArr: Word[]) => resultIdx
-  .map(
-    (wordIndex) => `<li class="results__list-true">
+const renderResultList = (resultIdx: number[], wordsArr: Word[]) =>
+  resultIdx
+    .map(
+      (wordIndex) => `<li class="results__list-true">
   ${wordsArr[wordIndex].word} - ${wordsArr[wordIndex].wordTranslate}
-  </li>`,
-  )
-  .join('');
+  </li>`
+    )
+    .join('');
