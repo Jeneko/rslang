@@ -23,8 +23,9 @@ export default async function getSprintGame(): Promise<HTMLDivElement> {
   if (state.getState().page === PageName.studyBook) {
     const gameWindow = elem.querySelector('.sprint') as HTMLElement;
     gameWindow.innerHTML = loadingBar;
-    const lvl = state.getState().studyBookChapter as number;
-    const currentPage = state.getState().studyBookPage as number;
+    const curState = state.getState();
+    const lvl = curState.studyBookChapter as number;
+    const currentPage = curState.studyBookPage as number;
     createGame(lvl, currentPage, gameWindow);
   }
   sprintHandler(elem);
