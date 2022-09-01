@@ -69,8 +69,7 @@ export const updateGame = (randomWords: CurrentWord, elem: HTMLElement): void =>
   (elem.querySelector('.earned-points') as HTMLElement).innerHTML = sprintState.earnedPoints.toString();
   (elem.querySelector('.reword-points') as HTMLElement).innerHTML = `+${sprintState.rewordPoints}`;
   (elem.querySelector('.english-word') as HTMLElement).innerHTML = sprintState.words[randomWords.curWordIdx].word;
-  (elem.querySelector('.russian-word') as HTMLElement).innerHTML =
-    sprintState.words[randomWords.randomIdx].wordTranslate;
+  (elem.querySelector('.russian-word') as HTMLElement).innerHTML = sprintState.words[randomWords.randomIdx].wordTranslate;
 };
 
 export const modalResults = (): string => `
@@ -78,11 +77,11 @@ export const modalResults = (): string => `
     <h3 class="result-points">${sprintState.earnedPoints} points</h3>
     <h5>Right answers:</h5>
     <ul class="results__unordered-list">
-    ${renderResultList(sprintState.rightAnswers, sprintState.words)}
+    ${renderResultList(sprintState.rightAnswers, sprintState.words, 'true')}
     </ul>
     <h5>Wrong answers:</h5>
     <ul class="results__unordered-list">
-    ${renderResultList(sprintState.wrongAnswers, sprintState.words)}
+    ${renderResultList(sprintState.wrongAnswers, sprintState.words, 'false')}
     </ul>
     <button class="results__close-button btn-close"></button>
   </div>
@@ -105,10 +104,9 @@ export const timer = (): void => {
 };
 
 const sessionCounter = () => {
-  sprintState.session.longestRow =
-    sprintState.session.count > sprintState.session.longestRow
-      ? sprintState.session.count
-      : sprintState.session.longestRow;
+  sprintState.session.longestRow = sprintState.session.count > sprintState.session.longestRow
+    ? sprintState.session.count
+    : sprintState.session.longestRow;
 
   if (sprintState.session.count === 3) {
     sprintState.rewordPoints = Points.medium;
@@ -126,11 +124,10 @@ const setDefaultSession = () => {
   (document.querySelector('.session') as HTMLElement).textContent = '🤨';
 };
 
-const renderResultList = (resultIdx: number[], wordsArr: Word[]) =>
-  resultIdx
-    .map(
-      (wordIndex) => `<li class="results__list-true">
+const renderResultList = (resultIdx: number[], wordsArr: Word[], bool: 'true' | 'false') => resultIdx
+  .map(
+    (wordIndex) => `<li class="results__list-${bool}">
   ${wordsArr[wordIndex].word} - ${wordsArr[wordIndex].wordTranslate}
-  </li>`
-    )
-    .join('');
+  </li>`,
+  )
+  .join('');

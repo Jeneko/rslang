@@ -1,7 +1,8 @@
-import { getAllUserWords, getWord } from 'API/index';
+import { getAllUserWords } from 'API/index';
 import { PageName, WordStatus } from 'types/index';
 import { getAuth } from 'utils/auth';
 import * as state from 'utils/state';
+import { getAllUserWordsWithData } from 'utils/user-words';
 import { renderModal, generateWords } from './modal-lvl';
 import {
   chooseWords,
@@ -116,14 +117,10 @@ const createGame = async (lvl: number, currentPage: number, elem: HTMLElement): 
 };
 
 const getWordsForRegisterMember = async (lvl: number, currentPage: number): Promise<void> => {
-  sprintState.userWords = await getAllUserWords();
   if (lvl === 6) {
-    const hardWordsId = sprintState.userWords
-      .filter((word) => word.difficulty === WordStatus.hard)
-      .map((word) => word.wordId);
-    const hardWord = Promise.all(hardWordsId.map((id) => getWord(id)));
-    sprintState.words = await hardWord;
+    sprintState.words = await getAllUserWordsWithData();
   } else {
+    sprintState.userWords = await getAllUserWords();
     const allWords = await generateWords(Number(lvl), currentPage);
     const wordsForGame = sprintState.userWords
       .filter((word) => word.difficulty === WordStatus.learned)
