@@ -11,7 +11,7 @@ const OPTIONAL_DEFAULTS: UserWordOptions = {
   guessedWrong: 0,
 };
 
-const USER_WORD_DEFAULTS: UserWord = {
+export const USER_WORD_DEFAULTS: UserWord = {
   difficulty: WordStatus.default,
   optional: OPTIONAL_DEFAULTS,
 };
@@ -60,7 +60,11 @@ export async function setWordOptional(wordId: string, optional: Partial<UserWord
   });
 }
 
-export async function setWordStatusAndOptional(wordId: string, difficulty: WordStatus, optional: Partial<UserWordOptions>): Promise<void> {
+export async function setWordStatusAndOptional(
+  wordId: string,
+  difficulty: WordStatus,
+  optional: Partial<UserWordOptions>,
+): Promise<void> {
   const userWords = await getAllUserWords();
   const userWord = userWords.find((word) => word.wordId === wordId);
 

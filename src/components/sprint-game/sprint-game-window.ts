@@ -3,7 +3,7 @@ import { getAuth } from 'utils/auth';
 import { sprintState } from './sprint-state';
 import statistic from './statistic';
 import { CurrentWord, DeleteWord, Points } from './types';
-import { createUpdateRightWord, createUpdateWrongWord } from './user-words';
+import userWords from './user-words-update';
 
 export const renderGame = (randomWords: CurrentWord): string => `
   <div class="points">
@@ -54,13 +54,13 @@ export const currentTranslateCheck = (randomWords: CurrentWord, depend: boolean)
     sprintState.session.longestRow = sprintState.session.count;
     sessionCounter();
     if (auth) {
-      createUpdateRightWord(id);
+      userWords(id, true);
     }
   } else {
     sprintState.wrongAnswers.push(randomWords.curWordIdx);
     setDefaultSession();
     if (auth) {
-      createUpdateWrongWord(id);
+      userWords(id, false);
     }
   }
 };
