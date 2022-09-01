@@ -17,7 +17,6 @@ export enum PageName {
   register = 'register',
   login = 'login',
   statistics = 'statistics',
-  // TODO: add other pages if needed
 }
 
 export enum Endpoints {

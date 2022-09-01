@@ -46,9 +46,6 @@
     margin-top: 15px;
 }
 
-@media (max-width: 1199.98px) {
-    .card-block {
-        display: flex;
-        justify-content: center;
-    }
+.card-body {
+    width: 20rem;
 }

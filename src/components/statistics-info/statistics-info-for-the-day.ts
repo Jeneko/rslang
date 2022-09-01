@@ -36,14 +36,13 @@ async function getWindowsStatistics(): Promise<HTMLElement> {
   const audiocallLongestRow = statisticsForTodayAudioCall.longestRow;
   const audiocallNewWords = statisticsForTodayAudioCall.newWordsQty;
   const audiocallWrongAnswers = statisticsForTodayAudioCall.wrongAnswers;
-  console.log(audiocallRightAnswers, audiocallWrongAnswers);
-  const audiocallPercentRightAnswers = getPercentAgeOfCorrectAnswers(audiocallRightAnswers, audiocallWrongAnswers);
+  const audiocallPercentRightAnswers = percentAge(audiocallRightAnswers, audiocallWrongAnswers);
 
   const sprintRightAnswers = statisticsForTodaySprint.rightAnswers;
   const sprintLongestRow = statisticsForTodaySprint.longestRow;
   const sprintNewWords = statisticsForTodaySprint.newWordsQty;
   const sprintWrongAnswers = statisticsForTodaySprint.wrongAnswers;
-  const sprintPercentRightAnswers = getPercentAgeOfCorrectAnswers(sprintRightAnswers, sprintWrongAnswers);
+  const sprintPercentRightAnswers = percentAge(sprintRightAnswers, sprintWrongAnswers);
 
   const windowsStatistics = document.createElement('div');
   windowsStatistics.classList.add('statistics-block');
@@ -57,10 +56,10 @@ async function getWindowsStatistics(): Promise<HTMLElement> {
         </h5>
       </div>
       <h2 class="display-2">Statistics for the day</h2>
-      <div class="row align-items-end justify-content-center">
-        <div class="card-block col-xxl-4 col-xl-4 col-lg-12 col-md-12 col-sm-12">
-            <div class="card" style="width: 20rem;">
-              <div class="card-body d-flex justify-content-between flex-column card-body-words">
+      <div class="row">
+        <div class="card-block  d-flex align-items-end justify-content-center col-xl-4 col-12">
+            <div class="card">
+              <div class="card-body card-body-words">
                 <h5 class="card-title card-title-statistics display-6">
                   Words statistics
                 </h5>
@@ -71,15 +70,15 @@ async function getWindowsStatistics(): Promise<HTMLElement> {
                 </div>
                 <div class="statistics-card-pagination d-flex justify-content-center align-items-center">
                   <button type="button" class="btn btn-primary btn-sm button-left"><</button>
-                    <span data-dateindex="${lengthWords - 1}" class="card-statistics-date">${convertDate(allStatWords[lengthWords - 1].date)}</span>
+                    <span data-dateindex="${lengthWords - 1}" class="card-statistics-date">${convertTimestampToDateStr(allStatWords[lengthWords - 1].date)}</span>
                   <button disabled type="button" class="btn btn-primary btn-sm button-right">></button>
                 </div>
               </div>
             </div>
           </div>
-        <div class="card-block col-xxl-4 col-xl-4 col-lg-12 col-md-12 col-sm-12">
-          <div class="card" style="width: 20rem;">
-            <div class="card-body d-flex justify-content-between flex-column card-body-audiocall">
+        <div class="card-block d-flex align-items-end justify-content-center col-xl-4 col-12">
+          <div class="card">
+            <div class="card-body card-body-audiocall">
               <h5 class="card-title card-title-statistics display-6">
                 Audio-call
               </h5>
@@ -90,15 +89,15 @@ async function getWindowsStatistics(): Promise<HTMLElement> {
               </div>
               <div class="statistics-card-pagination d-flex justify-content-center align-items-center">
                 <button type="button" class="btn btn-primary btn-sm button-left"><</button>
-                  <span data-dateindex="${lengthAudiocall - 1}" class="card-statistics-date card-statistics-audiocall-date">${convertDate(allStatAudiocall[lengthAudiocall - 1].date)}</span>
+                  <span data-dateindex="${lengthAudiocall - 1}" class="card-statistics-date card-statistics-audiocall-date">${convertTimestampToDateStr(allStatAudiocall[lengthAudiocall - 1].date)}</span>
                 <button disabled type="button" class="btn btn-primary btn-sm button-right">></button>
               </div>
             </div>
           </div>
         </div>
-        <div class="card-block col-xxl-4 col-xl-4 col-lg-12 col-md-12 col-sm-12">
-          <div class="card" style="width: 20rem;">
-            <div class="card-body d-flex justify-content-between flex-column card-body-sprint">
+        <div class="card-block d-flex align-items-end justify-content-center col-xl-4 col-12">
+          <div class="card">
+            <div class="card-body card-body-sprint">
               <h5 class="card-title card-title-statistics display-6">
                 Sprint
               </h5>
@@ -109,7 +108,7 @@ async function getWindowsStatistics(): Promise<HTMLElement> {
               </div>
                 <div class="statistics-card-pagination d-flex justify-content-center align-items-center">
                 <button type="button" class="btn btn-primary btn-sm button-left"><</button>
-                  <span data-dateindex="${lengthSprint - 1}" class="card-statistics-date card-statistics-sprint-date">${convertDate(allStatSprint[lengthSprint - 1].date)}</span>
+                  <span data-dateindex="${lengthSprint - 1}" class="card-statistics-date card-statistics-sprint-date">${convertTimestampToDateStr(allStatSprint[lengthSprint - 1].date)}</span>
                 <button disabled type="button" class="btn btn-primary btn-sm button-right">></button>
               </div>
             </div>
@@ -129,12 +128,12 @@ async function getWindowsStatistics(): Promise<HTMLElement> {
   return windowsStatistics;
 }
 
-function convertDate(ms: number): string {
+function convertTimestampToDateStr(ms: number): string {
   const date = new Date(ms);
   return `${date.getDate()}.${date.getMonth()}.${date.getFullYear()}`;
 }
 
-function handleEventPaginationButtons(allStatObject: WordsStatistic[] | GameStatistic[], cardBody: HTMLElement, key: StatusCardStatistics.Word | StatusCardStatistics.Game): void {
+function handleEventPaginationButtons(allStatObject: WordsStatistic[] | GameStatistic[], cardBody: HTMLElement, key: StatusCardStatistics): void {
   const buttonLeft = cardBody.querySelector('.button-left') as HTMLElement;
   const buttonRight = cardBody.querySelector('.button-right') as HTMLElement;
   const dataTable = (cardBody.querySelector('.card-statistics-date') as HTMLElement);
@@ -148,9 +147,9 @@ function handleEventPaginationButtons(allStatObject: WordsStatistic[] | GameStat
   }
 
   buttonLeft.addEventListener('click', () => {
-    const currentDateIndex = dataTable.dataset.dateindex as string;
+    const currentDateIndex = +(dataTable.dataset.dateindex as string);
 
-    const newIndex = +(currentDateIndex) - 1;
+    const newIndex = currentDateIndex - 1;
 
     let currentLearn;
     const currentNewWords = (allStatObject[newIndex].newWordsQty).toString();
@@ -159,12 +158,14 @@ function handleEventPaginationButtons(allStatObject: WordsStatistic[] | GameStat
     if (key === StatusCardStatistics.Game) {
       currentLearn = ((allStatObject[newIndex] as GameStatistic).longestRow).toString();
       const { wrongAnswers } = allStatObject[newIndex];
-      const percentCorrectAnswers = getPercentAgeOfCorrectAnswers(currentRightAnswers, wrongAnswers);
+      const percentCorrectAnswers = percentAge(currentRightAnswers, wrongAnswers);
 
       learnWords.textContent = percentCorrectAnswers.toString();
       newWords.textContent = currentNewWords;
       rightAnswers.textContent = currentRightAnswers;
-    } else if (key === StatusCardStatistics.Word) {
+    }
+
+    if (key === StatusCardStatistics.Word) {
       currentLearn = ((allStatObject[newIndex] as WordsStatistic).learnedWordsQty).toString();
       learnWords.textContent = currentLearn;
       newWords.textContent = currentNewWords;
@@ -172,12 +173,12 @@ function handleEventPaginationButtons(allStatObject: WordsStatistic[] | GameStat
     }
 
     dataTable.dataset.dateindex = newIndex.toString();
-    dataTable.innerHTML = `${convertDate(allStatObject[newIndex].date)}`;
+    dataTable.innerHTML = `${convertTimestampToDateStr(allStatObject[newIndex].date)}`;
 
-    if (+newIndex !== allStatObject.length - 1) {
+    if (newIndex !== allStatObject.length - 1) {
       buttonRight.removeAttribute('disabled');
     }
-    if (+newIndex < 1) {
+    if (newIndex < 1) {
       buttonLeft.setAttribute('disabled', 'true');
     }
   });
@@ -194,12 +195,14 @@ function handleEventPaginationButtons(allStatObject: WordsStatistic[] | GameStat
     if (key === StatusCardStatistics.Game) {
       currentLearn = ((allStatObject[newIndex] as GameStatistic).longestRow).toString();
       const { wrongAnswers } = allStatObject[newIndex];
-      const percentCorrectAnswers = getPercentAgeOfCorrectAnswers(currentRightAnswers, wrongAnswers);
+      const percentCorrectAnswers = percentAge(currentRightAnswers, wrongAnswers);
 
       learnWords.textContent = percentCorrectAnswers.toString();
       newWords.textContent = currentNewWords;
       rightAnswers.textContent = currentRightAnswers;
-    } else if (key === StatusCardStatistics.Word) {
+    }
+
+    if (key === StatusCardStatistics.Word) {
       currentLearn = ((allStatObject[newIndex] as WordsStatistic).learnedWordsQty).toString();
       learnWords.textContent = currentLearn;
       newWords.textContent = currentNewWords;
@@ -207,18 +210,18 @@ function handleEventPaginationButtons(allStatObject: WordsStatistic[] | GameStat
     }
 
     dataTable.dataset.dateindex = newIndex.toString();
-    dataTable.innerHTML = `${convertDate(allStatObject[newIndex].date)}`;
+    dataTable.innerHTML = `${convertTimestampToDateStr(allStatObject[newIndex].date)}`;
 
-    if (+newIndex === lengthDate - 1) {
+    if (newIndex === lengthDate - 1) {
       buttonRight.setAttribute('disabled', 'true');
     }
-    if (+newIndex > 0) {
+    if (newIndex > 0) {
       buttonLeft.removeAttribute('disabled');
     }
   });
 }
 
-function getPercentAgeOfCorrectAnswers(correct: string | number, wrong: string | number): number {
+function percentAge(correct: string | number, wrong: string | number): number {
   const sum = +correct + +wrong;
   return sum ? Math.trunc((+correct / sum) * +wrong) : 0;
 }
