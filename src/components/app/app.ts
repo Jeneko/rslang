@@ -23,36 +23,25 @@ function handleLinks(e: Event): void {
 
 async function loadPage(): Promise<void> {
   const curPage = state.getState().page;
+
+  const getPage: Record<PageName, () => Promise<Element>> = {
+    [PageName.main]: () => Promise.resolve(getMainPage()),
+    [PageName.studyBook]: () => getStudyBookPage(),
+    [PageName.audioCall]: () => getAudioCallPage(),
+    [PageName.sprint]: () => getSprintPage(),
+    [PageName.stats]: () => Promise.resolve(getMainPage()), // TODO: change to getStatisticPage() when it'll be ready
+    [PageName.team]: () => Promise.resolve(getTeamPage()),
+    [PageName.register]: () => Promise.resolve(getRegisterPage()),
+    [PageName.login]: () => Promise.resolve(getLoginPage()),
+  };
+
+  const fragment = new DocumentFragment();
+
+  fragment.append(getHeader());
+  fragment.append(await getPage[curPage]());
+
   document.body.innerHTML = '';
-
-  document.body.append(getHeader());
-
-  // TODO: replace with a mapper
-  switch (curPage) {
-    case PageName.main:
-      document.body.append(getMainPage());
-      break;
-    case PageName.studyBook:
-      document.body.append(await getStudyBookPage());
-      break;
-    case PageName.audioCall:
-      document.body.append(await getAudioCallPage());
-      break;
-    case PageName.sprint:
-      document.body.append(await getSprintPage());
-      break;
-    case PageName.register:
-      document.body.append(getRegisterPage());
-      break;
-    case PageName.login:
-      document.body.append(getLoginPage());
-      break;
-    case PageName.team:
-      document.body.append(getTeamPage());
-      break;
-    default:
-      break;
-  }
+  document.body.append(fragment);
 }
 
 function handleEvents(): void {
