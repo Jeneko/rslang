@@ -1,3 +1,7 @@
+.header .dropdown-menu {
+  margin: 0;
+}
+
 .header .active-page {
   color: white;
   background-color: var(--bs-gray-600);
