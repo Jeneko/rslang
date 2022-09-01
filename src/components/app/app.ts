@@ -35,11 +35,13 @@ async function loadPage(): Promise<void> {
     [PageName.login]: () => Promise.resolve(getLoginPage()),
   };
 
-  const pageElement = await getPage[curPage]();
+  const fragment = new DocumentFragment();
+
+  fragment.append(getHeader());
+  fragment.append(await getPage[curPage]());
 
   document.body.innerHTML = '';
-  document.body.append(getHeader());
-  document.body.append(pageElement);
+  document.body.append(fragment);
 }
 
 function handleEvents(): void {
