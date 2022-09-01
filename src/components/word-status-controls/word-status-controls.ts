@@ -1,13 +1,18 @@
 import * as state from 'utils/state';
+import { updateLearnedStatistic } from 'utils/statistic';
 import { setWordStatus } from 'utils/user-words';
 import { WordWithUserWord, WordStatus } from 'types/index';
 
 async function markHard(e: Event) {
   const target = e.target as HTMLButtonElement;
   const wordId = target.dataset.id as string;
+  const wordCard = target.closest('.word-card') as HTMLElement;
 
   target.disabled = true;
   await setWordStatus(wordId, WordStatus.hard);
+  if (wordCard.dataset.status === WordStatus.learned) {
+    await updateLearnedStatistic(-1);
+  }
   target.disabled = false;
 
   target.dispatchEvent(new Event('updateWordCard', { bubbles: true }));
@@ -20,6 +25,7 @@ async function markLearned(e: Event) {
 
   target.disabled = true;
   await setWordStatus(wordId, WordStatus.learned);
+  await updateLearnedStatistic(+1);
   target.disabled = false;
 
   target.dispatchEvent(new Event(isUserChapter ? 'deleteWordCard' : 'updateWordCard', { bubbles: true }));

@@ -1,4 +1,5 @@
 import * as auth from 'utils/auth';
+import * as state from 'utils/state';
 import {
   Endpoints, Word, User, ResponseError, Auth, StatusCode, UserWord,
   ResponseUserWord, AggregatedResults, Statistic, WordsStatistic, GameStatistic,
@@ -12,6 +13,7 @@ export const DEFAULT_WORDS_STAT: WordsStatistic = {
   learnedWordsQty: 0,
   newWordsQty: 0,
   rightAnswers: 0,
+  wrongAnswers: 0,
 };
 
 export const DEFAULT_GAME_STAT: GameStatistic = {
@@ -19,6 +21,7 @@ export const DEFAULT_GAME_STAT: GameStatistic = {
   longestRow: 0,
   newWordsQty: 0,
   rightAnswers: 0,
+  wrongAnswers: 0,
 };
 
 export async function getWords(group: number, page: number): Promise<Word[]> {
@@ -115,10 +118,11 @@ export async function updateToken(): Promise<void> {
 
   const response = await fetch(url, options);
 
-  // Handle bad response
-  if (response.status === StatusCode.forbidden) {
-    const errorText = await response.text();
-    throw new Error(errorText);
+  // If can't get new token - logout and show login page after reload
+  if (!response.ok) {
+    auth.deleteAuth();
+    state.updateState('page', 'login');
+    window.location.reload();
   }
 
   const newTokens = await response.json() as Pick<Auth, 'token' | 'refreshToken'>;
@@ -340,7 +344,7 @@ function getFormattedErrorText(errorText: string): string {
 }
 
 // Create brand new statisic
-function createNewUserStatistic(): Statistic {
+export function createNewUserStatistic(): Statistic {
   const newStatistic: Statistic = {
     learnedWords: 0,
     optional: {
