@@ -106,13 +106,15 @@ export const timer = (): void => {
 
 const sessionCounter = () => {
   sprintState.session.longestRow =
-    sprintState.session.count > sprintState.session.longestRow ? sprintState.session.count : sprintState.session.longestRow;
+    sprintState.session.count > sprintState.session.longestRow
+      ? sprintState.session.count
+      : sprintState.session.longestRow;
 
   if (sprintState.session.count === 3) {
     sprintState.rewordPoints = Points.medium;
     (document.querySelector('.session') as HTMLElement).textContent = '🙂';
   }
-  if (sprintState.session.count === 6) {
+  if (sprintState.session.count >= 6) {
     sprintState.rewordPoints = Points.high;
     (document.querySelector('.session') as HTMLElement).textContent = '😀';
   }
