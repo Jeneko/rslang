@@ -2,7 +2,7 @@ import getStatPage from 'components/statistics-info/statistics-info-for-the-day'
 import getFooter from 'components/footer/footer';
 import { getAuth } from 'utils/auth';
 import statisticsInfoAllDays from 'components/statistics-info/statistics-info-all-days';
-import getSpinner from 'components/load-spinner/load-spinner';
+import { showLoadSpinner } from 'components/load-spinner/load-spinner';
 import './statistics-page.css';
 
 export default async function getStatisticsPage() {
@@ -10,13 +10,12 @@ export default async function getStatisticsPage() {
     return noAuthUser();
   }
   const elem = document.createElement('div');
-  const spinner = getSpinner();
-  document.body.append(spinner);
+  showLoadSpinner(true);
   elem.append(await getStatPage());
   elem.append(await statisticsInfoAllDays());
   elem.append(getFooter());
   elem.classList.add('statistics-page');
-  spinner.remove();
+  showLoadSpinner(false);
   return elem;
 }
 
