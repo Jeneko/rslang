@@ -56,8 +56,8 @@ export const sprintHandler = (elem: HTMLElement): void => {
         updateGame(sprintState.randomWords, elem);
       } else {
         gameWindow.innerHTML = modalResults();
-        const auth = getAuth();
-        if (auth) {
+
+        if (getAuth()) {
           statistic();
         }
       }
