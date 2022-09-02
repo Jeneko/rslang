@@ -6,6 +6,10 @@
     font-weight: 700;
 }
 
+.statistics-section {
+    padding: 2rem;
+}
+
 .statistics-section > * {
     margin-top: 40px;
 }
@@ -21,13 +25,6 @@
 
 .statistics-no-auth-user-info {
     margin-top: 40px;
-}
-
-.spinner-statistics {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
 }
 
 .statistics-card-pagination {
@@ -53,5 +50,24 @@
 }
 
 .card-body {
-    width: 20rem;
+    max-width: 20rem;
+}
+
+/* Statistics for all days */
+
+.statistic-chart {
+    margin-bottom: 40px;
+    border-width: 1px;
+    border-color: var(--bs-border-color-translucent);
+    border-radius: 0.375rem;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+}
+
+.statistic-chart__heading {
+    font-weight: 600;
+}
+
+.statistics-all-days-wrapper {
+    gap: 10px;
 }

@@ -1,24 +1,22 @@
 import { getTodayStat } from 'utils/statistic';
-import { getUserStatistic } from 'API/index';
 import {
   WordsStatistic, GameStatistic, StatusCardStatistics, Statistic,
 } from 'types/index';
 import { ObjectStatisticsType } from './statistics.types';
 
-export default async function getStatPage(): Promise<HTMLElement> {
+export default async function getStatPage(respStatistics: Statistic): Promise<HTMLElement> {
   const page = document.createElement('div');
   page.classList.add('container', 'statistics-window');
   page.innerHTML = `
     <h1 class="page-heading"><span class="page-heading__rslang">RSLang</span> Statistics</h1>
   `;
-  const windowsStatistics = await getWindowsStatistics();
+
+  const windowsStatistics = await getWindowsStatistics(respStatistics);
   page.append(windowsStatistics);
   return page;
 }
 
-async function getWindowsStatistics(): Promise<HTMLElement> {
-  const respStatistics = await getUserStatistic();
-
+async function getWindowsStatistics(respStatistics: Statistic): Promise<HTMLElement> {
   const statistic = getObjectStatistic(respStatistics);
 
   const windowsStatistics = document.createElement('div');
@@ -37,7 +35,7 @@ async function getWindowsStatistics(): Promise<HTMLElement> {
 
 function convertTimestampToDateStr(ms: number): string {
   const date = new Date(ms);
-  return `${date.getDate()}.${date.getMonth()}.${date.getFullYear()}`;
+  return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
 }
 
 function handleEventPaginationButtons(allStatObject: WordsStatistic[] | GameStatistic[], cardBody: HTMLElement, key: StatusCardStatistics): void {
@@ -161,10 +159,8 @@ function getStatisticsWindowToString(respStatistics: Statistic, statistic: Objec
         </h5>
       </div>
       <h2 class="display-2">Statistics for the day</h2>
-      <div class="row">
-        <div class="card-block col-xl-4 col-12">
-            <div class="card">
-              <div class="card-body card-body-words">
+      <div class="row flex-xl-row flex-sm-column justify-content-xl-between justify-content-center align-items-center gap-3">
+        <div class="col-xl-4 col-6 card card-body card-body-words align-self-center">
                 <h5 class="card-title card-title-statistics display-6">
                   Words statistics
                 </h5>
@@ -178,12 +174,8 @@ function getStatisticsWindowToString(respStatistics: Statistic, statistic: Objec
                     <span data-dateindex="${statistic.lengthWords - 1}" class="card-statistics-date">${convertTimestampToDateStr(statistic.allStatWords[statistic.lengthWords - 1].date)}</span>
                   <button disabled type="button" class="btn btn-primary btn-sm button-right">></button>
                 </div>
-              </div>
-            </div>
           </div>
-        <div class="card-block col-xl-4 col-12">
-          <div class="card">
-            <div class="card-body card-body-audiocall">
+        <div class="col-xl-4 col-12 card card-body card-body-audiocall">
               <h5 class="card-title card-title-statistics display-6">
                 Audio-call
               </h5>
@@ -197,12 +189,8 @@ function getStatisticsWindowToString(respStatistics: Statistic, statistic: Objec
                   <span data-dateindex="${statistic.lengthAudiocall - 1}" class="card-statistics-date card-statistics-audiocall-date">${convertTimestampToDateStr(statistic.allStatAudiocall[statistic.lengthAudiocall - 1].date)}</span>
                 <button disabled type="button" class="btn btn-primary btn-sm button-right">></button>
               </div>
-            </div>
-          </div>
         </div>
-        <div class="card-block col-xl-4 col-12">
-          <div class="card">
-            <div class="card-body card-body-sprint">
+        <div class="card col-xl-4 col-12 card-body card-body-sprint">
               <h5 class="card-title card-title-statistics display-6">
                 Sprint
               </h5>
@@ -216,8 +204,6 @@ function getStatisticsWindowToString(respStatistics: Statistic, statistic: Objec
                   <span data-dateindex="${statistic.lengthSprint - 1}" class="card-statistics-date card-statistics-sprint-date">${convertTimestampToDateStr(statistic.allStatSprint[statistic.lengthSprint - 1].date)}</span>
                 <button disabled type="button" class="btn btn-primary btn-sm button-right">></button>
               </div>
-            </div>
-          </div>
         </div>
       </div>
     <section>

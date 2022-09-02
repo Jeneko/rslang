@@ -4,15 +4,17 @@ import { getAuth } from 'utils/auth';
 import getStatisticInfoAllDays from 'components/statistics-info/statistics-info-all-days';
 import { showLoadSpinner } from 'components/load-spinner/load-spinner';
 import './statistics-page.css';
+import { getUserStatistic } from 'API/index';
 
 export default async function getStatisticsPage() {
   if (!getAuth()) {
     return noAuthUser();
   }
+  const respStatistics = await getUserStatistic();
   const elem = document.createElement('div');
   showLoadSpinner(true);
-  elem.append(await getStatPage());
-  elem.append(await getStatisticInfoAllDays());
+  elem.append(await getStatPage(respStatistics));
+  elem.append(await getStatisticInfoAllDays(respStatistics));
   elem.append(getFooter());
   elem.classList.add('statistics-page');
   showLoadSpinner(false);

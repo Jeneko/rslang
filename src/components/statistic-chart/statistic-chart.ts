@@ -78,7 +78,7 @@ export async function getStatisticChart(stat: Statistic, chartType: ChartType): 
   const chartData = getChartData[chartType]();
 
   elem.innerHTML = `
-    <h2 class="statistic-chart__heading">Words | ${chartType}</h2>
+    <h2 class="statistic-chart__heading display-6">Words | ${chartType}</h2>
     <div class="statistic-chart__info">
       <span class="statistic-chart__info-text">${chartData.length ? INFO_TEXT : NO_STAT_TO_SHOW}</span>
     </div>
