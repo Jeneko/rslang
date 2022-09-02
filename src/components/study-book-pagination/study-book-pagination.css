@@ -6,8 +6,6 @@
 }
 
 .study-book-pagination__cur-page {
-  width: 40px;
   text-align: center;
-  font-weight: bold;
-  color: var(--bs-pink);
+  width: 70px;
 }
