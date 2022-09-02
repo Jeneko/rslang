@@ -1,0 +1,57 @@
+.statistic-chart {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: 'heading info'
+                       'chart chart';
+  gap: 1rem;
+  align-items: center;
+  padding: 2rem;
+  border: 1px solid var(--bs-gray-200);
+}
+
+.statistic-chart__info {
+  text-align: right;
+}
+
+.statistic-chart__info-text {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+  background-color: var(--bs-gray-100);
+}
+
+.chart {
+  grid-area: chart;
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  height: 200px;
+}
+
+.chart__column {
+  flex: 1;
+  background-color: var(--bs-blue);
+  transition: all 0.3s ease;
+  padding-bottom: 1rem;
+}
+
+.chart__column--additional {
+  pointer-events: none;
+  padding-bottom: 0;
+}
+
+.chart__column:hover {
+  background-color: var(--bs-pink);
+}
+
+@media (max-width: 991.98px) {
+  .statistic-chart__info {
+    text-align: left;
+  }
+  .statistic-chart {
+    grid-template-columns: 1fr;
+    grid-template-areas: 'heading'
+                         'info'
+                         'chart';
+  }
+}
