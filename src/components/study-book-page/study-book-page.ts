@@ -3,6 +3,7 @@ import getFooter from 'components/footer/footer';
 import getMiniGamesMenu from 'components/mini-games-menu/mini-games-menu';
 import getStudyBookWordsList from 'components/study-book-words-list/study-book-words-list';
 import getStudyBookChaptersMenu from 'components/study-book-chapters-menu/study-book-chapters-menu';
+import { showLoadSpinner } from 'components/load-spinner/load-spinner';
 import './study-book-page.css';
 
 function toggleMiniGameMenu(e: Event): void {
@@ -54,7 +55,9 @@ export default async function getStudyBookPage(): Promise<HTMLElement> {
   const wordsListContainer = elem.querySelector('.words-list') as HTMLElement;
 
   const miniGameMenu = getMiniGamesMenu();
+  showLoadSpinner(true);
   const wordsList = await getStudyBookWordsList();
+  showLoadSpinner(false);
   const isLearned = isWordListLearned(wordsList);
 
   miniGameMenu.hidden = isLearned;
