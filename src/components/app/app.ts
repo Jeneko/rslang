@@ -8,6 +8,7 @@ import getRegisterPage from 'components/register-page/register-page';
 import getStudyBookPage from 'components/study-book-page/study-book-page';
 import getAudioCallPage from 'components/audio-call-page/audio-call-page';
 import getTeamPage from 'components/team-page/team-page';
+import getStatisticPage from 'components/statistics-page/statistics-page';
 
 function handleLinks(e: Event): void {
   const target = e.target as HTMLElement;
@@ -29,10 +30,11 @@ async function loadPage(): Promise<void> {
     [PageName.studyBook]: () => getStudyBookPage(),
     [PageName.audioCall]: () => getAudioCallPage(),
     [PageName.sprint]: () => getSprintPage(),
-    [PageName.stats]: () => Promise.resolve(getMainPage()), // TODO: change to getStatisticPage() when it'll be ready
+    [PageName.stats]: () => Promise.resolve(getMainPage()),
     [PageName.team]: () => Promise.resolve(getTeamPage()),
     [PageName.register]: () => Promise.resolve(getRegisterPage()),
     [PageName.login]: () => Promise.resolve(getLoginPage()),
+    [PageName.statistics]: () => Promise.resolve(getStatisticPage()),
   };
 
   const fragment = new DocumentFragment();
