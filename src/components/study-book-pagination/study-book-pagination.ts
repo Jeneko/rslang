@@ -34,6 +34,13 @@ function handleEvents(elem: HTMLElement): void {
       elem.dispatchEvent(new Event('loadStudyBookChapter', { bubbles: true }));
     }
   };
+
+  // Change page from select
+  elem.onchange = (e: Event) => {
+    const target = e.target as HTMLSelectElement;
+    state.updateState('studyBookPage', Number(target.value));
+    elem.dispatchEvent(new Event('loadStudyBookChapter', { bubbles: true }));
+  };
 }
 
 export default function getStudyBookPagination(): HTMLElement {
@@ -41,9 +48,16 @@ export default function getStudyBookPagination(): HTMLElement {
   const elem = document.createElement('div');
   elem.className = 'study-book-pagination';
 
+  let pageSelectHTML = '<select class="form-select study-book-pagination__cur-page">';
+  for (let i = 0; i < PAGE_LIMIT; i += 1) {
+    const status = i === Number(curPage) ? 'selected' : '';
+    pageSelectHTML += `<option value="${i}" ${status}>${i + 1}</option>`;
+  }
+  pageSelectHTML += '</select>';
+
   elem.innerHTML = `
     <button class="btn btn-secondary btn-pagination-prev">Prev</button>
-    <div class="study-book-pagination__cur-page">${Number(curPage) + 1}</div>
+    ${pageSelectHTML}
     <button class="btn btn-secondary btn-pagination-next">Next</button>
   `;
 
