@@ -7,8 +7,8 @@ const NO_STAT_TO_SHOW = 'No&nbsp;stat to&nbsp;show yet';
 type ChartData = { value: number; timeStamp: number };
 
 export enum ChartType {
-  NewWords = 'New&nbsp;words',
-  LearnedWords = 'Learned&nbsp;words',
+  NewWords = 'New',
+  LearnedWords = 'Learned',
 }
 
 function getArrayOfPercsOfMax(array: number[]): number[] {
@@ -50,7 +50,7 @@ function toggleChartColumnInfo(e: Event): void {
 
   const target = e.target as HTMLElement;
   const infoText = target.classList.contains('chart__column')
-    ? `Words: ${target.dataset.value} | Date: ${getFormattedDateFromTimestamp(Number(target.dataset.timestamp as string))}`
+    ? `Words:&nbsp;${target.dataset.value} | Date:&nbsp;${getFormattedDateFromTimestamp(Number(target.dataset.timestamp as string))}`
     : INFO_TEXT;
   infoTextElem.innerHTML = infoText;
 }
@@ -77,7 +77,7 @@ export async function getStatisticChart(stat: Statistic, chartType: ChartType): 
   const chartData = getChartData[chartType]();
 
   elem.innerHTML = `
-    <h2 class="statistic-chart__heading">Chart | ${chartType}</h2>
+    <h2 class="statistic-chart__heading">Words | ${chartType}</h2>
     <div class="statistic-chart__info">
       <span class="statistic-chart__info-text">${chartData.length ? INFO_TEXT : NO_STAT_TO_SHOW}</span>
     </div>
