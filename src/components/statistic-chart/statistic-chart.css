@@ -32,6 +32,12 @@
   flex: 1;
   background-color: var(--bs-blue);
   transition: all 0.3s ease;
+  padding-bottom: 1rem;
+}
+
+.chart__column--additional {
+  pointer-events: none;
+  padding-bottom: 0;
 }
 
 .chart__column:hover {
