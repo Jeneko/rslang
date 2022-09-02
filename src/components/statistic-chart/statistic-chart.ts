@@ -3,6 +3,7 @@ import './statistic-chart.css';
 
 const INFO_TEXT = 'Choose column to&nbsp;see&nbsp;info';
 const NO_STAT_TO_SHOW = 'No&nbsp;stat to&nbsp;show yet';
+const MIN_COLUMN_QTY = 3;
 
 type ChartData = { value: number; timeStamp: number };
 
@@ -37,7 +38,7 @@ function getChart(chartData: ChartData[]): HTMLElement {
   });
 
   // Add empty element at the end of short charts to make them look nice
-  if (chartData.length < 3) {
+  if (chartData.length < MIN_COLUMN_QTY) {
     elem.innerHTML += '<div class="chart__column chart__column--additional" style="height: 0;"></div>';
   }
 
