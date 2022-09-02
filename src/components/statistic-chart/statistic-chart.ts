@@ -2,6 +2,7 @@ import { Statistic } from 'types/index';
 import './statistic-chart.css';
 
 const INFO_TEXT = 'Choose column to&nbsp;see&nbsp;info';
+const NO_STAT_TO_SHOW = 'No&nbsp;stat to&nbsp;show yet';
 
 type ChartData = { value: number; timeStamp: number };
 
@@ -74,17 +75,18 @@ export async function getStatisticChart(stat: Statistic, chartType: ChartType): 
   };
 
   const chartData = getChartData[chartType]();
-  const chart = getChart(chartData);
 
   elem.innerHTML = `
     <h2 class="statistic-chart__heading">Chart | ${chartType}</h2>
     <div class="statistic-chart__info">
-      <span class="statistic-chart__info-text">${INFO_TEXT}</span>
+      <span class="statistic-chart__info-text">${chartData.length ? INFO_TEXT : NO_STAT_TO_SHOW}</span>
     </div>
   `;
 
-  elem.append(chart);
-  handleEvents(elem);
+  if (chartData.length) {
+    handleEvents(elem);
+    elem.append(getChart(chartData));
+  }
 
   return elem;
 }
