@@ -17,6 +17,8 @@ import {
 import { sprintState, setDefaultSprintState } from './sprint-state';
 import statistic from './statistic';
 
+const PAGES_NUMBER = 30;
+
 export default async function getSprintGame(): Promise<HTMLDivElement> {
   const elem = document.createElement('div');
   elem.className = 'sprint-game container';
@@ -46,7 +48,7 @@ export const sprintHandler = (elem: HTMLElement): void => {
       gameWindow.innerHTML = loadingBar;
       const target = event.target as HTMLElement;
       const { lvl } = target.dataset;
-      createGame(Number(lvl), 30, gameWindow);
+      createGame(Number(lvl), PAGES_NUMBER, gameWindow);
     }
     if (classList.contains('chooseBtn')) {
       const isRandom = sprintState.randomWords.curWordIdx === sprintState.randomWords.randomIdx;
