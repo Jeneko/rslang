@@ -12,6 +12,7 @@ export default async function generateWindowGame(currentWord: Word | WordWithUse
   const {
     audio, word, image, transcription, wordTranslate,
   } = currentWord;
+  // eslint-disable-next-line no-underscore-dangle
   const id = currentWord.id ? currentWord.id : (currentWord as WordWithUserWord)._id;
   const imageResponse = `${SOURCE}/${image}`;
   const listRandomWords = getRandomWords(currentWord, arrayWords);

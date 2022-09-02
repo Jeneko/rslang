@@ -26,6 +26,7 @@ export async function sendDataToServer(correctAnswersList: WordWithUserWord[], w
       optionals.difficulty = WordStatus.learned;
       wordStatistics.learnedWordsQty += 1;
     }
+    // eslint-disable-next-line no-underscore-dangle
     updateUserWord(el._id as string, optionals);
   });
   wrongAnswersList.forEach((el) => {
@@ -41,6 +42,7 @@ export async function sendDataToServer(correctAnswersList: WordWithUserWord[], w
       optionals.difficulty = WordStatus.default;
       wordStatistics.learnedWordsQty -= 1;
     }
+    // eslint-disable-next-line no-underscore-dangle
     updateUserWord(el._id as string, optionals);
   });
   gameStatistics.newWordsQty += gameState.newWords;

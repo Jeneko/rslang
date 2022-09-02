@@ -291,6 +291,7 @@ async function checkNewWords(array: WordWithUserWord[]): Promise<number> {
         guessedWrong: 0,
       };
       counterNewWords += 1;
+      // eslint-disable-next-line no-underscore-dangle
       promiseArray.push(setWordOptional(el._id as string, defaultOptional));
     }
   }
