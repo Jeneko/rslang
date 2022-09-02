@@ -73,15 +73,15 @@ export const updateGame = (randomWords: CurrentWord, elem: HTMLElement): void =>
 };
 
 export const modalResults = (): string => `
- <div class="results">
+  <div class="results">
     <h3 class="result-points">${sprintState.earnedPoints} points</h3>
     <h5>Right answers:</h5>
     <ul class="results__unordered-list">
-    ${renderResultList(sprintState.rightAnswers, sprintState.words, 'true')}
+      ${renderResultList(sprintState.rightAnswers, sprintState.words, 'true')}
     </ul>
     <h5>Wrong answers:</h5>
     <ul class="results__unordered-list">
-    ${renderResultList(sprintState.wrongAnswers, sprintState.words, 'false')}
+      ${renderResultList(sprintState.wrongAnswers, sprintState.words, 'false')}
     </ul>
     <button class="results__close-button btn-close"></button>
   </div>
