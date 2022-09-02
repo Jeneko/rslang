@@ -70,12 +70,7 @@ function eventButtonPagination(
 ): void {
   const lengthDate = allStatObject.length;
   const currentDateIndex = dataTable.dataset.dateindex as string;
-  let newIndex;
-  if (flag) {
-    newIndex = +(currentDateIndex) + 1;
-  } else {
-    newIndex = +(currentDateIndex) - 1;
-  }
+  const newIndex = flag ? +(currentDateIndex) + 1 : +(currentDateIndex) - 1;
 
   const currentNewWords = (allStatObject[newIndex].newWordsQty).toString();
   const currentRightAnswers = (allStatObject[newIndex].rightAnswers).toString();
