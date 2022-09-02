@@ -18,6 +18,7 @@ import { sprintState, setDefaultSprintState } from './sprint-state';
 import statistic from './statistic';
 
 const PAGES_NUMBER = 30;
+const HURD_WORDS_PAGE = 6;
 
 export default async function getSprintGame(): Promise<HTMLDivElement> {
   const elem = document.createElement('div');
@@ -119,7 +120,7 @@ const createGame = async (lvl: number, currentPage: number, elem: HTMLElement): 
 };
 
 const getWordsForRegisterMember = async (lvl: number, currentPage: number): Promise<void> => {
-  if (lvl === 6) {
+  if (lvl === HURD_WORDS_PAGE) {
     sprintState.words = await getAllUserWordsWithData();
   } else {
     sprintState.userWords = await getAllUserWords();
