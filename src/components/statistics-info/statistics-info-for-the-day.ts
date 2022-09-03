@@ -69,25 +69,27 @@ function eventButtonPagination(
   const lengthDate = allStatObject.length;
   const currentDateIndex = dataTable.dataset.dateindex as string;
   const newIndex = flag ? +(currentDateIndex) + 1 : +(currentDateIndex) - 1;
+  console.log(allStatObject[newIndex]);
 
   const currentNewWords = (allStatObject[newIndex].newWordsQty).toString();
   const currentRightAnswers = (allStatObject[newIndex].rightAnswers).toString();
-  let currentLearn;
 
   if (key === StatusCardStatistics.Game) {
-    currentLearn = ((allStatObject[newIndex] as GameStatistic).longestRow).toString();
+    const longestSeries = ((allStatObject[newIndex] as GameStatistic).longestRow).toString();
     const { wrongAnswers } = allStatObject[newIndex];
     const percentCorrectAnswers = getPercentage(currentRightAnswers, wrongAnswers);
 
-    learnWords.textContent = percentCorrectAnswers.toString();
+    rightAnswers.textContent = percentCorrectAnswers.toString();
+    learnWords.textContent = longestSeries;
+    newWords.textContent = currentNewWords;
   }
 
   if (key === StatusCardStatistics.Word) {
-    currentLearn = ((allStatObject[newIndex] as WordsStatistic).learnedWordsQty).toString();
+    const currentLearn = ((allStatObject[newIndex] as WordsStatistic).learnedWordsQty).toString();
+    rightAnswers.textContent = currentRightAnswers;
     learnWords.textContent = currentLearn;
+    newWords.textContent = currentNewWords;
   }
-  newWords.textContent = currentNewWords;
-  rightAnswers.textContent = currentRightAnswers;
 
   dataTable.dataset.dateindex = newIndex.toString();
   dataTable.innerHTML = `${convertTimestampToDateStr(allStatObject[newIndex].date)}`;
@@ -111,7 +113,8 @@ function eventButtonPagination(
 
 function getPercentage(correct: string | number, wrong: string | number): number {
   const sum = +correct + +wrong;
-  return sum ? Math.trunc((+correct / sum) * +wrong) : 0;
+  console.log(sum, 'sum');
+  return sum ? Math.trunc((+correct / sum) * 100) : 0;
 }
 
 function getObjectStatistic(respStatistics: Statistic): ObjectStatisticsType {
@@ -168,11 +171,11 @@ function getStatisticsWindowToString(respStatistics: Statistic, statistic: Objec
             <table class="statistic-table">
               <tr>
                 <td class="statistic-td"><p class="card-text card-text-statistics">Learned words</p></td>
-                <td class="statistic-td statistic-td-amount statistic-td-amount-first"><span class="game-statistic-first game-statistic-info game-statistic-info-new-words">${statistic.wordsNew}</span></td>
+                <td class="statistic-td statistic-td-amount statistic-td-amount-first"><span class="game-statistic-first game-statistic-info card-text game-statistic-info-learned">${statistic.wordsNew}</span></td>
               </tr>
               <tr>
                 <td class="statistic-td"><p class="card-text card-text-statistics">New words</p></td>
-                <td class="statistic-td statistic-td-amount statistic-td-amount-second"><span class="game-statistic-second game-statistic-info card-text game-statistic-info-learned">${statistic.wordsLearned}</span></td>
+                <td class="statistic-td statistic-td-amount statistic-td-amount-second"><span class="game-statistic-second game-statistic-info game-statistic-info-new-words ">${statistic.wordsLearned}</span></td>
               </tr>
               <tr>
                 <td class="statistic-td"><p class="card-text card-text-statistics">Сorrect answers</p></td>
