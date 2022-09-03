@@ -4,7 +4,7 @@ import {
 import {
   Word, WordWithUserWord, GameStatistic, WordStatus, WordsStatistic, Statistic,
 } from 'types/index';
-import getTodayStat from 'utils/statistic';
+import { getTodayStat } from 'utils/statistic';
 import { GameState } from '../startNewGame/game.types';
 
 const NUMBER_FOR_LEARNED_WORD = 3;
