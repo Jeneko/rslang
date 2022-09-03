@@ -46,7 +46,6 @@ export const subtractShownWordIdx: DeleteWord = (wordsIdx, shownWordIdx) => word
 
 export const currentTranslateCheck = (randomWords: CurrentWord, depend: boolean) => {
   const { id } = sprintState.words[randomWords.curWordIdx];
-  const auth = getAuth();
   if (depend) {
     sprintState.earnedPoints += sprintState.rewordPoints;
     sprintState.rightAnswers.push(randomWords.curWordIdx);
@@ -58,7 +57,7 @@ export const currentTranslateCheck = (randomWords: CurrentWord, depend: boolean)
     setDefaultSession();
   }
 
-  if (auth) {
+  if (getAuth()) {
     userWordsUpdate(id, depend);
   }
 };
