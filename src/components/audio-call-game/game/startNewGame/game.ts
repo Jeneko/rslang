@@ -221,7 +221,6 @@ function showResult(modalResultGame: HTMLElement, gameState: GameState): void {
 
 export async function checkNextQuestion(e: Event, buttonNextQuestion: HTMLElement, listWords: Word[], gameState: GameState): Promise<void> {
   const currentIndex = getState().indexWord + 1;
-  console.log(buttonNextQuestion.dataset.wordchosen);
 
   if (currentIndex >= listWords.length && buttonNextQuestion.dataset.status === 'false') {
     clearGameWindow();
@@ -230,7 +229,6 @@ export async function checkNextQuestion(e: Event, buttonNextQuestion: HTMLElemen
     showResult(modalGameResult, gameState);
     updateState('indexWord', currentIndex);
   } else if (buttonNextQuestion.dataset.wordchosen === 'false') {
-    console.log(1);
     hiddenAllButtons();
     showCurrentWordInfo();
     buttonNextQuestion.textContent = NEXT_QUESTION;
@@ -240,7 +238,6 @@ export async function checkNextQuestion(e: Event, buttonNextQuestion: HTMLElemen
     const word = await getWord(wordId);
     gameState.wrongAnswers.push(word);
   } else {
-    console.log(2);
     buttonNextQuestion.textContent = SKIP;
     buttonNextQuestion.dataset.status = 'false';
     buttonNextQuestion.dataset.wordchosen = 'false';

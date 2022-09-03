@@ -69,7 +69,6 @@ function eventButtonPagination(
   const lengthDate = allStatObject.length;
   const currentDateIndex = dataTable.dataset.dateindex as string;
   const newIndex = flag ? +(currentDateIndex) + 1 : +(currentDateIndex) - 1;
-  console.log(allStatObject[newIndex]);
 
   const currentNewWords = (allStatObject[newIndex].newWordsQty).toString();
   const currentRightAnswers = (allStatObject[newIndex].rightAnswers).toString();
@@ -113,7 +112,6 @@ function eventButtonPagination(
 
 function getPercentage(correct: string | number, wrong: string | number): number {
   const sum = +correct + +wrong;
-  console.log(sum, 'sum');
   return sum ? Math.trunc((+correct / sum) * 100) : 0;
 }
 
