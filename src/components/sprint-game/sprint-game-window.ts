@@ -53,15 +53,13 @@ export const currentTranslateCheck = (randomWords: CurrentWord, depend: boolean)
     sprintState.session.count += 1;
     sprintState.session.longestRow = sprintState.session.count;
     sessionCounter();
-    if (auth) {
-      userWordsUpdate(id, true);
-    }
   } else {
     sprintState.wrongAnswers.push(randomWords.curWordIdx);
     setDefaultSession();
-    if (auth) {
-      userWordsUpdate(id, false);
-    }
+  }
+
+  if (auth) {
+    userWordsUpdate(id, depend);
   }
 };
 
