@@ -1,5 +1,26 @@
-.active-page {
+.header .dropdown-menu {
+  margin: 0;
+}
+
+.header .active-page {
   color: white;
-  background-color: var(--bs-gray-600);;
+  background-color: var(--bs-gray-600);
   border-radius: 6px;
+}
+
+@media (max-width: 991.98px) {
+  .header .navbar-nav {
+    margin-top: 1rem;
+  }
+
+  .header .dropdown-menu {
+    border: none;
+    background: none;
+    padding-left: 1rem;
+  }
+
+  .header .nav-link {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 }

@@ -1,0 +1,57 @@
+.statistic-info-wrapper {
+    text-align: center;
+}
+
+.statistic-info-of-day {
+    font-weight: 700;
+}
+
+.statistics-section > * {
+    margin-top: 40px;
+}
+
+.card-title-statistics {
+    margin-bottom: 60px;
+    font-weight: 600;
+}
+
+.card-text-statistics {
+    font-weight: 500;
+}
+
+.statistics-no-auth-user-info {
+    margin-top: 40px;
+}
+
+.spinner-statistics {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.statistics-card-pagination {
+    margin-top: 40px;
+}
+
+.card-statistics-date {
+    padding: 0px 14px;
+}
+
+.card-statistics-date {
+    display: inline-block;
+    text-align: center;
+    vertical-align: center;
+    min-width: 100px;
+}
+
+.card-block {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-body {
+    width: 20rem;
+}

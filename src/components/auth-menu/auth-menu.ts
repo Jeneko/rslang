@@ -1,4 +1,5 @@
 import * as auth from 'utils/auth';
+import './auth-menu.css';
 
 function handleEvents(elem: HTMLElement): void {
   elem.onclick = (e) => {

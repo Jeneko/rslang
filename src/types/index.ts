@@ -16,7 +16,7 @@ export enum PageName {
   team = 'team',
   register = 'register',
   login = 'login',
-  // TODO: add other pages if needed
+  statistics = 'statistics',
 }
 
 export enum Endpoints {
@@ -145,4 +145,9 @@ export interface Auth {
   refreshToken: string;
   userId: string;
   name: string;
+}
+
+export enum StatusCardStatistics {
+  Game = 'game',
+  Word = 'word',
 }

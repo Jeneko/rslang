@@ -12,8 +12,8 @@ export default function getMiniGamesMenu(): HTMLElement {
   elem.innerHTML = `
     <h2>Mini-Games</h2>
     <p>Start playing from here</p>
-    <button class="btn btn-primary game">Audio-Call</button>
-    <button class="btn btn-primary game">Sprint</button>
+    <button class="btn btn-primary game" data-link="audio-call">Audio-Call</button>
+    <button class="btn btn-primary game" data-link="sprint">Sprint</button>
   `;
 
   handleMiniGamesMenu(elem);
@@ -23,18 +23,20 @@ export default function getMiniGamesMenu(): HTMLElement {
 
 const handleMiniGamesMenu = (elem: HTMLElement) => {
   elem.addEventListener('click', async (event) => {
-    const target = event.target as Element;
+    const target = event.target as HTMLElement;
     if (target.classList.contains('game')) {
-      const link = target.textContent as string;
+      const { link } = target.dataset;
       document.body.innerHTML = '';
-      document.body.append(getHeader());
-      if (link.toLowerCase() === PageName.sprint) {
-        document.body.append(await getSprintPage());
+      const fragment = new DocumentFragment();
+      fragment.append(getHeader());
+      if (link === PageName.sprint) {
+        fragment.append(await getSprintPage());
       }
-      if (link.toLowerCase() === PageName.audioCall) {
-        document.body.append(await getAudioCallPage());
+      if (link === PageName.audioCall) {
+        fragment.append(await getAudioCallPage());
       }
-      state.updateState('page', link.toLowerCase());
+      document.body.append(fragment);
+      state.updateState('page', link as string);
     }
   });
 };

@@ -5,13 +5,13 @@ import {
   WordStatus, UserWordOptions, UserWord, WordWithUserWord,
 } from 'types/index';
 
-const OPTIONAL_DEFAULTS: UserWordOptions = {
+export const OPTIONAL_DEFAULTS: UserWordOptions = {
   guessedInRow: 0,
   guessedRight: 0,
   guessedWrong: 0,
 };
 
-const USER_WORD_DEFAULTS: UserWord = {
+export const USER_WORD_DEFAULTS: UserWord = {
   difficulty: WordStatus.default,
   optional: OPTIONAL_DEFAULTS,
 };
@@ -56,6 +56,28 @@ export async function setWordOptional(wordId: string, optional: Partial<UserWord
   // If user word does not exist
   await createUserWord(wordId, {
     difficulty: WordStatus.default,
+    optional: { ...OPTIONAL_DEFAULTS, ...optional },
+  });
+}
+
+export async function setWordStatusAndOptional(wordId: string, difficulty: WordStatus, optional: Partial<UserWordOptions>): Promise<void> {
+  const userWords = await getAllUserWords();
+  const userWord = userWords.find((word) => word.wordId === wordId);
+
+  // If user word exists
+  if (userWord) {
+    const updatedUserWord = {
+      difficulty,
+      optional: { ...userWord.optional, ...optional },
+    };
+    await updateUserWord(wordId, updatedUserWord);
+
+    return;
+  }
+
+  // If user word does not exist
+  await createUserWord(wordId, {
+    difficulty,
     optional: { ...OPTIONAL_DEFAULTS, ...optional },
   });
 }

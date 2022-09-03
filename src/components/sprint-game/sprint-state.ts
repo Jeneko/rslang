@@ -6,12 +6,17 @@ export const sprintState: SprintState = {
   rightAnswers: [],
   wrongAnswers: [],
   words: [],
+  userWords: [],
   wordsIndexes: [],
   randomWords: {
-    word: 0,
-    random: 0,
+    curWordIdx: 0,
+    randomIdx: 0,
   },
   timer: 60,
+  session: {
+    count: 0,
+    longestRow: 0,
+  },
 };
 
 export const setDefaultSprintState = () => {
@@ -20,4 +25,6 @@ export const setDefaultSprintState = () => {
   sprintState.earnedPoints = 0;
   sprintState.rewordPoints = 10;
   sprintState.timer = 60;
+  sprintState.session.count = 0;
+  sprintState.session.longestRow = 0;
 };
