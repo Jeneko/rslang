@@ -84,7 +84,7 @@ export const modalResults = (): string => `
   </div>
 `;
 
-export const timer = (): void => {
+export const startTimer = (): void => {
   const timeElem = document.querySelector('.time');
   if (timeElem) {
     timeElem.innerHTML = sprintState.timer.toString();
@@ -96,7 +96,7 @@ export const timer = (): void => {
       }
       return;
     }
-    setTimeout(timer, 1000);
+    setTimeout(startTimer, 1000);
   }
 };
 

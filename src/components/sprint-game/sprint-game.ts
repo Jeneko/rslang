@@ -11,7 +11,7 @@ import {
   loadingBar,
   modalResults,
   renderGame,
-  timer,
+  startTimer,
   updateGame,
 } from './sprint-game-window';
 import { sprintState, setDefaultSprintState } from './sprint-state';
@@ -110,7 +110,7 @@ const createGame = async (lvl: number, currentPage: number, elem: HTMLElement): 
   sprintState.randomWords = chooseWords(sprintState.wordsIndexes);
   elem.innerHTML = renderGame(sprintState.randomWords);
   (elem.querySelector('.choose-buttons') as HTMLElement).focus();
-  timer();
+  startTimer();
 };
 
 const getWordsForRegisterMember = async (lvl: number, currentPage: number): Promise<void> => {
