@@ -7,6 +7,16 @@ export const CHECK_ICON = '\u2713';
 export const WRONG_ICON = '\u2716';
 const NEXT_QUESTION = 'Next question';
 
+const KeyMapper = {
+  Digit1: 'Digit1',
+  Digit2: 'Digit2',
+  Digit3: 'Digit3',
+  Digit4: 'Digit4',
+  Digit5: 'Digit5',
+  Enter: 'Enter',
+  Space: 'Space',
+};
+
 export default function addEventsForChoiceButtons(currentWord: string, gameState: GameState, correctWord: Word): void {
   const buttonsChoiceWrapper = document.querySelector('.row-buttons-choice-wrapper');
   const buttonsChoice = document.querySelectorAll('.btn-choice-of-answer');
@@ -18,7 +28,7 @@ async function checkAnswer(e: Event, eventExecutor: string, buttonsChoice: NodeL
   if (!button.classList.contains('btn-choice-of-answer') && eventExecutor === 'click') {
     return;
   }
-  const currentButton = getCheckButton(e, eventExecutor) as HTMLElement | null;
+  const currentButton = getCheckButton(e, eventExecutor) as HTMLElement;
   const buttonNextQuestion = document.querySelector('.btn-next-question') as HTMLElement;
   if (!currentButton || currentButton.hasAttribute('disabled')) {
     return;
@@ -36,14 +46,15 @@ function getCheckButton(e: Event, eventExecutor: string): HTMLElement | null {
   if (eventExecutor === 'key') {
     const valuesKeyTargets = ['Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5'];
     const keyTarget = (e as KeyboardEvent).code;
-    console.log(keyTarget);
-    if (keyTarget === 'Enter') {
+    if (keyTarget === KeyMapper.Enter) {
       buttonNextQuestion?.dispatchEvent(new Event('checkNextQuestion'));
-    } else if (keyTarget === 'Space') {
+      return null;
+    }
+    if (keyTarget === KeyMapper.Space) {
       const button = document.querySelector('.button-audio');
       button?.dispatchEvent(new Event('play'));
     }
-    if (valuesKeyTargets.includes(keyTarget)) {
+    if (Object.keys(KeyMapper).includes(keyTarget)) {
       const numberButton = valuesKeyTargets.indexOf(keyTarget);
       const allButtons = document.querySelectorAll('.btn-choice-of-answer');
       const currentButton = allButtons[numberButton];

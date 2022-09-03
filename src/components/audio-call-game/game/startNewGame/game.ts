@@ -10,34 +10,27 @@ import audioImage from 'assets/speaker-icon.svg';
 import { showLoadSpinner } from 'components/load-spinner/load-spinner';
 import { sendDataToServer, getAuthWords } from '../sendingToServer/sendingToServer';
 import generateWindowGame from './generateWindowGame/generateWindowGame';
-import showCurrentWordInfo from './addEventsForChoiceButtons/showCurrentWordInfo/showCurrentWordInfo';
-import hiddenAllButtons from './addEventsForChoiceButtons/hideAnswerButtons/hideAnswerButtons';
+import { hiddenAllButtons, showCurrentWordInfo } from './addEventsForChoiceButtons/index';
+
 import playAudio from './playAudio/playAudio';
 
 const MAX_PAGE_NUM = 30;
 const USER_LEVEL = 6;
 const NEXT_QUESTION = 'Next question';
-const I_DO_NOT_KNOW = 'I do not know';
+const SKIP = 'Skip';
 
 export async function startNewGame(event: Event | null, startPage: HTMLElement | undefined): Promise<void> {
   // play for menu level
+  const statusAuth = getAuth();
   if (event) {
     const level = +((event.target as HTMLElement).dataset.level as string);
     showLoadSpinner(true);
-    const statusAuth = getAuth();
     if (!statusAuth && +((event.target as HTMLElement).dataset.level as string) === USER_LEVEL) {
       if (document.querySelector('.info-no-auth')) {
         showLoadSpinner(false);
         return;
       }
-      const modalInfo = document.createElement('div');
-      modalInfo.innerHTML = `
-        <p>
-          Chapter 7 contains the most difficult words user selected manually. Please, <a class="load-page-link" href="#login">Login</a> or <a class="load-page-link" href="#register">Register</a> to start using this chapter.
-        </p>
-      `;
-      modalInfo.classList.add('container', 'info-no-auth');
-      document.body.append(modalInfo);
+      document.body.append(getModalNoAuth());
       showLoadSpinner(false);
       return;
     }
@@ -49,14 +42,10 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
         return;
       }
     }
-    if (document.querySelector('.info-no-auth')) {
-      document.querySelector('.info-no-auth')?.remove();
-    }
+    document.querySelector('.info-no-auth')?.remove();
     const buttonCheck = event.target as HTMLElement;
     const buttonsWrapper = document.querySelector('.button-wrapper-audiocall');
-    if (buttonsWrapper) {
-      buttonsWrapper?.remove();
-    }
+    buttonsWrapper?.remove();
     checkNoWardsTitle();
 
     const blockButtonNextQuestion = getButtonNextQuestion();
@@ -76,26 +65,16 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
         const randomPage = Math.trunc(Math.random() * MAX_PAGE_NUM);
         updateState('indexWord', 0);
         let listWords;
-        if (getAuth()) {
+        if (statusAuth) {
           listWords = +currentLevel !== USER_LEVEL ? await getAuthWords(+currentLevel, randomPage) : await getAllUserWordsWithData();
           state.newWords = await checkNewWords(listWords as WordWithUserWord[]);
         } else {
           listWords = await getWords(+currentLevel, randomPage);
         }
 
-        if (!listWords.length) {
-          if (document.querySelector('.info-no-auth')) {
-            showLoadSpinner(false);
-            return;
-          }
-          const noHardWordsTitle = document.querySelector('.no-hard-words-info');
-          if (noHardWordsTitle) {
-            return;
-          }
-          showLoadSpinner(false);
+        if (checkWrongStartGame(listWords)) {
           return;
         }
-
         await generateWindowGame(listWords[0], listWords, state);
         windowGameBlock?.append(blockButtonNextQuestion);
         addEventsForNextQuestionButton(windowGameBlock, listWords, state);
@@ -106,18 +85,9 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
   } else {
     // play for study-book
     showLoadSpinner(true);
-    let buttonsWrapper = document.querySelector('.button-wrapper-audiocall');
-    if (buttonsWrapper) {
-      buttonsWrapper.remove();
-    } else {
-      buttonsWrapper = document.createElement('div');
-      buttonsWrapper.classList.add('.button-wrapper-audiocall');
-    }
     const currentPage = getState().studyBookPage;
     const currentChapter = getState().studyBookChapter;
-    if (buttonsWrapper) {
-      buttonsWrapper?.remove();
-    }
+
     const blockButtonNextQuestion = getButtonNextQuestion();
 
     const windowGameBlock = startPage?.querySelector('.audio-call-game') as HTMLElement;
@@ -132,16 +102,14 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
     updateState('indexWord', 0);
     let listWords;
 
-    if (currentChapter === USER_LEVEL && getAuth()) {
+    if (currentChapter === USER_LEVEL && statusAuth) {
       listWords = await getAllUserWordsWithData();
-      checkNewWords(listWords);
-    } else if (getAuth()) {
-      listWords = await getAuthWords(currentChapter, currentPage);
+      await checkNewWords(listWords);
     } else {
-      listWords = await getWords(currentChapter, currentPage);
+      listWords = statusAuth ? await getAuthWords(currentChapter, currentPage) : await getWords(currentChapter, currentPage);
     }
 
-    state.newWords = await checkNewWords(listWords as WordWithUserWord[]);
+    state.newWords = statusAuth ? await checkNewWords(listWords as WordWithUserWord[]) : 0;
     await generateWindowGame(listWords[0], listWords, state);
     windowGameBlock?.append(blockButtonNextQuestion);
     addEventsForNextQuestionButton(windowGameBlock, listWords, state);
@@ -153,37 +121,41 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
 export function addEventsForNextQuestionButton(windowGameBlock: HTMLElement, listWords: Word[], gameState: GameState): void {
   const buttonNextQuestion = windowGameBlock.querySelector('.btn-next-question') as HTMLElement;
   buttonNextQuestion.dataset.wordchosen = 'false';
+  handleEventsForNextQuestionButton(buttonNextQuestion, listWords, gameState);
+}
+
+function handleEventsForNextQuestionButton(buttonNextQuestion: HTMLElement, listWords: Word[], gameState: GameState) {
   buttonNextQuestion?.addEventListener('click', (e: Event) => {
     checkNextQuestion(e, buttonNextQuestion, listWords, gameState);
   });
-  buttonNextQuestion.addEventListener('checkNextQuestion', (e) => {
+  buttonNextQuestion.addEventListener('checkNextQuestion', (e: Event) => {
     checkNextQuestion(e, buttonNextQuestion, listWords, gameState);
   });
 }
 
 export function clearGameWindow(): void {
-  const gameWindow = document.querySelector('.game-window') as HTMLElement;
-  if (gameWindow) {
-    gameWindow.innerHTML = '';
+  const gameWindow = document.querySelector('.game-window');
+  if (document.querySelector('.game-window')) {
+    (gameWindow as HTMLElement).innerHTML = '';
   }
 }
 
 export function getNewWindowGame(): HTMLElement {
   const previousPage = getState().page;
-  let menu = document.querySelector('.audio-call-page') as HTMLElement;
+  let menu = document.querySelector('.audio-call-page');
   if (!menu) {
     menu = document.createElement('div');
     menu.classList.add('audio-call-page');
   }
   if (previousPage === 'study-book') {
     menu.append(createMenuGame(true));
-    startNewGame(null, menu);
+    startNewGame(null, menu as HTMLElement);
   } else {
     menu.append(createMenuGame(false));
     const menuLevels = menu.querySelector('.btn-wrapper');
     menuLevels?.addEventListener('click', (e: Event) => startNewGame(e, undefined));
   }
-  return menu;
+  return menu as HTMLElement;
 }
 
 function addAllAnswersForPage(list: Word[], blockList: HTMLElement) {
@@ -249,6 +221,7 @@ function showResult(modalResultGame: HTMLElement, gameState: GameState): void {
 
 export async function checkNextQuestion(e: Event, buttonNextQuestion: HTMLElement, listWords: Word[], gameState: GameState): Promise<void> {
   const currentIndex = getState().indexWord + 1;
+  console.log(buttonNextQuestion.dataset.wordchosen);
 
   if (currentIndex >= listWords.length && buttonNextQuestion.dataset.status === 'false') {
     clearGameWindow();
@@ -257,6 +230,7 @@ export async function checkNextQuestion(e: Event, buttonNextQuestion: HTMLElemen
     showResult(modalGameResult, gameState);
     updateState('indexWord', currentIndex);
   } else if (buttonNextQuestion.dataset.wordchosen === 'false') {
+    console.log(1);
     hiddenAllButtons();
     showCurrentWordInfo();
     buttonNextQuestion.textContent = NEXT_QUESTION;
@@ -266,7 +240,8 @@ export async function checkNextQuestion(e: Event, buttonNextQuestion: HTMLElemen
     const word = await getWord(wordId);
     gameState.wrongAnswers.push(word);
   } else {
-    buttonNextQuestion.textContent = I_DO_NOT_KNOW;
+    console.log(2);
+    buttonNextQuestion.textContent = SKIP;
     buttonNextQuestion.dataset.status = 'false';
     buttonNextQuestion.dataset.wordchosen = 'false';
     clearGameWindow();
@@ -299,7 +274,7 @@ async function checkNewWords(array: WordWithUserWord[]): Promise<number> {
   return counterNewWords;
 }
 
-function addTitleNoHardWords() {
+function addTitleNoHardWords(): void {
   const elem = document.querySelector('.no-hard-words-info');
   if (elem) {
     return;
@@ -314,18 +289,43 @@ function addTitleNoHardWords() {
   document.body.append(modalInfo);
 }
 
-function checkNoWardsTitle() {
+function checkNoWardsTitle(): void {
   const elem = document.querySelector('.no-hard-words-info');
   if (elem) {
     elem.remove();
   }
 }
 
-function getButtonNextQuestion() {
+function getButtonNextQuestion(): HTMLElement {
   const blockButtonNextQuestion = document.createElement('div');
   blockButtonNextQuestion.classList.add('button-wrapper-audiocall');
   blockButtonNextQuestion.innerHTML = `
-    <button type="button" data-status="false" class="btn btn-primary btn-next-question btn--hidden">${I_DO_NOT_KNOW}</button>
+    <button type="button" data-status="false" class="btn btn-primary btn-next-question">${SKIP}</button>
   `;
   return blockButtonNextQuestion;
+}
+
+function getModalNoAuth(): HTMLElement {
+  const modalInfo = document.createElement('div');
+  modalInfo.innerHTML = `
+    <p>
+      Chapter 7 contains the most difficult words user selected manually. Please, <a class="load-page-link" href="#login">Login</a> or <a class="load-page-link" href="#register">Register</a> to start using this chapter.
+    </p>
+  `;
+  modalInfo.classList.add('container', 'info-no-auth');
+  return modalInfo;
+}
+
+function checkWrongStartGame(listWords: Word[]): Boolean {
+  if (!listWords.length) {
+    if (document.querySelector('.info-no-auth')) {
+      showLoadSpinner(false);
+      return true;
+    }
+    if (document.querySelector('.no-hard-words-info')) {
+      return true;
+    }
+  }
+  showLoadSpinner(false);
+  return false;
 }

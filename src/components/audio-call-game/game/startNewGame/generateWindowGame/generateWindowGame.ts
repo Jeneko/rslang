@@ -13,7 +13,7 @@ export default async function generateWindowGame(currentWord: Word | WordWithUse
     audio, word, image, transcription, wordTranslate,
   } = currentWord;
   // eslint-disable-next-line no-underscore-dangle
-  const id = currentWord.id ? currentWord.id : (currentWord as WordWithUserWord)._id;
+  const id = currentWord.id || (currentWord as WordWithUserWord)._id;
   const imageResponse = `${SOURCE}/${image}`;
   const listRandomWords = getRandomWords(currentWord, arrayWords);
   windowGame.innerHTML = `
@@ -41,7 +41,7 @@ export default async function generateWindowGame(currentWord: Word | WordWithUse
     const answerVariant = document.createElement('div');
     answerVariant.classList.add('col');
     answerVariant.innerHTML = `
-        <button  type="button" data-id="${el[1]}" class="btn btn-light btn-choice-of-answer">${el[0]}</button>
+      <button  type="button" data-id="${el[1]}" class="btn btn-light btn-choice-of-answer">${el[0]}</button>
     `;
     fragmentButton.append(answerVariant);
   });
