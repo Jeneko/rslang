@@ -1,12 +1,16 @@
 .statistic-chart {
   display: grid;
-  grid-template-columns: 3fr 1fr;
+  grid-template-columns: auto auto;
   grid-template-areas: 'heading info'
                        'chart chart';
   gap: 1rem;
   align-items: center;
   padding: 1rem;
   border: 1px solid var(--bs-gray-200);
+}
+
+.statistic-chart__heading {
+  font-size: 24px;
 }
 
 .statistic-chart__info {
