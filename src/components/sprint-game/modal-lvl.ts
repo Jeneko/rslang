@@ -1,6 +1,5 @@
 import { getWords } from 'API/index';
 import { Word } from 'types/index';
-// import { Word } from 'types/index';
 
 export const renderModal = `
   <h1 class="page-heading">
@@ -19,9 +18,9 @@ export const renderModal = `
   </div>
 `;
 
-export const generateWords = async (lvl: number): Promise<Word[]> => {
+export const generateWords = async (lvl: number, currentPage: number): Promise<Word[]> => {
   const promises = [];
-  for (let page = 0; page < 30; page += 1) {
+  for (let page = 0; page <= currentPage; page += 1) {
     promises.push(getWords(lvl, page));
   }
   const allWords = await Promise.allSettled(promises);

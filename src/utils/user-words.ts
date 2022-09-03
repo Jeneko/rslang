@@ -5,13 +5,13 @@ import {
   WordStatus, UserWordOptions, UserWord, WordWithUserWord,
 } from 'types/index';
 
-const OPTIONAL_DEFAULTS: UserWordOptions = {
+export const OPTIONAL_DEFAULTS: UserWordOptions = {
   guessedInRow: 0,
   guessedRight: 0,
   guessedWrong: 0,
 };
 
-const USER_WORD_DEFAULTS: UserWord = {
+export const USER_WORD_DEFAULTS: UserWord = {
   difficulty: WordStatus.default,
   optional: OPTIONAL_DEFAULTS,
 };
