@@ -99,9 +99,7 @@ export const sprintHandler = (elem: HTMLElement): void => {
 };
 
 const createGame = async (lvl: number, currentPage: number, elem: HTMLElement): Promise<void> => {
-  const auth = getAuth();
-
-  if (auth) {
+  if (getAuth()) {
     await getWordsForRegisterMember(lvl, currentPage);
   } else {
     sprintState.words = await generateWords(Number(lvl), currentPage);
