@@ -27,13 +27,15 @@ const handleMiniGamesMenu = (elem: HTMLElement) => {
     if (target.classList.contains('game')) {
       const { link } = target.dataset;
       document.body.innerHTML = '';
-      document.body.append(getHeader());
+      const fragment = new DocumentFragment();
+      fragment.append(getHeader());
       if (link === PageName.sprint) {
-        document.body.append(await getSprintPage());
+        fragment.append(await getSprintPage());
       }
       if (link === PageName.audioCall) {
-        document.body.append(await getAudioCallPage());
+        fragment.append(await getAudioCallPage());
       }
+      document.body.append(fragment);
       state.updateState('page', link as string);
     }
   });
