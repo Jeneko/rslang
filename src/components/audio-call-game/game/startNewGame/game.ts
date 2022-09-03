@@ -75,6 +75,9 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
         if (checkWrongStartGame(listWords)) {
           return;
         }
+
+        listWords = shuffleArrayRandom(listWords);
+
         await generateWindowGame(listWords[0], listWords, state);
         windowGameBlock?.append(blockButtonNextQuestion);
         addEventsForNextQuestionButton(windowGameBlock, listWords, state);
@@ -108,6 +111,8 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
     } else {
       listWords = statusAuth ? await getAuthWords(currentChapter, currentPage) : await getWords(currentChapter, currentPage);
     }
+
+    listWords = shuffleArrayRandom(listWords);
 
     state.newWords = statusAuth ? await checkNewWords(listWords as WordWithUserWord[]) : 0;
     await generateWindowGame(listWords[0], listWords, state);
@@ -328,4 +333,8 @@ function checkWrongStartGame(listWords: Word[]): Boolean {
   }
   showLoadSpinner(false);
   return false;
+}
+
+function shuffleArrayRandom(array: Word[]) {
+  return array.sort(() => Math.random() - 0.5);
 }
