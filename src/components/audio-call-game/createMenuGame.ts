@@ -17,8 +17,8 @@ export default function createMenuGame(previousBookStudy: boolean): HTMLElement 
     </ol>
     <p>
       Game controls: you can play with both, mouse/touchpad and keyboard.<br>
-      Use keys from 1 to 5 to answer questions and Enter key to activate 'I do not know' button and skip to the next question.<br>
-      To hear the given word press Spacebar.
+      Use keys from <kbd>1</kbd> to <kbd>5</kbd> to answer questions and <kbd>Enter</kbd> key to activate 'I do not know' button and skip to the next question.<br>
+      To hear the given word press <kbd>Spacebar</kbd>.
     <p>
   </div>
     <div class="game-window game-window--hidden"></div>
@@ -28,6 +28,5 @@ export default function createMenuGame(previousBookStudy: boolean): HTMLElement 
     <div class="game-window"></div>
   `;
   elem.innerHTML = previousBookStudy ? meaningfulName2 : meaningfulName1;
-  console.log(elem);
   return elem;
 }
