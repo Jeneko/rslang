@@ -4,7 +4,11 @@ import './header.css';
 
 function highlightActiveMenuItem(elem: HTMLElement): void {
   const { page } = state.getState();
-  elem.querySelector(`[href="#${page}"]`)?.classList.add('active-page');
+  const activePageLink = elem.querySelector(`[href="#${page}"]`);
+  const activeDropdown = activePageLink?.closest('.dropdown');
+
+  activePageLink?.classList.add('active-page');
+  activeDropdown?.classList.add('active');
 }
 
 export default function getHeader(): HTMLElement {
