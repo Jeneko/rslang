@@ -227,7 +227,7 @@ function showResult(modalResultGame: HTMLElement, gameState: GameState): void {
 export async function checkNextQuestion(e: Event, buttonNextQuestion: HTMLElement, listWords: Word[], gameState: GameState): Promise<void> {
   const currentIndex = getState().indexWord + 1;
 
-  if (currentIndex >= listWords.length && buttonNextQuestion.dataset.status === 'false') {
+  if (currentIndex >= listWords.length && buttonNextQuestion.dataset.status === 'true') {
     clearGameWindow();
     const modalGameResult = getModalResultGame(gameState);
     playAgainButtonClickHandler(modalGameResult);

@@ -33,7 +33,7 @@ function updateWordStatistic(correctAnswersList: WordWithUserWord[], wrongAnswer
       wordStatistics.learnedWordsQty += 1;
     }
     // eslint-disable-next-line no-underscore-dangle
-    updateUserWord(el._id as string, optionals);
+    updateUserWord(el.id || el._id as string, optionals);
   });
   wrongAnswersList.forEach((el) => {
     const optionals = {
@@ -49,7 +49,7 @@ function updateWordStatistic(correctAnswersList: WordWithUserWord[], wrongAnswer
       wordStatistics.learnedWordsQty -= 1;
     }
     // eslint-disable-next-line no-underscore-dangle
-    updateUserWord(el._id as string, optionals);
+    updateUserWord(el.id || el._id as string, optionals);
   });
 }
 
