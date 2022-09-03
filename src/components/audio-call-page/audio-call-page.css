@@ -113,3 +113,18 @@
   color: transparent;  
   text-shadow: 0 0 0 white;
 }
+
+.current-word-info {
+  animation: show 0.5s ease-out forwards;
+}
+
+@keyframes show {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 100;
+    transform: translateY(0px);
+  }
+}
