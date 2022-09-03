@@ -1,11 +1,11 @@
 .statistic-chart {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 3fr 1fr;
   grid-template-areas: 'heading info'
                        'chart chart';
   gap: 1rem;
   align-items: center;
-  padding: 2rem;
+  padding: 1rem;
   border: 1px solid var(--bs-gray-200);
 }
 
@@ -49,7 +49,7 @@
     text-align: left;
   }
   .statistic-chart {
-    grid-template-columns: 1fr;
+    grid-template-columns: auto;
     grid-template-areas: 'heading'
                          'info'
                          'chart';
