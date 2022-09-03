@@ -6,12 +6,12 @@
     font-weight: 700;
 }
 
-.statistics-section > * {
+.statistics-wrapper > * {
     margin-top: 40px;
 }
 
 .card-title-statistics {
-    margin-bottom: 60px;
+    margin-bottom: 16px;
     font-weight: 600;
     font-size: 24px;
 }

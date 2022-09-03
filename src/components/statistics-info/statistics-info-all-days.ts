@@ -5,7 +5,7 @@ export default async function getStatisticInfoAllDays(statistic: Statistic) {
   const elem = document.createElement('div');
   elem.classList.add('container', 'statistics-window', 'statistics-section-for-all-time');
   const row = document.createElement('div');
-  row.classList.add('row', 'statistics-all-days-wrapper', 'justify-content-between');
+  row.classList.add('row', 'statistics-all-days-wrapper', 'justify-content-between', 'statistics-wrapper');
 
   elem.innerHTML = `
     <h2 class="display-2">Statistic for all time</h2>
