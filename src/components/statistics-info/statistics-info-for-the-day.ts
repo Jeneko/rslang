@@ -169,11 +169,11 @@ function getStatisticsWindowToString(respStatistics: Statistic, statistic: Objec
             <table class="statistic-table">
               <tr>
                 <td class="statistic-td"><p class="card-text card-text-statistics">Learned words</p></td>
-                <td class="statistic-td statistic-td-amount statistic-td-amount-first"><span class="game-statistic-first game-statistic-info card-text game-statistic-info-learned">${statistic.wordsNew}</span></td>
+                <td class="statistic-td statistic-td-amount statistic-td-amount-first"><span class="game-statistic-first game-statistic-info card-text game-statistic-info-learned">${statistic.wordsLearned}</span></td>
               </tr>
               <tr>
                 <td class="statistic-td"><p class="card-text card-text-statistics">New words</p></td>
-                <td class="statistic-td statistic-td-amount statistic-td-amount-second"><span class="game-statistic-second game-statistic-info game-statistic-info-new-words ">${statistic.wordsLearned}</span></td>
+                <td class="statistic-td statistic-td-amount statistic-td-amount-second"><span class="game-statistic-second game-statistic-info game-statistic-info-new-words ">${statistic.wordsNew}</span></td>
               </tr>
               <tr>
                 <td class="statistic-td"><p class="card-text card-text-statistics">Сorrect answers</p></td>
@@ -225,11 +225,11 @@ function getStatisticsWindowToString(respStatistics: Statistic, statistic: Objec
                   </tr>
                   <tr>
                     <td class="statistic-td"><p class="card-text card-text-statistics">New words</p></td>
-                    <td class="statistic-td statistic-td-amount statistic-td-amount-second"><span class="game-statistic-second game-statistic-info game-statistic-info-new-words">${statistic.sprintLongestRow}</span></td>
+                    <td class="statistic-td statistic-td-amount statistic-td-amount-second"><span class="game-statistic-second game-statistic-info game-statistic-info-new-words">${statistic.sprintNewWords}</span></td>
                   </tr>
                   <tr>
                     <td class="statistic-td"><p class="card-text card-text-statistics">Longest series</p></td>
-                    <td class="statistic-td statistic-td-amount statistic-td-amount-third"><span class="game-statistic-third game-statistic-info game-statistic-info-longest-row">${statistic.sprintNewWords}</span></td>
+                    <td class="statistic-td statistic-td-amount statistic-td-amount-third"><span class="game-statistic-third game-statistic-info game-statistic-info-longest-row">${statistic.sprintLongestRow}</span></td>
                   </tr>
                 </table>
               </div>
