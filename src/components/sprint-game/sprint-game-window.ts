@@ -106,18 +106,18 @@ const sessionCounter = () => {
     : sprintState.session.longestRow;
 
   if (sprintState.session.count === 3) {
-    sprintState.rewordPoints = Points.medium;
+    sprintState.rewordPoints = Points.Medium;
     (document.querySelector('.session') as HTMLElement).textContent = '🙂';
   }
   if (sprintState.session.count >= 6) {
-    sprintState.rewordPoints = Points.high;
+    sprintState.rewordPoints = Points.High;
     (document.querySelector('.session') as HTMLElement).textContent = '😀';
   }
 };
 
 const setDefaultSession = () => {
   sprintState.session.count = 0;
-  sprintState.rewordPoints = Points.small;
+  sprintState.rewordPoints = Points.Small;
   (document.querySelector('.session') as HTMLElement).textContent = '🤨';
 };
 
