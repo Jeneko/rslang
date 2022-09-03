@@ -14,6 +14,7 @@
     margin-bottom: 16px;
     font-weight: 600;
     font-size: 24px;
+    text-align: center;
 }
 
 .card-text-statistics {
@@ -55,6 +56,45 @@
     padding: 2rem;
 }
 
+/* table */
+
+.statistic-table {
+    margin: 0 auto;
+    width: 180px;
+}
+
+.statistic-td {
+    text-align: left;
+    padding-top: 12px;
+}
+
+.statistic-td-amount {
+    width: 36px;
+}
+
+.game-statistic-info {
+    display: inline-block;
+    min-width: 36px;
+    height: 26px;
+    border-radius: 0.375rem;
+    text-align: center;
+    color: white;
+    font-weight: 500;
+    padding: 0 0.2rem;
+}
+
+.game-statistic-first {
+    background-color: var(--bs-pink);
+}
+
+.game-statistic-second {
+    background-color: var(--bs-info);
+}
+
+.game-statistic-third {
+    background-color: var(--bs-green);
+}
+
 /* Statistics for all days */
 
 .statistic-chart {
@@ -72,3 +112,4 @@
 .statistics-all-days-wrapper {
     gap: 10px;
 }
+

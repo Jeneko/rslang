@@ -161,28 +161,50 @@ function getStatisticsWindowToString(respStatistics: Statistic, statistic: Objec
       <h2 class="display-2">Statistics for the day</h2>
       <div class="row flex-xl-row flex-sm-column justify-content-xl-between justify-content-center align-items-center gap-3">
         <div class="col-xl-4 col-6 card card-body card-body-words align-self-center">
-                <h5 class="card-title card-title-statistics display-6">
-                  Words statistics
-                </h5>
-                <div class="card-text-wrapper">
-                  <p class="card-text card-text-statistics">Learned <span class="game-statistic-info-learned">${statistic.wordsLearned}</span> words.</p>
-                  <p class="card-text card-text-statistics">New <span class="game-statistic-info-new-words">${statistic.wordsNew}</span> words.</p>
-                  <p class="card-text card-text-statistics">Amount correct answers <span class="game-statistic-info-right-answers">${statistic.wordsRightAnswers}</span>.</p>
-                </div>
-                <div class="statistics-card-pagination d-flex justify-content-center align-items-center">
-                  <button type="button" class="btn btn-primary btn-sm button-left"><</button>
-                    <span data-dateindex="${statistic.lengthWords - 1}" class="card-statistics-date">${convertTimestampToDateStr(statistic.allStatWords[statistic.lengthWords - 1].date)}</span>
-                  <button disabled type="button" class="btn btn-primary btn-sm button-right">></button>
-                </div>
+          <h5 class="card-title card-title-statistics display-6">
+            Words statistics
+          </h5>
+          <div class="card-text-wrapper">
+            <table class="statistic-table">
+              <tr>
+                <td class="statistic-td"><p class="card-text card-text-statistics">Learned words</p></td>
+                <td class="statistic-td statistic-td-amount statistic-td-amount-first"><span class="game-statistic-first game-statistic-info game-statistic-info-new-words">${statistic.wordsNew}</span></td>
+              </tr>
+              <tr>
+                <td class="statistic-td"><p class="card-text card-text-statistics">New words</p></td>
+                <td class="statistic-td statistic-td-amount statistic-td-amount-second"><span class="game-statistic-second game-statistic-info card-text game-statistic-info-learned">${statistic.wordsLearned}</span></td>
+              </tr>
+              <tr>
+                <td class="statistic-td"><p class="card-text card-text-statistics">Сorrect answers</p></td>
+                <td class="statistic-td statistic-td-amount statistic-td-amount-third"><span class="game-statistic-third game-statistic-info game-statistic-info-right-answers">${statistic.wordsRightAnswers}</span></td>
+              </tr>
+            </table>
+            <div class="statistics-card-pagination d-flex justify-content-center align-items-center">
+              <button type="button" class="btn btn-primary btn-sm button-left"><</button>
+                <span data-dateindex="${statistic.lengthWords - 1}" class="card-statistics-date">${convertTimestampToDateStr(statistic.allStatWords[statistic.lengthWords - 1].date)}</span>
+              <button disabled type="button" class="btn btn-primary btn-sm button-right">></button>
+            </div>
           </div>
+        </div>
         <div class="col-xl-4 col-12 card card-body card-body-audiocall">
               <h5 class="card-title card-title-statistics display-6">
                 Audio-call
               </h5>
               <div class="card-text-wrapper">
-                <p class="card-text card-text-statistics">Percent correctly answers <span class="game-statistic-info-right-answers">${statistic.audiocallPercentRightAnswers}</span> %.</p>
-                <p class="card-text card-text-statistics">New <span class="game-statistic-info-new-words">${statistic.audiocallNewWords}</span> words.</p>
-                <p class="card-text card-text-statistics">Longest series of correct answers <span class="game-statistic-info-longest-row">${statistic.audiocallLongestRow}</span>.</p>
+                <table class="statistic-table">
+                  <tr>
+                    <td class="statistic-td"><p class="card-text card-text-statistics">Right answers (%)</p></td>
+                    <td class="statistic-td statistic-td-amount"><span class="game-statistic-first game-statistic-info game-statistic-info-right-answers">${statistic.audiocallPercentRightAnswers}</span></td>
+                  </tr>
+                  <tr>
+                    <td class="statistic-td"><p class="card-text card-text-statistics">New words</p></td>
+                    <td class="statistic-td statistic-td-amount statistic-td-amount-second"><span class="game-statistic-second game-statistic-info game-statistic-info-new-words">${statistic.audiocallNewWords}</span></td>
+                  </tr>
+                  <tr>
+                    <td class="statistic-td"><p class="card-text card-text-statistics">Longest series</p></td>
+                    <td class="statistic-td statistic-td-amount statistic-td-amount-third"><span class="game-statistic-third game-statistic-info game-statistic-info-longest-row">${statistic.audiocallLongestRow}</span></td>
+                  </tr>
+                </table>
               </div>
               <div class="statistics-card-pagination d-flex justify-content-center align-items-center">
                 <button type="button" class="btn btn-primary btn-sm button-left"><</button>
@@ -195,9 +217,20 @@ function getStatisticsWindowToString(respStatistics: Statistic, statistic: Objec
                 Sprint
               </h5>
               <div class="card-text-wrapper">
-                <p class="card-text card-text-statistics">Percent correctly answers <span class="game-statistic-info-right-answers">${statistic.sprintPercentRightAnswers}</span> %.</p>
-                <p class="card-text card-text-statistics">New <span class="game-statistic-info-new-words">${statistic.sprintLongestRow}</span> words.</p>
-                <p class="card-text card-text-statistics">Longest series of correct answers <span class="game-statistic-info-longest-row">${statistic.sprintNewWords}</span>.</p>
+                <table class="statistic-table">
+                  <tr>
+                    <td class="statistic-td"><p class="card-text card-text-statistics">Right answers (%)</p></td>
+                    <td class="statistic-td statistic-td-amount statistic-td-amount-first"><span class="game-statistic-first game-statistic-info game-statistic-info-right-answers">${statistic.sprintPercentRightAnswers}</span></td>
+                  </tr>
+                  <tr>
+                    <td class="statistic-td"><p class="card-text card-text-statistics">New words</p></td>
+                    <td class="statistic-td statistic-td-amount statistic-td-amount-second"><span class="game-statistic-second game-statistic-info game-statistic-info-new-words">${statistic.sprintLongestRow}</span></td>
+                  </tr>
+                  <tr>
+                    <td class="statistic-td"><p class="card-text card-text-statistics">Longest series</p></td>
+                    <td class="statistic-td statistic-td-amount statistic-td-amount-third"><span class="game-statistic-third game-statistic-info game-statistic-info-longest-row">${statistic.sprintNewWords}</span></td>
+                  </tr>
+                </table>
               </div>
                 <div class="statistics-card-pagination d-flex justify-content-center align-items-center">
                 <button type="button" class="btn btn-primary btn-sm button-left"><</button>
