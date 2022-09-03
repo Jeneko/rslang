@@ -39,9 +39,7 @@ export const sprintHandler = (elem: HTMLElement): void => {
     const { classList } = event.target as Element;
     const gameWindow = elem.querySelector('.sprint') as HTMLElement;
 
-    if (elem.querySelector('.choose-buttons')) {
-      (elem.querySelector('.choose-buttons') as HTMLElement).focus();
-    }
+    (elem.querySelector('.choose-buttons') as HTMLElement)?.focus();
 
     if (classList.contains('btn-lvl')) {
       gameWindow.innerHTML = loadingBar;
