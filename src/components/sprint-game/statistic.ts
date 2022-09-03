@@ -37,8 +37,7 @@ const getLearnedWords = (wordArray: ResponseUserWord[]): ResponseUserWord[] => w
 const getLearnedWordsNumber = (userWords: ResponseUserWord[]): number => {
   const learnedWordsBeforeGame = getLearnedWords(sprintState.userWords);
   const learnedWordsAfterGame = getLearnedWords(userWords);
-  const learnedWordsQty = learnedWordsAfterGame.length - learnedWordsBeforeGame.length;
-  return learnedWordsQty;
+  return learnedWordsAfterGame.length - learnedWordsBeforeGame.length;
 };
 
 const getUserWordsId = (wordArray: ResponseUserWord[]) => wordArray.map((word) => word.wordId);
@@ -46,6 +45,5 @@ const getUserWordsId = (wordArray: ResponseUserWord[]) => wordArray.map((word) =
 const getNewWordsQty = (userWords: ResponseUserWord[]): number => {
   const userWordsIdBeforeGame = getUserWordsId(sprintState.userWords);
   const userWordsIdAfterGame = getUserWordsId(userWords);
-  const newWords = userWordsIdAfterGame.filter((id) => !userWordsIdBeforeGame.includes(id));
-  return newWords.length;
+  return userWordsIdAfterGame.filter((id) => !userWordsIdBeforeGame.includes(id)).length;
 };
