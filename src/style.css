@@ -24,3 +24,8 @@ button:disabled .spinner-border {
 .user-form {
   margin: 2rem 0;
 }
+
+.session {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
