@@ -48,7 +48,11 @@
   background-color: var(--bs-pink);
 }
 
-@media (max-width: 991.98px) {
+.statistic-chart__heading {
+  font-size: 20px;
+}
+
+@media (max-width: 575.98px) {
   .statistic-chart__info {
     text-align: left;
   }

@@ -6,10 +6,6 @@
     font-weight: 700;
 }
 
-.statistics-wrapper > * {
-    margin-top: 40px;
-}
-
 .card-title-statistics {
     margin-bottom: 16px;
     font-weight: 600;
@@ -54,11 +50,7 @@
 }
 
 .statistics-window {
-    padding: 2rem;
-}
-
-.card-statistics {
-    margin: 0 auto;
+    padding: 0 2rem;
 }
 
 .row > *:not(:last-child) {
@@ -75,6 +67,10 @@
 
 .game-statistic-third {
     background-color: var(--bs-green);
+}
+
+.statistics-title {
+    margin: 3rem 0;
 }
 
 /* table */
@@ -104,6 +100,17 @@
     padding: 0 0.2rem;
 }
 
+.card-statistics-words {
+    margin-right: auto;
+}
+
+.card-statistics-sprint {
+    margin-left: auto;
+}
+
+.card-statistics-audiocall {
+    margin: 0 auto;
+}
 /* Statistics for all days */
 
 .statistic-chart {
@@ -122,3 +129,8 @@
     gap: 10px;
 }
 
+@media (max-width: 991.98px) {
+    .card-statistics {
+        margin: 0 auto;
+    }
+}

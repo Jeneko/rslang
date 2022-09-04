@@ -157,14 +157,14 @@ function getObjectStatistic(respStatistics: Statistic): ObjectStatisticsType {
 function getStatisticsWindowToString(respStatistics: Statistic, statistic: ObjectStatisticsType): string {
   const elem = `
     <div class="statistics-wrapper statistics-section-for-day">
-      <h2 class="display-2">Statistics for words</h2>
+      <h2 class="statistics-title display-2">Statistics for words</h2>
         <div class="statistic-info-wrapper">
         <p class="statistic-info-of-day display-3">${respStatistics.learnedWords}</p>
         <h5 class="card-title display-5">
           Words learned
         </h5>
       </div>
-      <h2 class="display-2">Statistics for the day</h2>
+      <h2 class="statistics-title display-2">Statistics for the day</h2>
       <div class="row">
         <div class="col-12 col-lg-4 statistic-block">
           <div class="card card-statistics card-statistics-words">

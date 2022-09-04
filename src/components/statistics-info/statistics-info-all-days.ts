@@ -7,18 +7,18 @@ export default async function getStatisticInfoAllDays(statistic: Statistic) {
   const row = document.createElement('div');
   const tableNew = document.createElement('div');
   const tableLearned = document.createElement('div');
-  row.classList.add('row', 'statistics-all-days-wrapper', 'justify-content-between', 'statistics-wrapper');
+  row.classList.add('row');
 
   elem.innerHTML = `
-    <h2 class="display-2">Statistic for all time</h2>
+    <h2 class="statistics-title display-2">Statistic for all time</h2>
   `;
   elem.classList.add('container', 'statistics-window');
 
   const newWords = await getStatisticChart(statistic, ChartType.NewWords);
   const learnWords = await getStatisticChart(statistic, ChartType.LearnedWords);
 
-  tableNew.classList.add('col', 'col-lg-5', 'col-12');
-  tableLearned.classList.add('col', 'col-lg-5', 'col-12');
+  tableNew.classList.add('col', 'col-lg-6', 'col-12');
+  tableLearned.classList.add('col', 'col-lg-6', 'col-12');
 
   tableNew.append(newWords);
   tableLearned.append(learnWords);
