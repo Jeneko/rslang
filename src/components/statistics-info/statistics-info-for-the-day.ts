@@ -27,8 +27,6 @@ async function getWindowsStatistics(respStatistics: Statistic): Promise<HTMLElem
   const cardAudioCall = windowsStatistics.querySelector('.card-statistics-audiocall') as HTMLElement;
   const cardSprint = windowsStatistics.querySelector('.card-statistics-sprint') as HTMLElement;
 
-  getArrayForCorrectAnswersWords(statistic);
-
   handleEventPaginationButtons(statistic.allStatWords as WordsStatistic[], cardWords, StatusCardStatistics.Word);
   handleEventPaginationButtons(statistic.allStatAudiocall as GameStatistic[], cardAudioCall, StatusCardStatistics.Game);
   handleEventPaginationButtons(statistic.allStatSprint as GameStatistic[], cardSprint, StatusCardStatistics.Game);
@@ -86,9 +84,13 @@ function eventButtonPagination(
   }
 
   if (key === StatusCardStatistics.Word) {
-    const currentLearn = ((allStatObject[newIndex] as WordsStatistic).learnedWordsQty).toString();
-    rightAnswers.textContent = currentRightAnswers;
-    learnWords.textContent = currentLearn;
+    const correctAnswers = allStatObject[newIndex].rightAnswers;
+    const { wrongAnswers } = allStatObject[newIndex];
+    const learnWordsAmount = ((allStatObject[newIndex] as WordsStatistic).learnedWordsQty).toString();
+    const currentLearn = getPercentage(correctAnswers, wrongAnswers).toString();
+
+    rightAnswers.textContent = currentLearn;
+    learnWords.textContent = learnWordsAmount;
     newWords.textContent = currentNewWords;
   }
 
@@ -134,10 +136,7 @@ function getObjectStatistic(respStatistics: Statistic): ObjectStatisticsType {
     wordsLearned: statisticsForTodayWords.learnedWordsQty,
     wordsNew: statisticsForTodayWords.newWordsQty,
     wordsRightAnswers: statisticsForTodayWords.rightAnswers,
-    wordsPercentRightAnswers: getPercentage(
-      (statisticsForTodayAudioCall.rightAnswers + statisticsForTodaySprint.rightAnswers),
-      (statisticsForTodayAudioCall.wrongAnswers + statisticsForTodaySprint.wrongAnswers),
-    ),
+    wordsPercentRightAnswers: getPercentage(statisticsForTodayWords.rightAnswers, statisticsForTodayWords.wrongAnswers),
 
     audiocallRightAnswers: statisticsForTodayAudioCall.rightAnswers,
     audiocallLongestRow: statisticsForTodayAudioCall.longestRow,
@@ -261,10 +260,4 @@ function getStatisticsWindowToString(respStatistics: Statistic, statistic: Objec
     </div>
   `;
   return elem;
-}
-
-function getArrayForCorrectAnswersWords(statistic: ObjectStatisticsType) {
-  const audioStat = statistic.allStatAudiocall as GameStatistic[];
-  const sprintStat = statistic.allStatSprint as GameStatistic[];
-  console.log(sprintStat, audioStat);
 }
