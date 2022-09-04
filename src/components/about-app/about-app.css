@@ -1,6 +1,7 @@
 .about-app {
   text-align: center;
   padding: 2rem;
+  min-height: calc(100vh - (118px));
 }
 
 .about-wrapper {
