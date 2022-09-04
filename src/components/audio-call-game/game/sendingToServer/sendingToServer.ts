@@ -56,6 +56,7 @@ function updateWordStatistic(correctAnswersList: WordWithUserWord[], wrongAnswer
 async function updateGameStatistic(gameStatistics: GameStatistic, wordStatistics: WordsStatistic, correctAnswersList: WordWithUserWord[], wrongAnswersList: WordWithUserWord[], gameState: GameState, userStatistics: Statistic) {
   const lengthDateGame = userStatistics.optional.audiocall.stat.length;
   const lengthDateWords = userStatistics.optional.words.stat.length;
+  userStatistics.learnedWords = wordStatistics.learnedWordsQty;
   userStatistics.optional.audiocall.stat[lengthDateGame - 1].longestRow = gameStatistics.longestRow < gameState.longestStreakForGame ? gameState.longestStreakForGame : gameStatistics.longestRow;
   userStatistics.optional.audiocall.stat[lengthDateGame - 1].rightAnswers += correctAnswersList.length;
   userStatistics.optional.audiocall.stat[lengthDateGame - 1].wrongAnswers += wrongAnswersList.length;
