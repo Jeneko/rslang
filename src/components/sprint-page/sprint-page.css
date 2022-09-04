@@ -23,10 +23,6 @@
   text-align: center;
 }
 
-.btn-lvl {
-  margin-right: 0.22rem;
-}
-
 .choose-words {
   padding: 2rem 0;
   border: 1px solid var(--bs-gray-200);

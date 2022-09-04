@@ -6,16 +6,18 @@ export const renderModal = `
     <span class="page-heading__rslang">RSLang</span> Sprint
   </h1>
   <div class="sprint">
-    <div class="modal-lvl">
+    <div class="modal-lvl study-book-chapters-menu">
       <h2>Levels</h2>
       <p>From Easy to most Hard</p>
-      <button class="btn btn-lvl btn-primary" data-lvl="0">1</button>
-      <button class="btn btn-lvl btn-primary" data-lvl="1">2</button>
-      <button class="btn btn-lvl btn-primary" data-lvl="2">3</button>
-      <button class="btn btn-lvl btn-primary" data-lvl="3">4</button>
-      <button class="btn btn-lvl btn-primary" data-lvl="4">5</button>
-      <button class="btn btn-lvl btn-primary" data-lvl="5">6</button>
-      <button class="btn btn-lvl btn-primary btn-danger" data-lvl="6">7</button>
+      <ol>
+        <li><button class="btn btn-lvl btn-primary btn-select-chapter" data-lvl="0">1</button></li>
+        <li><button class="btn btn-lvl btn-primary btn-select-chapter" data-lvl="1">2</button></li>
+        <li><button class="btn btn-lvl btn-primary btn-select-chapter" data-lvl="2">3</button></li>
+        <li><button class="btn btn-lvl btn-primary btn-select-chapter" data-lvl="3">4</button></li>
+        <li><button class="btn btn-lvl btn-primary btn-select-chapter" data-lvl="4">5</button></li>
+        <li><button class="btn btn-lvl btn-primary btn-select-chapter" data-lvl="5">6</button></li>
+        <li><button class="btn btn-lvl btn-primary btn-danger btn-select-chapter" data-lvl="6">7</button></li>
+      </ol>
       <p class="lvl-instructions">
       Game controls: you can play with both, mouse/touchpad and keyboard.<br>
       Use <kbd>ArrowLeft</kbd> and <kbd>ArrowRight</kbd> to select an answer.
