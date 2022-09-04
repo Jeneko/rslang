@@ -10,7 +10,7 @@ export default async function getStatisticInfoAllDays(statistic: Statistic) {
   row.classList.add('row');
 
   elem.innerHTML = `
-    <h2 class="statistics-title display-2">Statistic for all time</h2>
+    <h2 class="statistics-title display-2">All time statistic</h2>
   `;
   elem.classList.add('container', 'statistics-window');
 
