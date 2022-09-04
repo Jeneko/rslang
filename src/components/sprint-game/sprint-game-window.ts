@@ -6,20 +6,22 @@ import { CurrentWord, DeleteWord, Points } from './types';
 import userWordsUpdate from './user-words-update';
 
 export const renderGame = (randomWords: CurrentWord): string => `
-  <div class="points">
-    <p class="earned-points">${sprintState.earnedPoints}</p>
-    <p class="reword-points">+${sprintState.rewordPoints}</p>
-  </div>
-  <div class="choose-words">
-    <div class="session">🤨</div>
-    <p class="english-word">${sprintState.words[randomWords.curWordIdx].word}</p>
-    <p class="russian-word">${sprintState.words[randomWords.randomIdx].wordTranslate}</p>
-    <div class="choose-buttons" tabindex="-1">
-      <button class="btn chooseBtn btn-primary btn-true">True</button>
-      <button class="btn chooseBtn btn-primary btn-false">False</button>
+  <div class="game-on">
+    <div class="points">
+      <p class="earned-points">${sprintState.earnedPoints}</p>
+      <p class="reword-points">+${sprintState.rewordPoints}</p>
     </div>
+    <div class="choose-words">
+      <div class="session">🤨</div>
+      <p class="english-word">${sprintState.words[randomWords.curWordIdx].word}</p>
+      <p class="russian-word">${sprintState.words[randomWords.randomIdx].wordTranslate}</p>
+      <div class="choose-buttons" tabindex="-1">
+        <button class="btn chooseBtn btn-primary btn-true">True</button>
+        <button class="btn chooseBtn btn-primary btn-false">False</button>
+      </div>
+    </div>
+    <div class="timer"><span class="time"></span></div>
   </div>
-  <div class="timer"><span class="time"></span></div>
 `;
 
 export const loadingBar = `
@@ -70,17 +72,18 @@ export const updateGame = (randomWords: CurrentWord, elem: HTMLElement): void =>
 };
 
 export const modalResults = (): string => `
-  <div class="results">
+  <div class="results modal-body">
     <h3 class="result-points">${sprintState.earnedPoints} points</h3>
-    <h5>Right answers:</h5>
-    <ul class="results__unordered-list">
+    <h3>Your longest string of guessed ${sprintState.session.longestRow} words!</h3>
+    <h5>Right answers: (${sprintState.rightAnswers.length})</h5>
+    <ul class="results__unordered-list list-group">
       ${renderResultList(sprintState.rightAnswers, sprintState.words, 'true')}
     </ul>
-    <h5>Wrong answers:</h5>
-    <ul class="results__unordered-list">
+    <h5>Wrong answers: (${sprintState.wrongAnswers.length})</h5>
+    <ul class="results__unordered-list list-group">
       ${renderResultList(sprintState.wrongAnswers, sprintState.words, 'false')}
     </ul>
-    <button class="results__close-button btn-close"></button>
+    <button type="button" class="results__close-button btn btn-primary">Play again</button>
   </div>
 `;
 
@@ -123,8 +126,11 @@ const setDefaultSession = () => {
 
 const renderResultList = (resultIdx: number[], wordsArr: Word[], bool: 'true' | 'false') => resultIdx
   .map(
-    (wordIndex) => `<li class="results__list-${bool}">
-  ${wordsArr[wordIndex].word} - ${wordsArr[wordIndex].wordTranslate}
+    (wordIndex) => `<li class="results__list-${bool} list-group-item">
+    <button class="button-audio-result">
+      <img class="button-audio-image" src="./assets/speaker-icon-c3ab7e6f8f04de36b145.svg" data-audio="${wordsArr[wordIndex].audio}"/>
+    </button>
+  ${wordsArr[wordIndex].word} | ${wordsArr[wordIndex].wordTranslate}
   </li>`,
   )
   .join('');

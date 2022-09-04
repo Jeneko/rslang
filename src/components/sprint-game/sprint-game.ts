@@ -1,4 +1,5 @@
 import { getAllUserWords } from 'API/index';
+import playAudio from 'components/audio-call-game/game/startNewGame/playAudio/playAudio';
 import { getSpinner } from 'components/load-spinner/load-spinner';
 import { PageName, WordStatus } from 'types/index';
 import { getAuth } from 'utils/auth';
@@ -9,7 +10,6 @@ import {
   chooseWords,
   subtractShownWordIdx,
   currentTranslateCheck,
-  loadingBar,
   modalResults,
   renderGame,
   startTimer,
@@ -26,8 +26,8 @@ export default async function getSprintGame(): Promise<HTMLDivElement> {
   elem.className = 'sprint-game container';
   elem.innerHTML = renderModal;
   if (state.getState().page === PageName.studyBook) {
+    (elem.querySelector('.modal-lvl') as HTMLElement).style.display = 'none';
     const gameWindow = elem.querySelector('.sprint') as HTMLElement;
-    gameWindow.innerHTML = loadingBar;
     const { studyBookChapter, studyBookPage } = state.getState();
     createGame(+studyBookChapter, +studyBookPage, gameWindow);
   }
@@ -43,7 +43,6 @@ export const sprintHandler = (elem: HTMLElement): void => {
     (elem.querySelector('.choose-buttons') as HTMLElement)?.focus();
 
     if (classList.contains('btn-lvl')) {
-      // gameWindow.innerHTML = loadingBar;
       const target = event.target as HTMLElement;
       const { lvl } = target.dataset;
       createGame(Number(lvl), PAGES_NUMBER, gameWindow);
@@ -65,6 +64,11 @@ export const sprintHandler = (elem: HTMLElement): void => {
     }
     if (classList.contains('results__close-button')) {
       elem.innerHTML = renderModal;
+    }
+    if (classList.contains('button-audio-image')) {
+      const target = event.target as HTMLElement;
+      const { audio } = target.dataset;
+      playAudio(audio as string);
     }
   });
 
@@ -100,24 +104,31 @@ export const sprintHandler = (elem: HTMLElement): void => {
 };
 
 const createGame = async (lvl: number, currentPage: number, elem: HTMLElement): Promise<void> => {
+  const message = elem.querySelector('.message') as HTMLElement;
+
   if (getAuth()) {
     elem.append(getSpinner());
     await getWordsForRegisterMember(lvl, currentPage);
   } else {
     if (lvl === HARD_WORDS_PAGE) {
-      (elem.querySelector('.message') as HTMLElement).innerHTML = message;
+      message.innerHTML = messageHardWOrds;
       return;
     }
     elem.append(getSpinner());
     sprintState.words = await generateWords(Number(lvl), currentPage);
   }
 
-  sprintState.wordsIndexes = sprintState.words.map((_, i) => i);
-  setDefaultSprintState();
-  sprintState.randomWords = chooseWords(sprintState.wordsIndexes);
-  elem.innerHTML = renderGame(sprintState.randomWords);
-  (elem.querySelector('.choose-buttons') as HTMLElement).focus();
-  startTimer();
+  if (sprintState.words.length) {
+    sprintState.wordsIndexes = sprintState.words.map((_, i) => i);
+    setDefaultSprintState();
+    sprintState.randomWords = chooseWords(sprintState.wordsIndexes);
+    elem.innerHTML = renderGame(sprintState.randomWords);
+    (elem.querySelector('.choose-buttons') as HTMLElement).focus();
+    startTimer();
+  } else {
+    (elem.querySelector('.load-spinner') as HTMLElement).remove();
+    message.innerHTML = messageNoWords;
+  }
 };
 
 const getWordsForRegisterMember = async (lvl: number, currentPage: number): Promise<void> => {
@@ -133,6 +144,10 @@ const getWordsForRegisterMember = async (lvl: number, currentPage: number): Prom
   }
 };
 
-const message = `
-<p>Chapter 7 contains the most difficult words user selected manually. Please, <a href="#login" class="load-page-link">Login</a> or <a href="#register" class="load-page-link">Register</a> to start using this chapter.</p>
+const messageHardWOrds = `
+  <p>Chapter 7 contains the most difficult words user selected manually. Please, <a href="#login" class="load-page-link">Login</a> or <a href="#register" class="load-page-link">Register</a> to start using this chapter.</p>
+`;
+
+const messageNoWords = `
+  <p>You don't have words in this category! Choose other level.</p>
 `;
