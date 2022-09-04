@@ -19,6 +19,9 @@ const NEXT_QUESTION = 'Next question';
 const SKIP = 'Skip';
 
 export async function startNewGame(event: Event | null, startPage: HTMLElement | undefined): Promise<void> {
+  if (!(event?.target as HTMLElement).classList.contains('btn-select-level')) {
+    return;
+  }
   // play for menu level
   const statusAuth = getAuth();
   if (event) {
