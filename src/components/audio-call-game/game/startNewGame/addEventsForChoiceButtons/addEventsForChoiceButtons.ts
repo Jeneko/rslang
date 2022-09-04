@@ -61,10 +61,12 @@ function getCheckButton(e: Event, eventExecutor: string): HTMLElement | null {
       const numberButton = valuesKeyTargets.indexOf(keyTarget);
       const allButtons = document.querySelectorAll('.btn-choice-of-answer');
       const currentButton = allButtons[numberButton];
+      (buttonNextQuestion as HTMLElement).dataset.status = 'true';
       (buttonNextQuestion as HTMLElement).dataset.wordchosen = 'true';
       return currentButton as HTMLElement;
     }
   } else if (eventExecutor === 'click') {
+    (buttonNextQuestion as HTMLElement).dataset.status = 'true';
     (buttonNextQuestion as HTMLElement).dataset.wordchosen = 'true';
     return e.target as HTMLElement;
   }
