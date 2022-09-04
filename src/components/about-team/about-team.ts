@@ -15,7 +15,7 @@ export default function getAboutTeam(): HTMLElement {
           <div class="team__card-about">
             <h2 class="team__card-about-name">Evgeniy Kozlov</h2>
             <p class="team__card-about-specialty">Team leader, Frontend developer</p>
-            <p class="team__card-about-progress">Did basic project settings, logout forms, TextBook, saving and getting statistic logic, statistic charts</p>
+            <p class="team__card-about-progress">Did basic project settings, user authorization, TextBook, saving and getting statistic logic, statistic charts</p>
             <a href="https://github.com/Jeneko" target="_blank" class="team__card-about-git"></a>
           </div>
         </div>
@@ -24,7 +24,7 @@ export default function getAboutTeam(): HTMLElement {
           <div class="team__card-about">
             <h2 class="team__card-about-name">Dmitry Kaliasinski</h2>
             <p class="team__card-about-specialty">Frontend developer</p>
-            <p class="team__card-about-progress">Implemented Sprint game and team page</p>
+            <p class="team__card-about-progress">Implemented Sprint game, team page and footer</p>
             <a href="https://github.com/dmitrykaliasinski" target="_blank" class="team__card-about-git"></a>
           </div>
         </div>
