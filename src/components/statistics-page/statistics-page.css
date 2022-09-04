@@ -65,6 +65,18 @@
     margin-bottom: 1rem;
 }
 
+.game-statistic-first {
+    background-color: var(--bs-info);
+}
+
+.game-statistic-second {
+    background-color: var(--bs-pink);
+}
+
+.game-statistic-third {
+    background-color: var(--bs-green);
+}
+
 /* table */
 
 .statistic-table {
@@ -90,18 +102,6 @@
     color: white;
     font-weight: 500;
     padding: 0 0.2rem;
-}
-
-.game-statistic-first {
-    background-color: var(--bs-pink);
-}
-
-.game-statistic-second {
-    background-color: var(--bs-info);
-}
-
-.game-statistic-third {
-    background-color: var(--bs-green);
 }
 
 /* Statistics for all days */
