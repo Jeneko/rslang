@@ -85,4 +85,8 @@
   .team__card-second {
     align-self: flex-start;
   }
+
+  .team__card-img {
+    border-radius: 10px 0 0 0;
+  }
 }
