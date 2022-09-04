@@ -5,6 +5,8 @@ export default async function getStatisticInfoAllDays(statistic: Statistic) {
   const elem = document.createElement('div');
   elem.classList.add('container', 'statistics-window', 'statistics-section-for-all-time');
   const row = document.createElement('div');
+  const tableNew = document.createElement('div');
+  const tableLearned = document.createElement('div');
   row.classList.add('row', 'statistics-all-days-wrapper', 'justify-content-between', 'statistics-wrapper');
 
   elem.innerHTML = `
@@ -15,11 +17,14 @@ export default async function getStatisticInfoAllDays(statistic: Statistic) {
   const newWords = await getStatisticChart(statistic, ChartType.NewWords);
   const learnWords = await getStatisticChart(statistic, ChartType.LearnedWords);
 
-  newWords.classList.add('col', 'col-xl-5', 'col-12');
-  learnWords.classList.add('col', 'col-xl-5', 'col-12');
+  tableNew.classList.add('col', 'col-lg-5', 'col-12');
+  tableLearned.classList.add('col', 'col-lg-5', 'col-12');
 
-  row.append(newWords);
-  row.append(learnWords);
+  tableNew.append(newWords);
+  tableLearned.append(learnWords);
+
+  row.append(tableNew);
+  row.append(tableLearned);
   elem.append(row);
 
   return elem;

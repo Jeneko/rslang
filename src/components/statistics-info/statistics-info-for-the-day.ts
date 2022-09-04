@@ -23,9 +23,9 @@ async function getWindowsStatistics(respStatistics: Statistic): Promise<HTMLElem
   windowsStatistics.classList.add('statistics-block');
   windowsStatistics.innerHTML = getStatisticsWindowToString(respStatistics, statistic);
 
-  const cardWords = windowsStatistics.querySelector('.card-body-words') as HTMLElement;
-  const cardAudioCall = windowsStatistics.querySelector('.card-body-audiocall') as HTMLElement;
-  const cardSprint = windowsStatistics.querySelector('.card-body-sprint') as HTMLElement;
+  const cardWords = windowsStatistics.querySelector('.card-statistics-words') as HTMLElement;
+  const cardAudioCall = windowsStatistics.querySelector('.card-statistics-audiocall') as HTMLElement;
+  const cardSprint = windowsStatistics.querySelector('.card-statistics-sprint') as HTMLElement;
 
   handleEventPaginationButtons(statistic.allStatWords as WordsStatistic[], cardWords, StatusCardStatistics.Word);
   handleEventPaginationButtons(statistic.allStatAudiocall as GameStatistic[], cardAudioCall, StatusCardStatistics.Game);
@@ -160,34 +160,40 @@ function getStatisticsWindowToString(respStatistics: Statistic, statistic: Objec
         </h5>
       </div>
       <h2 class="display-2">Statistics for the day</h2>
-      <div class="row flex-xl-row flex-sm-column justify-content-xl-between justify-content-center align-items-center gap-3">
-        <div class="col-xl-4 col-6 card card-body card-body-words align-self-center">
-          <h5 class="card-title card-title-statistics display-6">
-            Words statistics
-          </h5>
-          <div class="card-text-wrapper">
-            <table class="statistic-table">
-              <tr>
-                <td class="statistic-td"><p class="card-text card-text-statistics">Learned words</p></td>
-                <td class="statistic-td statistic-td-amount statistic-td-amount-first"><span class="game-statistic-first game-statistic-info card-text game-statistic-info-learned">${statistic.wordsLearned}</span></td>
-              </tr>
-              <tr>
-                <td class="statistic-td"><p class="card-text card-text-statistics">New words</p></td>
-                <td class="statistic-td statistic-td-amount statistic-td-amount-second"><span class="game-statistic-second game-statistic-info game-statistic-info-new-words ">${statistic.wordsNew}</span></td>
-              </tr>
-              <tr>
-                <td class="statistic-td"><p class="card-text card-text-statistics">Сorrect answers</p></td>
-                <td class="statistic-td statistic-td-amount statistic-td-amount-third"><span class="game-statistic-third game-statistic-info game-statistic-info-right-answers">${statistic.wordsRightAnswers}</span></td>
-              </tr>
-            </table>
-            <div class="statistics-card-pagination d-flex justify-content-center align-items-center">
-              <button type="button" class="btn btn-primary btn-sm button-left"><</button>
-                <span data-dateindex="${statistic.lengthWords - 1}" class="card-statistics-date">${convertTimestampToDateStr(statistic.allStatWords[statistic.lengthWords - 1].date)}</span>
-              <button disabled type="button" class="btn btn-primary btn-sm button-right">></button>
+      <div class="row">
+        <div class="col-12 col-lg-4">
+          <div class="card card-statistics card-statistics-words">
+            <div class="card-body">
+              <h5 class="card-title card-title-statistics display-6">
+                Words statistics
+              </h5>
+              <div class="card-text-wrapper">
+                <table class="statistic-table">
+                  <tr>
+                    <td class="statistic-td"><p class="card-text card-text-statistics">Learned words</p></td>
+                    <td class="statistic-td statistic-td-amount statistic-td-amount-first"><span class="game-statistic-first game-statistic-info card-text game-statistic-info-learned">${statistic.wordsLearned}</span></td>
+                  </tr>
+                  <tr>
+                    <td class="statistic-td"><p class="card-text card-text-statistics">New words</p></td>
+                    <td class="statistic-td statistic-td-amount statistic-td-amount-second"><span class="game-statistic-second game-statistic-info game-statistic-info-new-words ">${statistic.wordsNew}</span></td>
+                  </tr>
+                  <tr>
+                    <td class="statistic-td"><p class="card-text card-text-statistics">Сorrect answers</p></td>
+                    <td class="statistic-td statistic-td-amount statistic-td-amount-third"><span class="game-statistic-third game-statistic-info game-statistic-info-right-answers">${statistic.wordsRightAnswers}</span></td>
+                  </tr>
+                </table>
+                <div class="statistics-card-pagination d-flex justify-content-center align-items-center">
+                  <button type="button" class="btn btn-primary btn-sm button-left"><</button>
+                    <span data-dateindex="${statistic.lengthWords - 1}" class="card-statistics-date">${convertTimestampToDateStr(statistic.allStatWords[statistic.lengthWords - 1].date)}</span>
+                  <button disabled type="button" class="btn btn-primary btn-sm button-right">></button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="col-xl-4 col-12 card card-body card-body-audiocall">
+        <div class="col-lg-4 col-12">
+          <div class="card card-statistics card-statistics-audiocall">
+            <div class="card-body">
               <h5 class="card-title card-title-statistics display-6">
                 Audio-call
               </h5>
@@ -212,8 +218,12 @@ function getStatisticsWindowToString(respStatistics: Statistic, statistic: Objec
                   <span data-dateindex="${statistic.lengthAudiocall - 1}" class="card-statistics-date card-statistics-audiocall-date">${convertTimestampToDateStr(statistic.allStatAudiocall[statistic.lengthAudiocall - 1].date)}</span>
                 <button disabled type="button" class="btn btn-primary btn-sm button-right">></button>
               </div>
+            </div>
+          </div>
         </div>
-        <div class="card col-xl-4 col-12 card-body card-body-sprint">
+        <div class="col-lg-4 col-12">
+          <div class="card card-statistics card-statistics-sprint">
+            <div class="card-body">
               <h5 class="card-title card-title-statistics display-6">
                 Sprint
               </h5>
@@ -233,14 +243,16 @@ function getStatisticsWindowToString(respStatistics: Statistic, statistic: Objec
                   </tr>
                 </table>
               </div>
-                <div class="statistics-card-pagination d-flex justify-content-center align-items-center">
+              <div class="statistics-card-pagination d-flex justify-content-center align-items-center">
                 <button type="button" class="btn btn-primary btn-sm button-left"><</button>
                   <span data-dateindex="${statistic.lengthSprint - 1}" class="card-statistics-date card-statistics-sprint-date">${convertTimestampToDateStr(statistic.allStatSprint[statistic.lengthSprint - 1].date)}</span>
                 <button disabled type="button" class="btn btn-primary btn-sm button-right">></button>
               </div>
+            </div>
+          </div>
         </div>
       </div>
-    <section>
+    </div>
   `;
   return elem;
 }

@@ -47,13 +47,19 @@
     align-items: center;
 }
 
-.card-body {
+.card-statistics {
     max-width: 20rem;
     width: 100%;
+    user-select: none;
 }
 
 .statistics-window {
     padding: 2rem;
+}
+
+.card-statistics {
+    margin: 0 auto;
+    margin-top: 1rem;
 }
 
 /* table */
