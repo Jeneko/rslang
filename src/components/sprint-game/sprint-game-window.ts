@@ -1,4 +1,3 @@
-import audioImage from 'assets/speaker-icon.svg';
 import { Word } from 'types/index';
 import { getAuth } from 'utils/auth';
 import { sprintState } from './sprint-state';
@@ -129,7 +128,7 @@ const renderResultList = (resultIdx: number[], wordsArr: Word[], bool: 'true' | 
   .map(
     (wordIndex) => `<li class="results__list-${bool} list-group-item">
     <button class="button-audio-result">
-      <img class="button-audio-image" src="${audioImage}" data-audio="${wordsArr[wordIndex].audio}"/>
+      <img class="button-audio-image" src="assets/speaker-icon.svg" data-audio="${wordsArr[wordIndex].audio}"/>
     </button>
   ${wordsArr[wordIndex].word} | ${wordsArr[wordIndex].wordTranslate}
   </li>`,
