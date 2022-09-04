@@ -1,6 +1,6 @@
 import { getAllUserWords } from 'API/index';
 import playAudio from 'components/audio-call-game/game/startNewGame/playAudio/playAudio';
-import { getSpinner } from 'components/load-spinner/load-spinner';
+import { showLoadSpinner } from 'components/load-spinner/load-spinner';
 import { PageName, WordStatus } from 'types/index';
 import { getAuth } from 'utils/auth';
 import * as state from 'utils/state';
@@ -107,14 +107,14 @@ const createGame = async (lvl: number, currentPage: number, elem: HTMLElement): 
   const message = elem.querySelector('.message') as HTMLElement;
 
   if (getAuth()) {
-    document.body.append(getSpinner());
+    showLoadSpinner(true);
     await getWordsForRegisterMember(lvl, currentPage);
   } else {
     if (lvl === HARD_WORDS_PAGE) {
       message.innerHTML = messageHardWOrds;
       return;
     }
-    document.body.append(getSpinner());
+    showLoadSpinner(true);
     sprintState.words = await generateWords(Number(lvl), currentPage);
   }
 
@@ -129,7 +129,7 @@ const createGame = async (lvl: number, currentPage: number, elem: HTMLElement): 
     message.innerHTML = messageNoWords;
   }
 
-  (document.querySelector('.load-spinner') as HTMLElement).remove();
+  showLoadSpinner(false);
 };
 
 const getWordsForRegisterMember = async (lvl: number, currentPage: number): Promise<void> => {
