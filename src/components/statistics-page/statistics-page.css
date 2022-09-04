@@ -114,7 +114,6 @@
 /* Statistics for all days */
 
 .statistic-chart {
-    margin-bottom: 40px;
     border-width: 1px;
     border-color: var(--bs-border-color-translucent);
     border-radius: 0.375rem;
@@ -127,6 +126,10 @@
 
 .statistics-all-days-wrapper {
     gap: 10px;
+}
+
+.statistics-section-for-all-time {
+    margin-bottom: 3rem;
 }
 
 @media (max-width: 991.98px) {

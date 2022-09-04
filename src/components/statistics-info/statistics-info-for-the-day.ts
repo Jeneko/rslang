@@ -166,7 +166,7 @@ function getStatisticsWindowToString(respStatistics: Statistic, statistic: Objec
       </div>
       <h2 class="statistics-title display-2">Statistics for the day</h2>
       <div class="row">
-        <div class="col-12 col-lg-4 statistic-block">
+        <div class="col-12 col-md-6 col-lg-4 statistic-block">
           <div class="card card-statistics card-statistics-words">
             <div class="card-body">
               <h5 class="card-title card-title-statistics display-6">
@@ -196,7 +196,7 @@ function getStatisticsWindowToString(respStatistics: Statistic, statistic: Objec
             </div>
           </div>
         </div>
-        <div class="col-lg-4 col-12 statistic-block">
+        <div class="col-lg-4 col-md-6 col-12 statistic-block">
           <div class="card card-statistics card-statistics-audiocall">
             <div class="card-body">
               <h5 class="card-title card-title-statistics display-6">
@@ -226,7 +226,7 @@ function getStatisticsWindowToString(respStatistics: Statistic, statistic: Objec
             </div>
           </div>
         </div>
-        <div class="col-lg-4 col-12 statistic-block">
+        <div class="col-lg-4 col-md-6 col-12 statistic-block">
           <div class="card card-statistics card-statistics-sprint">
             <div class="card-body">
               <h5 class="card-title card-title-statistics display-6">
