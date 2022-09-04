@@ -1,5 +1,23 @@
 .header .dropdown-menu {
   margin: 0;
+  padding: 0.5rem;
+}
+
+.header .dropdown.active {
+  border-radius: 6px;
+  background-color: var(--bs-gray-200);
+}
+
+.header .dropdown-menu {
+  background-color: inherit;
+  border: 0;
+  background-color: var(--bs-gray-200);
+  box-shadow: 0 10px 30px 0 rgba(0,0,0,0.2);
+  transform: translateY(12px);
+}
+
+.header .dropdown-item {
+  border-radius: 6px;
 }
 
 .header .active-page {
@@ -17,6 +35,8 @@
     border: none;
     background: none;
     padding-left: 1rem;
+    box-shadow: none;
+    transform: none;
   }
 
   .header .nav-link {
