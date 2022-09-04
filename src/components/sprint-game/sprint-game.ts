@@ -107,14 +107,14 @@ const createGame = async (lvl: number, currentPage: number, elem: HTMLElement): 
   const message = elem.querySelector('.message') as HTMLElement;
 
   if (getAuth()) {
-    elem.append(getSpinner());
+    document.body.append(getSpinner());
     await getWordsForRegisterMember(lvl, currentPage);
   } else {
     if (lvl === HARD_WORDS_PAGE) {
       message.innerHTML = messageHardWOrds;
       return;
     }
-    elem.append(getSpinner());
+    document.body.append(getSpinner());
     sprintState.words = await generateWords(Number(lvl), currentPage);
   }
 
@@ -126,9 +126,10 @@ const createGame = async (lvl: number, currentPage: number, elem: HTMLElement): 
     (elem.querySelector('.choose-buttons') as HTMLElement).focus();
     startTimer();
   } else {
-    (elem.querySelector('.load-spinner') as HTMLElement).remove();
     message.innerHTML = messageNoWords;
   }
+
+  (document.querySelector('.load-spinner') as HTMLElement).remove();
 };
 
 const getWordsForRegisterMember = async (lvl: number, currentPage: number): Promise<void> => {

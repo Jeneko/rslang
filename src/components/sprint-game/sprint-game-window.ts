@@ -128,7 +128,7 @@ const renderResultList = (resultIdx: number[], wordsArr: Word[], bool: 'true' | 
   .map(
     (wordIndex) => `<li class="results__list-${bool} list-group-item">
     <button class="button-audio-result">
-      <img class="button-audio-image" src="./assets/speaker-icon-c3ab7e6f8f04de36b145.svg" data-audio="${wordsArr[wordIndex].audio}"/>
+      <img class="button-audio-image" src="assets/speaker-icon-c3ab7e6f8f04de36b145.svg" data-audio="${wordsArr[wordIndex].audio}"/>
     </button>
   ${wordsArr[wordIndex].word} | ${wordsArr[wordIndex].wordTranslate}
   </li>`,

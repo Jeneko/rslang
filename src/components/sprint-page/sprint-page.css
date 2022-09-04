@@ -1,7 +1,3 @@
-.sprint-game {
-  height: calc(100vh - 3.5rem);
-}
-
 .sprint {
   margin-top: 2rem;
 }
@@ -28,8 +24,10 @@
 }
 
 .choose-words {
-  padding: 2rem;
+  padding: 2rem 0;
   border: 1px solid var(--bs-gray-200);
+  border-radius: 10px;
+  width: 190px;
 }
 
 .choose-buttons:focus {
@@ -42,5 +40,9 @@
 }
 
 .results__close-button {
-  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.list-group {
+  margin-bottom: 1rem;
 }
