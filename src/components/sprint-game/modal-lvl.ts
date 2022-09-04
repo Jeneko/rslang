@@ -18,7 +18,7 @@ export const renderModal = `
       <button class="btn btn-lvl btn-primary btn-danger" data-lvl="6">7</button>
       <p class="lvl-instructions">
       Game controls: you can play with both, mouse/touchpad and keyboard.<br>
-      Use <kbd>ArrowLeft</kbd>-<kbd>ArrowRight</kbd> to select an answer.
+      Use <kbd>ArrowLeft</kbd> and <kbd>ArrowRight</kbd> to select an answer.
       <p>
       <div class="message"></div>
     </div>
