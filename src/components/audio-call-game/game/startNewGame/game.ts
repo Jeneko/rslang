@@ -1,4 +1,4 @@
-import { getWords, getWord } from 'API/index';
+import { getWords, getWord, getAggregatedWord } from 'API/index';
 import { updateState, getState } from 'utils/state';
 import { Word, WordWithUserWord } from 'types/index';
 import { GameState } from 'game.types';
@@ -88,7 +88,6 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
       }
     }
   } else {
-    console.log(1);
     // play for study-book
     showLoadSpinner(true);
     const currentPage = getState().studyBookPage;
@@ -112,8 +111,10 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
       listWords = await getAllUserWordsWithData();
       await checkNewWords(listWords);
     } else {
-      listWords = statusAuth ? await getAuthWords(currentPage, currentChapter) : await getWords(currentChapter, currentPage);
+      listWords = statusAuth ? await getAuthWords(currentChapter, currentPage) : await getWords(currentChapter, currentPage);
     }
+
+    listWords = shuffleArrayRandom(listWords);
 
     state.newWords = statusAuth ? await checkNewWords(listWords as WordWithUserWord[]) : 0;
     await generateWindowGame(listWords[0], listWords, state);
@@ -244,8 +245,8 @@ export async function checkNextQuestion(e: Event, buttonNextQuestion: HTMLElemen
     buttonNextQuestion.dataset.wordchosen = 'true';
     buttonNextQuestion.dataset.status = 'true';
     const wordId = (document.querySelector('.current-word-info') as HTMLElement).dataset.id as string;
-    const word = await getWord(wordId);
-    gameState.wrongAnswers.push(word);
+    const word = getAuth() ? await getAggregatedWord(wordId) : await getWord(wordId);
+    gameState.wrongAnswers.push(word as Word);
   } else {
     buttonNextQuestion.textContent = SKIP;
     buttonNextQuestion.dataset.status = 'false';

@@ -70,7 +70,7 @@ async function updateGameStatistic(gameStatistics: GameStatistic, wordStatistics
 export async function getAuthWords(currentLevel: string | number, currentPage: string | number): Promise<Word[]> {
   const words: Word[] = [];
   async function getMoreWords(level: number, page: number) {
-    const filter = `{"$and":[{"userWord.difficulty": {"$not": {"$eq": "learned"}}},{"page":${level}},{"group": ${page}}]}`;
+    const filter = `{"$and":[{"userWord.difficulty": {"$not": {"$eq": "learned"}}},{"page":${page}},{"group": ${level}}]}`;
     const resp = await getAggregatedWords(filter, NUMBER_OF_WORDS_TO_PLAY);
     let result = resp[0].paginatedResults;
     if (words.length + result.length > NUMBER_OF_WORDS_TO_PLAY) {
@@ -78,8 +78,7 @@ export async function getAuthWords(currentLevel: string | number, currentPage: s
       result = result.splice(length);
     }
     words.push(...result);
-
-    if (page > 0 && words.length < NUMBER_OF_WORDS_TO_PLAY) {
+    if (page - 1 >= 0 && words.length < NUMBER_OF_WORDS_TO_PLAY) {
       await getMoreWords(level, page - 1);
     }
   }
