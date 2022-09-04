@@ -59,7 +59,10 @@
 
 .card-statistics {
     margin: 0 auto;
-    margin-top: 1rem;
+}
+
+.row > *:not(:last-child) {
+    margin-bottom: 1rem;
 }
 
 /* table */
