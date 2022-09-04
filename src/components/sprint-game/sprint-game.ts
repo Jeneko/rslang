@@ -1,4 +1,5 @@
 import { getAllUserWords } from 'API/index';
+import { getSpinner } from 'components/load-spinner/load-spinner';
 import { PageName, WordStatus } from 'types/index';
 import { getAuth } from 'utils/auth';
 import * as state from 'utils/state';
@@ -42,7 +43,7 @@ export const sprintHandler = (elem: HTMLElement): void => {
     (elem.querySelector('.choose-buttons') as HTMLElement)?.focus();
 
     if (classList.contains('btn-lvl')) {
-      gameWindow.innerHTML = loadingBar;
+      // gameWindow.innerHTML = loadingBar;
       const target = event.target as HTMLElement;
       const { lvl } = target.dataset;
       createGame(Number(lvl), PAGES_NUMBER, gameWindow);
@@ -100,8 +101,14 @@ export const sprintHandler = (elem: HTMLElement): void => {
 
 const createGame = async (lvl: number, currentPage: number, elem: HTMLElement): Promise<void> => {
   if (getAuth()) {
+    elem.append(getSpinner());
     await getWordsForRegisterMember(lvl, currentPage);
   } else {
+    if (lvl === HARD_WORDS_PAGE) {
+      (elem.querySelector('.message') as HTMLElement).innerHTML = message;
+      return;
+    }
+    elem.append(getSpinner());
     sprintState.words = await generateWords(Number(lvl), currentPage);
   }
 
@@ -125,3 +132,7 @@ const getWordsForRegisterMember = async (lvl: number, currentPage: number): Prom
     sprintState.words = allWords.filter((word) => !wordsForGame.includes(word.id));
   }
 };
+
+const message = `
+<p>Chapter 7 contains the most difficult words user selected manually. Please, <a href="#login" class="load-page-link">Login</a> or <a href="#register" class="load-page-link">Register</a> to start using this chapter.</p>
+`;

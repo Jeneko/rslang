@@ -7,17 +7,23 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin-top: 4rem;
+  margin-top: 2rem;
 }
 
-.modal-lvl,
+.modal-lvl {
+  align-self: start;
+}
+
+.lvl-instructions {
+  margin-top: 1rem;
+}
+
 .points,
 .choose-words,
 .timer {
   text-align: center;
 }
 
-.modal-lvl,
 .choose-words {
   padding: 2rem;
   border: 1px solid var(--bs-gray-200);
