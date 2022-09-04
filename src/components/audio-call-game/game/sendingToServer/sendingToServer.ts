@@ -54,12 +54,13 @@ function updateWordStatistic(correctAnswersList: WordWithUserWord[], wrongAnswer
 }
 
 async function updateGameStatistic(gameStatistics: GameStatistic, wordStatistics: WordsStatistic, correctAnswersList: WordWithUserWord[], wrongAnswersList: WordWithUserWord[], gameState: GameState, userStatistics: Statistic) {
-  gameStatistics.newWordsQty += gameState.newWords;
-  gameStatistics.longestRow = gameStatistics.longestRow < gameState.longestStreakForGame ? gameState.longestStreakForGame : gameStatistics.longestRow;
-  gameStatistics.rightAnswers += correctAnswersList.length;
-  gameStatistics.wrongAnswers += wrongAnswersList.length;
-  wordStatistics.newWordsQty += gameState.newWords;
-  wordStatistics.rightAnswers += correctAnswersList.length;
+  const lengthDateGame = userStatistics.optional.audiocall.stat.length;
+  const lengthDateWords = userStatistics.optional.words.stat.length;
+  userStatistics.optional.audiocall.stat[lengthDateGame - 1].longestRow = gameStatistics.longestRow < gameState.longestStreakForGame ? gameState.longestStreakForGame : gameStatistics.longestRow;
+  userStatistics.optional.audiocall.stat[lengthDateGame - 1].rightAnswers += correctAnswersList.length;
+  userStatistics.optional.audiocall.stat[lengthDateGame - 1].wrongAnswers += wrongAnswersList.length;
+  userStatistics.optional.words.stat[lengthDateWords - 1].newWordsQty += +gameState.newWords;
+  userStatistics.optional.words.stat[lengthDateWords - 1].rightAnswers += correctAnswersList.length;
   await updateUserStatistic(userStatistics);
 }
 

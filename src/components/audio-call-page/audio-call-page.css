@@ -70,7 +70,7 @@
 
 .row-buttons-choice-wrapper {
   margin-top: 24px;
-  height: 60px;
+  min-height: 90px;
 }
 
 .current-word-info {
@@ -112,6 +112,10 @@
 .correct-icon-audiocall {
   color: transparent;  
   text-shadow: 0 0 0 white;
+}
+
+.row-buttons-choice-wrapper > *{
+  margin-top: 1rem;
 }
 
 .current-word-info {
