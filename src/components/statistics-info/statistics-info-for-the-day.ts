@@ -27,6 +27,8 @@ async function getWindowsStatistics(respStatistics: Statistic): Promise<HTMLElem
   const cardAudioCall = windowsStatistics.querySelector('.card-statistics-audiocall') as HTMLElement;
   const cardSprint = windowsStatistics.querySelector('.card-statistics-sprint') as HTMLElement;
 
+  getArrayForCorrectAnswersWords(statistic);
+
   handleEventPaginationButtons(statistic.allStatWords as WordsStatistic[], cardWords, StatusCardStatistics.Word);
   handleEventPaginationButtons(statistic.allStatAudiocall as GameStatistic[], cardAudioCall, StatusCardStatistics.Game);
   handleEventPaginationButtons(statistic.allStatSprint as GameStatistic[], cardSprint, StatusCardStatistics.Game);
@@ -165,7 +167,7 @@ function getStatisticsWindowToString(respStatistics: Statistic, statistic: Objec
       </div>
       <h2 class="display-2">Statistics for the day</h2>
       <div class="row">
-        <div class="col-12 col-lg-4">
+        <div class="col-12 col-lg-4 statistic-block">
           <div class="card card-statistics card-statistics-words">
             <div class="card-body">
               <h5 class="card-title card-title-statistics display-6">
@@ -195,7 +197,7 @@ function getStatisticsWindowToString(respStatistics: Statistic, statistic: Objec
             </div>
           </div>
         </div>
-        <div class="col-lg-4 col-12">
+        <div class="col-lg-4 col-12 statistic-block">
           <div class="card card-statistics card-statistics-audiocall">
             <div class="card-body">
               <h5 class="card-title card-title-statistics display-6">
@@ -225,7 +227,7 @@ function getStatisticsWindowToString(respStatistics: Statistic, statistic: Objec
             </div>
           </div>
         </div>
-        <div class="col-lg-4 col-12">
+        <div class="col-lg-4 col-12 statistic-block">
           <div class="card card-statistics card-statistics-sprint">
             <div class="card-body">
               <h5 class="card-title card-title-statistics display-6">
@@ -259,4 +261,10 @@ function getStatisticsWindowToString(respStatistics: Statistic, statistic: Objec
     </div>
   `;
   return elem;
+}
+
+function getArrayForCorrectAnswersWords(statistic: ObjectStatisticsType) {
+  const audioStat = statistic.allStatAudiocall as GameStatistic[];
+  const sprintStat = statistic.allStatSprint as GameStatistic[];
+  console.log(sprintStat, audioStat);
 }
