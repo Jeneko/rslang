@@ -2,7 +2,7 @@ import {
   getAggregatedWords, getUserStatistic, updateUserStatistic, updateUserWord,
 } from 'API/index';
 import {
-  Word, WordWithUserWord, GameStatistic, WordStatus, WordsStatistic, Statistic,
+  Word, WordWithUserWord, GameStatistic, WordStatus, WordsStatistic, Statistic, ResponseUserWord,
 } from 'types/index';
 import { getTodayStat } from 'utils/statistic';
 import { GameState } from '../startNewGame/game.types';
@@ -14,12 +14,13 @@ export async function sendDataToServer(correctAnswersList: WordWithUserWord[], w
   const userStatistics = await getUserStatistic();
   const gameStatistics = getTodayStat<GameStatistic>(userStatistics, 'audiocall');
   const wordStatistics = getTodayStat<WordsStatistic>(userStatistics, 'words');
-  updateWordStatistic(correctAnswersList, wrongAnswersList, wordStatistics);
-  updateGameStatistic(gameStatistics, wordStatistics, correctAnswersList, wrongAnswersList, gameState, userStatistics);
+  await updateWordStatistic(correctAnswersList, wrongAnswersList, wordStatistics);
+  await updateGameStatistic(gameStatistics, wordStatistics, correctAnswersList, wrongAnswersList, gameState, userStatistics);
 }
 
-function updateWordStatistic(correctAnswersList: WordWithUserWord[], wrongAnswersList: WordWithUserWord[], wordStatistics: WordsStatistic) {
-  correctAnswersList.forEach((el) => {
+async function updateWordStatistic(correctAnswersList: WordWithUserWord[], wrongAnswersList: WordWithUserWord[], wordStatistics: WordsStatistic) {
+  const arrayPromise: Promise<ResponseUserWord>[] = [];
+  correctAnswersList.forEach(async (el) => {
     const optionals = {
       difficulty: el.userWord ? el.userWord.difficulty : WordStatus.default,
       optional: {
@@ -33,7 +34,7 @@ function updateWordStatistic(correctAnswersList: WordWithUserWord[], wrongAnswer
       wordStatistics.learnedWordsQty += 1;
     }
     // eslint-disable-next-line no-underscore-dangle
-    updateUserWord(el.id || el._id as string, optionals);
+    arrayPromise.push(updateUserWord(el.id || el._id as string, optionals));
   });
   wrongAnswersList.forEach((el) => {
     const optionals = {
@@ -49,8 +50,9 @@ function updateWordStatistic(correctAnswersList: WordWithUserWord[], wrongAnswer
       wordStatistics.learnedWordsQty -= 1;
     }
     // eslint-disable-next-line no-underscore-dangle
-    updateUserWord(el.id || el._id as string, optionals);
+    arrayPromise.push(updateUserWord(el.id || el._id as string, optionals));
   });
+  await Promise.all(arrayPromise);
 }
 
 async function updateGameStatistic(gameStatistics: GameStatistic, wordStatistics: WordsStatistic, correctAnswersList: WordWithUserWord[], wrongAnswersList: WordWithUserWord[], gameState: GameState, userStatistics: Statistic) {

@@ -54,7 +54,7 @@
 }
 
 .btn-play-again {
-  margin-top: 20px;
+  margin-top: 2rem;
 }
 
 .audiocall-speaker-image {
@@ -117,6 +117,10 @@
 
 .row-buttons-choice-wrapper > *{
   margin-top: 1rem;
+}
+
+.modal-body {
+  padding-bottom: 2rem;
 }
 
 .current-word-info {

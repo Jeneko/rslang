@@ -109,10 +109,8 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
       listWords = await getAllUserWordsWithData();
       await checkNewWords(listWords);
     } else {
-      listWords = statusAuth ? await getAuthWords(currentChapter, currentPage) : await getWords(currentChapter, currentPage);
+      listWords = statusAuth ? await getAuthWords(currentPage, currentChapter) : await getWords(currentChapter, currentPage);
     }
-
-    listWords = shuffleArrayRandom(listWords);
 
     state.newWords = statusAuth ? await checkNewWords(listWords as WordWithUserWord[]) : 0;
     await generateWindowGame(listWords[0], listWords, state);
@@ -206,7 +204,7 @@ function playAgainButtonClickHandler(modalResultGame: HTMLElement): void {
   });
 }
 
-function showResult(modalResultGame: HTMLElement, gameState: GameState): void {
+async function showResult(modalResultGame: HTMLElement, gameState: GameState): Promise<void> {
   const buttonNextQuestion = document.querySelector('.btn-next-question');
   const parentModal = document.querySelector('.game-window');
   const blockListCorrect = modalResultGame.querySelector('.list-group-correct') as HTMLElement;
@@ -214,7 +212,7 @@ function showResult(modalResultGame: HTMLElement, gameState: GameState): void {
   const { correctAnswers, wrongAnswers } = gameState;
 
   if (getAuth()) {
-    sendDataToServer(correctAnswers as WordWithUserWord[], wrongAnswers as WordWithUserWord[], gameState);
+    await sendDataToServer(correctAnswers as WordWithUserWord[], wrongAnswers as WordWithUserWord[], gameState);
   }
 
   addAllAnswersForPage(correctAnswers, blockListCorrect);
@@ -228,11 +226,14 @@ export async function checkNextQuestion(e: Event, buttonNextQuestion: HTMLElemen
   const currentIndex = getState().indexWord + 1;
 
   if (currentIndex >= listWords.length && buttonNextQuestion.dataset.status === 'true') {
+    document.querySelector('.button-wrapper-audiocall')?.remove();
+    showLoadSpinner(true);
     clearGameWindow();
     const modalGameResult = getModalResultGame(gameState);
     playAgainButtonClickHandler(modalGameResult);
-    showResult(modalGameResult, gameState);
+    await showResult(modalGameResult, gameState);
     updateState('indexWord', currentIndex);
+    showLoadSpinner(false);
   } else if (buttonNextQuestion.dataset.wordchosen === 'false') {
     hiddenAllButtons();
     showCurrentWordInfo();
