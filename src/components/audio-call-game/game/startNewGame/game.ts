@@ -6,7 +6,6 @@ import controlGameWindow from 'components/audio-call-game/game/controlGameWindow
 import createMenuGame from 'components/audio-call-game/createMenuGame';
 import { getAllUserWordsWithData, setWordOptional } from 'utils/user-words';
 import { getAuth } from 'utils/auth';
-import audioImage from 'assets/speaker-icon.svg';
 import { showLoadSpinner } from 'components/load-spinner/load-spinner';
 import { sendDataToServer, getAuthWords } from '../sendingToServer/sendingToServer';
 import generateWindowGame from './generateWindowGame/generateWindowGame';
@@ -166,7 +165,7 @@ function addAllAnswersForPage(list: Word[], blockList: HTMLElement) {
   list.forEach((el) => {
     const listItem = document.createElement('li');
     listItem.classList.add('list-group-item');
-    listItem.innerHTML = `<button class="button-audio-result"><img class="button-audio-image" src="${audioImage}"></button> ${el.word} | ${el.wordTranslate}`;
+    listItem.innerHTML = `<button class="button-audio-result"><img class="button-audio-image" src="assets/speaker-icon.svg"></button> ${el.word} | ${el.wordTranslate}`;
     const buttonAudio = listItem.querySelector('.button-audio-result');
     buttonAudio?.addEventListener('click', () => {
       playAudio(el.audio);
