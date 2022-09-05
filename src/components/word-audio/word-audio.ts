@@ -1,6 +1,5 @@
 import { SOURCE } from 'API/index';
 import { WordWithUserWord } from 'types/index';
-import speakerIcon from './word-audio.svg';
 import './word-audio.css';
 
 function updateBtnAudioNum(audioBtn: HTMLButtonElement): void {
@@ -47,7 +46,7 @@ export default function getWordAudio(word: WordWithUserWord): HTMLElement {
 
   elem.innerHTML = `
     <button class="btn-audio" data-id="${word.id}" data-audio="1">
-      <img class="btn-audio__speaker-icon" src="${speakerIcon}">
+      <img class="btn-audio__speaker-icon" src="assets/speaker-icon.svg">
       <div class="btn-audio__audio-title"></div>
     </button>
     <input type="hidden" name="audio-1" value="${word.audio}">
