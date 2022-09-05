@@ -1,5 +1,5 @@
 import { getAllUserWords } from 'API/index';
-import { outputAlert } from 'components/alert-message/alert-message';
+import { clearAlerts, outputAlert } from 'components/alert-message/alert-message';
 import playAudio from 'components/audio-call-game/game/startNewGame/playAudio/playAudio';
 import { showLoadSpinner } from 'components/load-spinner/load-spinner';
 import { AlertType, PageName, WordStatus } from 'types/index';
@@ -112,6 +112,7 @@ const createGame = async (lvl: number, currentPage: number, elem: HTMLElement): 
     await getWordsForRegisterMember(lvl, currentPage);
   } else {
     if (lvl === HARD_WORDS_PAGE) {
+      clearAlerts(message);
       outputAlert(message, AlertType.info, messageHardWords);
       return;
     }
@@ -127,6 +128,7 @@ const createGame = async (lvl: number, currentPage: number, elem: HTMLElement): 
     (elem.querySelector('.choose-buttons') as HTMLElement).focus();
     startTimer();
   } else {
+    clearAlerts(message);
     outputAlert(message, AlertType.info, messageNoWords);
   }
 
