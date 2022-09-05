@@ -69,11 +69,6 @@
   border-radius: 50%;
 }
 
-.row-buttons-choice-wrapper {
-  margin-top: 0px;
-  min-height: 206px;
-}
-
 .current-word-info {
   margin-top: 24px;
 }
@@ -117,6 +112,7 @@
 
 .row-buttons-choice-wrapper > *{
   margin-top: 1rem;
+  min-height: 206px;
 }
 
 .modal-body {
