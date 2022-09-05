@@ -24,7 +24,7 @@ export default function getAboutTeam(): HTMLElement {
           <div class="team__card-about">
             <h2 class="team__card-about-name">Dmitry Kaliasinski</h2>
             <p class="team__card-about-specialty">Frontend developer</p>
-            <p class="team__card-about-progress">Implemented Sprint game, team page and footer</p>
+            <p class="team__card-about-progress">Implemented Sprint game, team page, footer and project video presentation</p>
             <a href="https://github.com/dmitrykaliasinski" target="_blank" class="team__card-about-git"></a>
           </div>
         </div>
