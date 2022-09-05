@@ -28,6 +28,5 @@ export default function createMenuGame(previousBookStudy: boolean): HTMLElement 
     <div class="game-window"></div>
   `;
   elem.innerHTML = previousBookStudy ? meaningfulName2 : meaningfulName1;
-  console.log(elem);
   return elem;
 }

@@ -12,6 +12,7 @@ export type ObjectStatisticsType = {
   wordsLearned: number;
   wordsNew: number;
   wordsRightAnswers: number;
+  wordsPercentRightAnswers: number;
 
   audiocallRightAnswers: number;
   audiocallLongestRow: number;
