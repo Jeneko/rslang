@@ -1,33 +1,42 @@
 import { getTodayStat } from 'utils/statistic';
-import { getUserStatistic } from 'API/index';
 import {
   WordsStatistic, GameStatistic, StatusCardStatistics, Statistic,
 } from 'types/index';
 import { ObjectStatisticsType } from './statistics.types';
 
-export default async function getStatPage(): Promise<HTMLElement> {
+enum HeaderName {
+  WordsStatistics = 'Words statistics',
+  AudioCall = 'Audio-call',
+  Sprint = 'Sprint',
+}
+
+enum TitlesStatus {
+  CardStatisticsWords = 'card-statistics-words',
+  CardStatisticsAudio = 'card-statistics-audiocall',
+  CardStatisticsSprint = 'card-statistics-sprint',
+}
+
+export default async function getStatPage(respStatistics: Statistic): Promise<HTMLElement> {
   const page = document.createElement('div');
   page.classList.add('container', 'statistics-window');
   page.innerHTML = `
     <h1 class="page-heading"><span class="page-heading__rslang">RSLang</span> Statistics</h1>
   `;
-  const windowsStatistics = await getWindowsStatistics();
+
+  const windowsStatistics = await getWindowsStatistics(respStatistics);
   page.append(windowsStatistics);
   return page;
 }
 
-async function getWindowsStatistics(): Promise<HTMLElement> {
-  const respStatistics = await getUserStatistic();
-
+async function getWindowsStatistics(respStatistics: Statistic): Promise<HTMLElement> {
   const statistic = getObjectStatistic(respStatistics);
 
-  const windowsStatistics = document.createElement('div');
+  const windowsStatistics = getCards(statistic, respStatistics.learnedWords);
   windowsStatistics.classList.add('statistics-block');
-  windowsStatistics.innerHTML = getStatisticsWindowToString(respStatistics, statistic);
 
-  const cardWords = windowsStatistics.querySelector('.card-body-words') as HTMLElement;
-  const cardAudioCall = windowsStatistics.querySelector('.card-body-audiocall') as HTMLElement;
-  const cardSprint = windowsStatistics.querySelector('.card-body-sprint') as HTMLElement;
+  const cardWords = windowsStatistics.querySelector('.card-statistics-words') as HTMLElement;
+  const cardAudioCall = windowsStatistics.querySelector('.card-statistics-audiocall') as HTMLElement;
+  const cardSprint = windowsStatistics.querySelector('.card-statistics-sprint') as HTMLElement;
 
   handleEventPaginationButtons(statistic.allStatWords as WordsStatistic[], cardWords, StatusCardStatistics.Word);
   handleEventPaginationButtons(statistic.allStatAudiocall as GameStatistic[], cardAudioCall, StatusCardStatistics.Game);
@@ -37,7 +46,7 @@ async function getWindowsStatistics(): Promise<HTMLElement> {
 
 function convertTimestampToDateStr(ms: number): string {
   const date = new Date(ms);
-  return `${date.getDate()}.${date.getMonth()}.${date.getFullYear()}`;
+  return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
 }
 
 function handleEventPaginationButtons(allStatObject: WordsStatistic[] | GameStatistic[], cardBody: HTMLElement, key: StatusCardStatistics): void {
@@ -74,22 +83,27 @@ function eventButtonPagination(
 
   const currentNewWords = (allStatObject[newIndex].newWordsQty).toString();
   const currentRightAnswers = (allStatObject[newIndex].rightAnswers).toString();
-  let currentLearn;
 
   if (key === StatusCardStatistics.Game) {
-    currentLearn = ((allStatObject[newIndex] as GameStatistic).longestRow).toString();
+    const longestSeries = (allStatObject[newIndex] as GameStatistic).longestRow.toString();
     const { wrongAnswers } = allStatObject[newIndex];
     const percentCorrectAnswers = getPercentage(currentRightAnswers, wrongAnswers);
 
-    learnWords.textContent = percentCorrectAnswers.toString();
+    rightAnswers.textContent = percentCorrectAnswers.toString();
+    learnWords.textContent = longestSeries;
+    newWords.textContent = currentNewWords;
   }
 
   if (key === StatusCardStatistics.Word) {
-    currentLearn = ((allStatObject[newIndex] as WordsStatistic).learnedWordsQty).toString();
-    learnWords.textContent = currentLearn;
+    const correctAnswers = allStatObject[newIndex].rightAnswers;
+    const { wrongAnswers } = allStatObject[newIndex];
+    const learnWordsAmount = (allStatObject[newIndex] as WordsStatistic).learnedWordsQty.toString();
+    const currentLearn = getPercentage(correctAnswers, wrongAnswers).toString();
+
+    rightAnswers.textContent = currentLearn;
+    learnWords.textContent = learnWordsAmount;
+    newWords.textContent = currentNewWords;
   }
-  newWords.textContent = currentNewWords;
-  rightAnswers.textContent = currentRightAnswers;
 
   dataTable.dataset.dateindex = newIndex.toString();
   dataTable.innerHTML = `${convertTimestampToDateStr(allStatObject[newIndex].date)}`;
@@ -113,7 +127,7 @@ function eventButtonPagination(
 
 function getPercentage(correct: string | number, wrong: string | number): number {
   const sum = +correct + +wrong;
-  return sum ? Math.trunc((+correct / sum) * +wrong) : 0;
+  return sum ? Math.trunc((+correct / sum) * 100) : 0;
 }
 
 function getObjectStatistic(respStatistics: Statistic): ObjectStatisticsType {
@@ -133,6 +147,7 @@ function getObjectStatistic(respStatistics: Statistic): ObjectStatisticsType {
     wordsLearned: statisticsForTodayWords.learnedWordsQty,
     wordsNew: statisticsForTodayWords.newWordsQty,
     wordsRightAnswers: statisticsForTodayWords.rightAnswers,
+    wordsPercentRightAnswers: getPercentage(statisticsForTodayWords.rightAnswers, statisticsForTodayWords.wrongAnswers),
 
     audiocallRightAnswers: statisticsForTodayAudioCall.rightAnswers,
     audiocallLongestRow: statisticsForTodayAudioCall.longestRow,
@@ -150,77 +165,64 @@ function getObjectStatistic(respStatistics: Statistic): ObjectStatisticsType {
   return objStatistic;
 }
 
-function getStatisticsWindowToString(respStatistics: Statistic, statistic: ObjectStatisticsType): string {
-  const elem = `
-    <section class="statistics-section statistics-section-for-day">
-      <h2 class="display-2">Statistics for words</h2>
-        <div class="statistic-info-wrapper">
-        <p class="statistic-info-of-day display-3">${respStatistics.learnedWords}</p>
+function getCards(respStatistics: ObjectStatisticsType, learnedWords: number) {
+  const elem = document.createElement('div');
+  elem.innerHTML = `
+    <h2 class="statistics-title display-2">Statistics for words</h2>
+      <div class="statistic-info-wrapper">
+        <p class="statistic-info-of-day display-3">${learnedWords}</p>
         <h5 class="card-title display-5">
           Words learned
         </h5>
       </div>
-      <h2 class="display-2">Statistics for the day</h2>
-      <div class="row">
-        <div class="card-block col-xl-4 col-12">
-            <div class="card">
-              <div class="card-body card-body-statistic card-body-words">
-                <h5 class="card-title card-title-statistics display-6">
-                  Words statistics
-                </h5>
-                <div class="card-text-wrapper">
-                  <p class="card-text card-text-statistics">Learned <span class="game-statistic-info-learned">${statistic.wordsLearned}</span> words.</p>
-                  <p class="card-text card-text-statistics">New <span class="game-statistic-info-new-words">${statistic.wordsNew}</span> words.</p>
-                  <p class="card-text card-text-statistics">Amount correct answers <span class="game-statistic-info-right-answers">${statistic.wordsRightAnswers}</span>.</p>
-                </div>
-                <div class="statistics-card-pagination d-flex justify-content-center align-items-center">
-                  <button type="button" class="btn btn-primary btn-sm button-left"><</button>
-                    <span data-dateindex="${statistic.lengthWords - 1}" class="card-statistics-date">${convertTimestampToDateStr(statistic.allStatWords[statistic.lengthWords - 1].date)}</span>
-                  <button disabled type="button" class="btn btn-primary btn-sm button-right">></button>
-                </div>
-              </div>
-            </div>
-          </div>
-        <div class="card-block col-xl-4 col-12">
-          <div class="card">
-            <div class="card-body card-body-statistic card-body-audiocall">
-              <h5 class="card-title card-title-statistics display-6">
-                Audio-call
-              </h5>
-              <div class="card-text-wrapper">
-                <p class="card-text card-text-statistics">Percent correctly answers <span class="game-statistic-info-right-answers">${statistic.audiocallPercentRightAnswers}</span> %.</p>
-                <p class="card-text card-text-statistics">New <span class="game-statistic-info-new-words">${statistic.audiocallNewWords}</span> words.</p>
-                <p class="card-text card-text-statistics">Longest series of correct answers <span class="game-statistic-info-longest-row">${statistic.audiocallLongestRow}</span>.</p>
-              </div>
-              <div class="statistics-card-pagination d-flex justify-content-center align-items-center">
-                <button type="button" class="btn btn-primary btn-sm button-left"><</button>
-                  <span data-dateindex="${statistic.lengthAudiocall - 1}" class="card-statistics-date card-statistics-audiocall-date">${convertTimestampToDateStr(statistic.allStatAudiocall[statistic.lengthAudiocall - 1].date)}</span>
-                <button disabled type="button" class="btn btn-primary btn-sm button-right">></button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="card-block col-xl-4 col-12">
-          <div class="card">
-            <div class="card-body card-body-statistic card-body-sprint">
-              <h5 class="card-title card-title-statistics display-6">
-                Sprint
-              </h5>
-              <div class="card-text-wrapper">
-                <p class="card-text card-text-statistics">Percent correctly answers <span class="game-statistic-info-right-answers">${statistic.sprintPercentRightAnswers}</span> %.</p>
-                <p class="card-text card-text-statistics">New <span class="game-statistic-info-new-words">${statistic.sprintLongestRow}</span> words.</p>
-                <p class="card-text card-text-statistics">Longest series of correct answers <span class="game-statistic-info-longest-row">${statistic.sprintNewWords}</span>.</p>
-              </div>
-                <div class="statistics-card-pagination d-flex justify-content-center align-items-center">
-                <button type="button" class="btn btn-primary btn-sm button-left"><</button>
-                  <span data-dateindex="${statistic.lengthSprint - 1}" class="card-statistics-date card-statistics-sprint-date">${convertTimestampToDateStr(statistic.allStatSprint[statistic.lengthSprint - 1].date)}</span>
-                <button disabled type="button" class="btn btn-primary btn-sm button-right">></button>
-              </div>
-            </div>
+    <h2 class="statistics-title display-2">Statistics for the day</h2>
+  `;
+  elem.classList.add('row');
+  const wordsLength = respStatistics.allStatWords.length;
+  const audioLength = respStatistics.allStatAudiocall.length;
+  const sprintLength = respStatistics.allStatSprint.length;
+
+  const words = respStatistics.allStatWords[wordsLength - 1];
+  const audiocall = respStatistics.allStatAudiocall[audioLength - 1];
+  const sprint = respStatistics.allStatSprint[sprintLength - 1];
+  elem.append(getCard(words.newWordsQty, getPercentage(words.rightAnswers, words.wrongAnswers), words.learnedWordsQty, convertTimestampToDateStr(words.date), wordsLength, TitlesStatus.CardStatisticsWords, HeaderName.WordsStatistics));
+  elem.append(getCard(audiocall.newWordsQty, getPercentage(audiocall.rightAnswers, audiocall.wrongAnswers), audiocall.longestRow, convertTimestampToDateStr(audiocall.date), audioLength, TitlesStatus.CardStatisticsAudio, HeaderName.AudioCall));
+  elem.append(getCard(sprint.newWordsQty, getPercentage(sprint.rightAnswers, sprint.wrongAnswers), sprint.longestRow, convertTimestampToDateStr(sprint.date), sprintLength, TitlesStatus.CardStatisticsSprint, HeaderName.Sprint));
+  return elem;
+}
+
+function getCard(newWords: number, wordsPercentRightAnswers: number, wordsLearnedOrLongestRow: number, date: string, length: number, titleClass: string, title: string): HTMLElement {
+  const card = document.createElement('div');
+  card.classList.add('col-12', 'col-md-6', 'col-lg-4', 'statistic-block');
+  card.innerHTML = `
+    <div class="card card-statistics ${titleClass}">
+      <div class="card-body">
+        <h5 class="card-title card-title-statistics display-6">
+          ${title}
+        </h5>
+        <div class="card-text-wrapper">
+          <table class="statistic-table">
+            <tr>
+              <td class="statistic-td"><p class="card-text card-text-statistics">New words</p></td>
+              <td class="statistic-td statistic-td-amount statistic-td-amount-second"><span class="game-statistic-first game-statistic-info game-statistic-info-new-words ">${newWords}</span></td>
+            </tr>
+            <tr>
+              <td class="statistic-td"><p class="card-text card-text-statistics">Right answers (%)</p></td>
+              <td class="statistic-td statistic-td-amount statistic-td-amount-third"><span class="game-statistic-second game-statistic-info game-statistic-info-right-answers">${wordsPercentRightAnswers}</span></td>
+            </tr>
+            <tr>
+              <td class="statistic-td"><p class="card-text card-text-statistics">Learned words</p></td>
+              <td class="statistic-td statistic-td-amount statistic-td-amount-first"><span class="game-statistic-third game-statistic-info card-text game-statistic-info-learned">${wordsLearnedOrLongestRow}</span></td>
+            </tr>
+          </table>
+          <div class="statistics-card-pagination d-flex justify-content-center align-items-center">
+            <button type="button" class="btn btn-primary btn-sm button-left"><</button>
+              <span data-dateindex="${length - 1}" class="card-statistics-date">${date}</span>
+            <button disabled type="button" class="btn btn-primary btn-sm button-right">></button>
           </div>
         </div>
       </div>
-    <section>
+    </div>
   `;
-  return elem;
+  return card;
 }

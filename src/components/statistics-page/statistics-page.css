@@ -6,13 +6,11 @@
     font-weight: 700;
 }
 
-.statistics-section > * {
-    margin-top: 40px;
-}
-
 .card-title-statistics {
-    margin-bottom: 60px;
+    margin-bottom: 16px;
     font-weight: 600;
+    font-size: 24px;
+    text-align: center;
 }
 
 .card-text-statistics {
@@ -21,13 +19,6 @@
 
 .statistics-no-auth-user-info {
     margin-top: 40px;
-}
-
-.spinner-statistics {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
 }
 
 .statistics-card-pagination {
@@ -52,6 +43,111 @@
     align-items: center;
 }
 
-.card-body-statistic {
-    width: 20rem;
+.card-statistics {
+    max-width: 20rem;
+    width: 100%;
+    user-select: none;
+}
+
+.statistics-window {
+    padding: 0 2rem;
+}
+
+.game-statistic-first {
+    background-color: var(--bs-info);
+}
+
+.game-statistic-second {
+    background-color: var(--bs-pink);
+}
+
+.game-statistic-third {
+    background-color: var(--bs-green);
+}
+
+.statistics-title {
+    margin: 3rem 0;
+}
+
+/* table */
+
+.statistic-table {
+    margin: 0 auto;
+    width: 180px;
+}
+
+.statistic-td {
+    text-align: left;
+    padding-top: 12px;
+}
+
+.statistic-td-amount {
+    width: 36px;
+}
+
+.game-statistic-info {
+    display: inline-block;
+    min-width: 36px;
+    height: 26px;
+    border-radius: 0.375rem;
+    text-align: center;
+    color: white;
+    font-weight: 500;
+    padding: 0 0.2rem;
+}
+
+.card-statistics-words {
+    margin-right: auto;
+}
+
+.card-statistics-sprint {
+    margin-left: auto;
+}
+
+.card-statistics-audiocall {
+    margin: 0 auto;
+}
+/* Statistics for all days */
+
+.statistic-chart {
+    border-width: 1px;
+    border-color: var(--bs-border-color-translucent);
+    border-radius: 0.375rem;
+    gap: 2rem;
+}
+
+.statistic-chart__heading {
+    font-weight: 600;
+}
+
+.statistics-all-days-wrapper {
+    gap: 10px;
+}
+
+.statistics-section-for-all-time {
+    margin-bottom: 3rem;
+}
+
+@media (max-width: 991.98px) {
+    .card-statistics {
+        margin: 0 auto;
+    }
+}
+
+/* No auth window */
+
+.statistic-no-auth {
+    min-height: calc(100vh - (118px + 2rem));
+}
+
+@media (max-width: 1199.98px) {
+    .statistic-no-auth {
+        min-height: calc(100vh - (136px + 2rem));
+    }
+}
+
+@media (max-width: 767.98px) {
+    .statistic-no-auth {
+        min-height: calc(100vh - (160px + 2rem));
+    }
 }

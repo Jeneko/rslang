@@ -15,7 +15,7 @@
   display: flex;
   max-width: 33rem;
   border-radius: 10px;
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(20px);
   box-shadow: rgb(201, 201, 201) 0px 0px 10px;
 }
 
@@ -80,6 +80,7 @@
   .team__card {
     flex-direction: column;
     width: 100%;
+    align-items: center;
   }
 
   .team__card-second {
@@ -87,6 +88,12 @@
   }
 
   .team__card-img {
-    border-radius: 10px 0 0 0;
+    border-radius: 100%;
+    margin-top: 1rem;
+  }
+
+  .team__card-about {
+    align-items: center;
+    text-align: center;
   }
 }

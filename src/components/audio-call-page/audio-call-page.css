@@ -103,6 +103,7 @@
 .btn-next-question {
   margin-top: 40px;
   font-size: 30px;
+  min-width: 240px;
 }
 
 .wrong-icon-audiocall {

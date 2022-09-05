@@ -31,6 +31,11 @@ function getChart(chartData: ChartData[]): HTMLElement {
   const chartDataPerc = getArrayOfPercsOfMax(chartData.map((el) => el.value));
 
   // Add columns to the chart
+
+  if (chartDataPerc.length === 1 && chartDataPerc[0] !== 0) {
+    chartDataPerc[0] = 50;
+  }
+
   chartDataPerc.forEach((value, i) => {
     elem.innerHTML += `
       <div class="chart__column" style="height: ${value}%;" data-value="${chartData[i].value}" data-timestamp="${chartData[i].timeStamp}"></div>
