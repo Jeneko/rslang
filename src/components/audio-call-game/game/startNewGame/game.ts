@@ -1,7 +1,8 @@
 import { getWords, getWord, getAggregatedWord } from 'API/index';
 import { updateState, getState } from 'utils/state';
-import { Word, WordWithUserWord } from 'types/index';
+import { Word, WordWithUserWord, AlertType } from 'types/index';
 import { GameState } from 'game.types';
+import { outputAlert } from 'components/alert-message/alert-message';
 import controlGameWindow from 'components/audio-call-game/game/controlGameWindow/controlGameWindow';
 import createMenuGame from 'components/audio-call-game/createMenuGame';
 import { getAllUserWordsWithData, setWordOptional } from 'utils/user-words';
@@ -32,7 +33,7 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
         showLoadSpinner(false);
         return;
       }
-      document.body.append(getModalNoAuth());
+      getModalNoAuth();
       showLoadSpinner(false);
       return;
     }
@@ -44,6 +45,7 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
         return;
       }
     }
+    document.querySelector('.audio-call-message')?.remove();
     document.querySelector('.info-no-auth')?.remove();
     const buttonCheck = event.target as HTMLElement;
     const buttonsWrapper = document.querySelector('.button-wrapper-audiocall');
@@ -312,15 +314,11 @@ function getButtonNextQuestion(): HTMLElement {
   return blockButtonNextQuestion;
 }
 
-function getModalNoAuth(): HTMLElement {
-  const modalInfo = document.createElement('div');
-  modalInfo.innerHTML = `
-    <p>
-      Chapter 7 contains the most difficult words user selected manually. Please, <a class="load-page-link" href="#login">Login</a> or <a class="load-page-link" href="#register">Register</a> to start using this chapter.
-    </p>
-  `;
-  modalInfo.classList.add('container', 'info-no-auth');
-  return modalInfo;
+function getModalNoAuth(): void {
+  const modalInfo = document.querySelector('.audio-call-message') as HTMLElement;
+  const text = 'Chapter 7 contains the most difficult words user selected manually. Please, <a class="load-page-link" href="#login">Login</a> or <a class="load-page-link" href="#register">Register</a> to start using this chapter.';
+
+  outputAlert(modalInfo, AlertType.info, text);
 }
 
 function checkWrongStartGame(listWords: Word[]): Boolean {

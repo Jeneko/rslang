@@ -15,14 +15,15 @@ export default function createMenuGame(previousBookStudy: boolean): HTMLElement 
       <li><button class="btn btn-primary btn-select-level" data-level="5">6</button></li>
       <li><button class="btn btn-danger btn-select-level" data-level="6">7</button></li>
     </ol>
-    <p>
+    <p class="audio-call-info">
       Game controls: you can play with both, mouse/touchpad and keyboard.<br>
       Use keys from <kbd>1</kbd> to <kbd>5</kbd> to answer questions and <kbd>Enter</kbd> key to activate 'I do not know' button and skip to the next question.<br>
       To hear the given word press <kbd>Spacebar</kbd>.
     <p>
   </div>
-    <div class="game-window game-window--hidden"></div>
-  </div>`;
+  <div class="audio-call-message"></div>
+  <div class="game-window game-window--hidden"></div>
+  `;
   const meaningfulName2 = `
     <h1 class="page-heading"><span class="page-heading__rslang">RSLang</span> Audio-call</h1>
     <div class="game-window"></div>
