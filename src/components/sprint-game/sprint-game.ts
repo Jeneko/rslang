@@ -1,7 +1,8 @@
 import { getAllUserWords } from 'API/index';
+import { clearAlerts, outputAlert } from 'components/alert-message/alert-message';
 import playAudio from 'components/audio-call-game/game/startNewGame/playAudio/playAudio';
 import { showLoadSpinner } from 'components/load-spinner/load-spinner';
-import { PageName, WordStatus } from 'types/index';
+import { AlertType, PageName, WordStatus } from 'types/index';
 import { getAuth } from 'utils/auth';
 import * as state from 'utils/state';
 import { getAllUserWordsWithData } from 'utils/user-words';
@@ -111,7 +112,8 @@ const createGame = async (lvl: number, currentPage: number, elem: HTMLElement): 
     await getWordsForRegisterMember(lvl, currentPage);
   } else {
     if (lvl === HARD_WORDS_PAGE) {
-      message.innerHTML = messageHardWOrds;
+      clearAlerts(message);
+      outputAlert(message, AlertType.info, messageHardWords);
       return;
     }
     showLoadSpinner(true);
@@ -126,7 +128,8 @@ const createGame = async (lvl: number, currentPage: number, elem: HTMLElement): 
     (elem.querySelector('.choose-buttons') as HTMLElement).focus();
     startTimer();
   } else {
-    message.innerHTML = messageNoWords;
+    clearAlerts(message);
+    outputAlert(message, AlertType.info, messageNoWords);
   }
 
   showLoadSpinner(false);
@@ -145,10 +148,6 @@ const getWordsForRegisterMember = async (lvl: number, currentPage: number): Prom
   }
 };
 
-const messageHardWOrds = `
-  <p>Chapter 7 contains the most difficult words user selected manually. Please, <a href="#login" class="load-page-link">Login</a> or <a href="#register" class="load-page-link">Register</a> to start using this chapter.</p>
-`;
+const messageHardWords = 'Chapter 7 contains the most difficult words user selected manually. Please, <a href="#login" class="load-page-link">Login</a> or <a href="#register" class="load-page-link">Register</a> to start using this chapter.';
 
-const messageNoWords = `
-  <p>You don't have words in this category! Choose other level.</p>
-`;
+const messageNoWords = 'You don\'t have words in this category! Choose other level.';
