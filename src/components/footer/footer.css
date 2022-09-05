@@ -25,10 +25,6 @@ body {
   margin-left: 1rem;
 }
 
-.statistic-no-auth {
-  min-height: calc(100vh - (118px + 2rem));
-}
-
 @media (max-width: 1199.98px) {
   body {
     padding-bottom: 80px;
@@ -39,4 +35,15 @@ body {
   body {
     padding-bottom: 104px;
   }
+}
+
+@media (max-width: 575.98px) {
+  .footer {
+    position: static;
+  }
+
+  body {
+    padding-bottom: 0px;
+  }
+
 }
