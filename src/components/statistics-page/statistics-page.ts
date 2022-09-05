@@ -23,11 +23,15 @@ export default async function getStatisticsPage() {
 
 function noAuthUser() {
   const wrapper = document.createElement('div');
-  wrapper.classList.add('container');
+  wrapper.classList.add('container', 'statistic-no-auth');
+  const noAuthWindow = document.createElement('div');
   wrapper.innerHTML = `
     <h1 class="page-heading">
       <span class="page-heading__rslang">RSLang</span> Statistic
     </h1>
-    <p class="statistics-no-auth-user-info">Please, <a href="#login" class="load-page-link">Login</a> or <a href="#register" class="load-page-link">Register</a> to start using statistics.</p>`;
-  return wrapper;
+    <p class="statistics-no-auth-user-info">Please, <a href="#login" class="load-page-link">Login</a> or <a href="#register" class="load-page-link">Register</a> to start using statistics.</p>
+  `;
+  noAuthWindow.append(wrapper);
+  noAuthWindow.append(getFooter());
+  return noAuthWindow;
 }
