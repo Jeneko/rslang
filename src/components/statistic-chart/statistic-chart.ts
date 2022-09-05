@@ -32,7 +32,7 @@ function getChart(chartData: ChartData[]): HTMLElement {
 
   // Add columns to the chart
 
-  if (chartDataPerc.length === 1) {
+  if (chartDataPerc.length === 1 && chartDataPerc[0] != 0) {
     chartDataPerc[0] = 50;
   }
 
