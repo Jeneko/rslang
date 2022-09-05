@@ -13,7 +13,7 @@ export enum ChartType {
 }
 
 function getArrayOfPercsOfMax(array: number[]): number[] {
-  const maxValue = Math.max(...array);
+  const maxValue = Math.max(...array) || 100;
 
   return array.map((el) => (el * 100) / maxValue);
 }
@@ -33,6 +33,7 @@ function getChart(chartData: ChartData[]): HTMLElement {
   // Add columns to the chart
 
   if (chartDataPerc.length === 1 && chartDataPerc[0] !== 0) {
+    console.log(chartDataPerc[0]);
     chartDataPerc[0] = 50;
   }
 
