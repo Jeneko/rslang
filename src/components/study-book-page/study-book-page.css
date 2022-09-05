@@ -1,0 +1,49 @@
+.study-book-page--chapter-1 .study-book-chapter-heading {
+  color: white;
+  background-image: linear-gradient(to right, #5aa5fd 0%, #0074fc 100%);
+}
+
+.study-book-page--chapter-2 .study-book-chapter-heading {
+  color: white;
+  background-image: linear-gradient(to right, #0074fc 0%, #a03aff 100%);
+}
+
+.study-book-page--chapter-3 .study-book-chapter-heading {
+  color: white;
+  background-image: linear-gradient(to right, #a03aff 0%, #30cfd0 100%);
+}
+
+.study-book-page--chapter-4 .study-book-chapter-heading {
+  color: white;
+  background-image: linear-gradient(to right, #00DBDE 0%, #FC00FF 100%);
+}
+
+.study-book-page--chapter-5 .study-book-chapter-heading {
+  color: white;
+  background-image: linear-gradient(to right, #b8cbb8 0%, #b8cbb8 0%, #b465da 0%, #cf6cc9 33%, #ee609c 66%, #ee609c 100%);
+}
+
+.study-book-page--chapter-6 .study-book-chapter-heading {
+  color: white;
+  background-image: linear-gradient(to right, #ff2f6e 0%, #ffdd1c 100%);
+}
+
+.study-book-page--chapter-7 .study-book-chapter-heading {
+  color: white;
+  background-image: linear-gradient(to right, #dc3545 0%, #c00040 100%);
+}
+
+.study-book-menus {
+  display: flex;
+  gap: 2rem;
+  margin: 2rem 0;
+  justify-content: space-between;
+}
+
+@media (max-width: 575px) {
+  .study-book-menus {
+    margin: 1.5rem 0;
+    gap: 1.5rem;
+    flex-direction: column;
+  }
+}

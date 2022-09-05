@@ -1,0 +1,49 @@
+.sprint {
+  margin-top: 2rem;
+}
+
+.game-on {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.modal-lvl {
+  align-self: start;
+}
+
+.lvl-instructions {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.points,
+.choose-words,
+.timer {
+  text-align: center;
+}
+
+.choose-words {
+  padding: 2rem 0;
+  border: 1px solid var(--bs-gray-200);
+  border-radius: 10px;
+  width: 190px;
+}
+
+.choose-buttons:focus {
+  outline: none;
+}
+
+.timer {
+  margin-top: 2rem;
+  font-size: 4rem;
+}
+
+.results__close-button {
+  margin-bottom: 1rem;
+}
+
+.list-group {
+  margin-bottom: 1rem;
+}

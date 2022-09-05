@@ -1,0 +1,7 @@
+.study-book-chapters-menu ol {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 0.5rem;
+  list-style: none;
+}

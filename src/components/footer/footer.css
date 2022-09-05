@@ -1,0 +1,49 @@
+body {
+  padding-bottom: 62px;
+}
+
+.footer {
+  position: fixed;
+  width: 100%;
+  bottom: 0px;
+  left: 0px;
+  padding: 1rem 0;
+  background-color: #f8f9fa;
+  color: var(--bs-body-color);
+}
+
+.footer-rsschool {
+  background-image: url('assets/rsschool-logo.svg');
+  background-repeat: no-repeat;
+  display: inline-block;
+  height: 1.5rem;
+  width: 4rem;
+}
+
+.link-dark {
+  text-decoration: none;
+  margin-left: 1rem;
+}
+
+@media (max-width: 1199.98px) {
+  body {
+    padding-bottom: 80px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  body {
+    padding-bottom: 104px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .footer {
+    position: static;
+  }
+
+  body {
+    padding-bottom: 0px;
+  }
+
+}

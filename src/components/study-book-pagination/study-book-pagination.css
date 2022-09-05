@@ -1,0 +1,11 @@
+.study-book-pagination {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin: 2rem 0;
+}
+
+.study-book-pagination__cur-page {
+  text-align: center;
+  width: 70px;
+}
