@@ -16,6 +16,11 @@ enum TitlesStatus {
   CardStatisticsSprint = 'card-statistics-sprint',
 }
 
+enum FiledValueCard {
+  LearnedWords = 'Learned words',
+  LongestSeries = 'Longest series',
+}
+
 export default async function getStatPage(respStatistics: Statistic): Promise<HTMLElement> {
   const page = document.createElement('div');
   page.classList.add('container', 'statistics-window');
@@ -185,13 +190,13 @@ function getCards(respStatistics: ObjectStatisticsType, learnedWords: number) {
   const words = respStatistics.allStatWords[wordsLength - 1];
   const audiocall = respStatistics.allStatAudiocall[audioLength - 1];
   const sprint = respStatistics.allStatSprint[sprintLength - 1];
-  elem.append(getCard(words.newWordsQty, getPercentage(words.rightAnswers, words.wrongAnswers), words.learnedWordsQty, convertTimestampToDateStr(words.date), wordsLength, TitlesStatus.CardStatisticsWords, HeaderName.WordsStatistics));
-  elem.append(getCard(audiocall.newWordsQty, getPercentage(audiocall.rightAnswers, audiocall.wrongAnswers), audiocall.longestRow, convertTimestampToDateStr(audiocall.date), audioLength, TitlesStatus.CardStatisticsAudio, HeaderName.AudioCall));
-  elem.append(getCard(sprint.newWordsQty, getPercentage(sprint.rightAnswers, sprint.wrongAnswers), sprint.longestRow, convertTimestampToDateStr(sprint.date), sprintLength, TitlesStatus.CardStatisticsSprint, HeaderName.Sprint));
+  elem.append(getCard(words.newWordsQty, getPercentage(words.rightAnswers, words.wrongAnswers), words.learnedWordsQty, convertTimestampToDateStr(words.date), wordsLength, TitlesStatus.CardStatisticsWords, HeaderName.WordsStatistics, FiledValueCard.LearnedWords));
+  elem.append(getCard(audiocall.newWordsQty, getPercentage(audiocall.rightAnswers, audiocall.wrongAnswers), audiocall.longestRow, convertTimestampToDateStr(audiocall.date), audioLength, TitlesStatus.CardStatisticsAudio, HeaderName.AudioCall, FiledValueCard.LongestSeries));
+  elem.append(getCard(sprint.newWordsQty, getPercentage(sprint.rightAnswers, sprint.wrongAnswers), sprint.longestRow, convertTimestampToDateStr(sprint.date), sprintLength, TitlesStatus.CardStatisticsSprint, HeaderName.Sprint, FiledValueCard.LongestSeries));
   return elem;
 }
 
-function getCard(newWords: number, wordsPercentRightAnswers: number, wordsLearnedOrLongestRow: number, date: string, length: number, titleClass: string, title: string): HTMLElement {
+function getCard(newWords: number, wordsPercentRightAnswers: number, wordsLearnedOrLongestRow: number, date: string, length: number, titleClass: TitlesStatus, title: HeaderName, fieldValue: FiledValueCard): HTMLElement {
   const card = document.createElement('div');
   card.classList.add('col-12', 'col-md-6', 'col-lg-4', 'statistic-block');
   card.innerHTML = `
@@ -211,7 +216,7 @@ function getCard(newWords: number, wordsPercentRightAnswers: number, wordsLearne
               <td class="statistic-td statistic-td-amount statistic-td-amount-third"><span class="game-statistic-second game-statistic-info game-statistic-info-right-answers">${wordsPercentRightAnswers}</span></td>
             </tr>
             <tr>
-              <td class="statistic-td"><p class="card-text card-text-statistics">Learned words</p></td>
+              <td class="statistic-td"><p class="card-text card-text-statistics">${fieldValue}</p></td>
               <td class="statistic-td statistic-td-amount statistic-td-amount-first"><span class="game-statistic-third game-statistic-info card-text game-statistic-info-learned">${wordsLearnedOrLongestRow}</span></td>
             </tr>
           </table>
