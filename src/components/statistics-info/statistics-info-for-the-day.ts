@@ -196,7 +196,7 @@ function getCards(respStatistics: ObjectStatisticsType, learnedWords: number) {
   return elem;
 }
 
-function getCard(newWords: number, wordsPercentRightAnswers: number, wordsLearnedOrLongestRow: number, date: string, length: number, titleClass: string, title: string, fieldValue: string): HTMLElement {
+function getCard(newWords: number, wordsPercentRightAnswers: number, wordsLearnedOrLongestRow: number, date: string, length: number, titleClass: TitlesStatus, title: HeaderName, fieldValue: FiledValueCard): HTMLElement {
   const card = document.createElement('div');
   card.classList.add('col-12', 'col-md-6', 'col-lg-4', 'statistic-block');
   card.innerHTML = `
