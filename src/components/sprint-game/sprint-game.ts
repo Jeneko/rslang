@@ -148,10 +148,6 @@ const getWordsForRegisterMember = async (lvl: number, currentPage: number): Prom
   }
 };
 
-const messageHardWords = `
-  Chapter 7 contains the most difficult words user selected manually. Please, <a href="#login" class="load-page-link">Login</a> or <a href="#register" class="load-page-link">Register</a> to start using this chapter.
-`;
+const messageHardWords = 'Chapter 7 contains the most difficult words user selected manually. Please, <a href="#login" class="load-page-link">Login</a> or <a href="#register" class="load-page-link">Register</a> to start using this chapter.';
 
-const messageNoWords = `
-  You don't have words in this category! Choose other level.
-`;
+const messageNoWords = 'You don\'t have words in this category! Choose other level.';
