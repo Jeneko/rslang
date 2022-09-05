@@ -2,7 +2,7 @@ import { getWords, getWord, getAggregatedWord } from 'API/index';
 import { updateState, getState } from 'utils/state';
 import { Word, WordWithUserWord, AlertType } from 'types/index';
 import { GameState } from 'game.types';
-import { outputAlert } from 'components/alert-message/alert-message';
+import { outputAlert, clearAlerts } from 'components/alert-message/alert-message';
 import controlGameWindow from 'components/audio-call-game/game/controlGameWindow/controlGameWindow';
 import createMenuGame from 'components/audio-call-game/createMenuGame';
 import { getAllUserWordsWithData, setWordOptional } from 'utils/user-words';
@@ -284,18 +284,11 @@ async function checkNewWords(array: WordWithUserWord[]): Promise<number> {
 }
 
 function addTitleNoHardWords(): void {
-  const elem = document.querySelector('.no-hard-words-info');
-  if (elem) {
-    return;
-  }
-  const modalInfo = document.createElement('div');
-  modalInfo.innerHTML = `
-    <p class="no-hard-words-info">
-      You do not have hard words! Learn more in the  <a class="load-page-link" href="#study-book">study book</a>!
-    </p>
-    `;
-  modalInfo.classList.add('container', 'info-empty-hard-words');
-  document.body.append(modalInfo);
+  const modalInfo = document.querySelector('.audio-call-message') as HTMLElement;
+  clearAlerts(modalInfo);
+  const text = 'You do not have hard words! Learn more in the  <a class="load-page-link" href="#study-book">study book</a>!';
+
+  outputAlert(modalInfo, AlertType.info, text);
 }
 
 function checkNoWardsTitle(): void {
@@ -316,6 +309,7 @@ function getButtonNextQuestion(): HTMLElement {
 
 function getModalNoAuth(): void {
   const modalInfo = document.querySelector('.audio-call-message') as HTMLElement;
+  clearAlerts(modalInfo);
   const text = 'Chapter 7 contains the most difficult words user selected manually. Please, <a class="load-page-link" href="#login">Login</a> or <a class="load-page-link" href="#register">Register</a> to start using this chapter.';
 
   outputAlert(modalInfo, AlertType.info, text);

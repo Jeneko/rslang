@@ -56,14 +56,13 @@ async function updateWordStatistic(correctAnswersList: WordWithUserWord[], wrong
 }
 
 async function updateGameStatistic(gameStatistics: GameStatistic, wordStatistics: WordsStatistic, correctAnswersList: WordWithUserWord[], wrongAnswersList: WordWithUserWord[], gameState: GameState, userStatistics: Statistic) {
-  const lengthDateGame = userStatistics.optional.audiocall.stat.length;
-  const lengthDateWords = userStatistics.optional.words.stat.length;
   userStatistics.learnedWords = wordStatistics.learnedWordsQty;
-  userStatistics.optional.audiocall.stat[lengthDateGame - 1].longestRow = gameStatistics.longestRow < gameState.longestStreakForGame ? gameState.longestStreakForGame : gameStatistics.longestRow;
-  userStatistics.optional.audiocall.stat[lengthDateGame - 1].rightAnswers += correctAnswersList.length;
-  userStatistics.optional.audiocall.stat[lengthDateGame - 1].wrongAnswers += wrongAnswersList.length;
-  userStatistics.optional.words.stat[lengthDateWords - 1].newWordsQty += +gameState.newWords;
-  userStatistics.optional.words.stat[lengthDateWords - 1].rightAnswers += correctAnswersList.length;
+  userStatistics.optional.audiocall.stat[0].longestRow = gameStatistics.longestRow < gameState.longestStreakForGame ? gameState.longestStreakForGame : gameStatistics.longestRow;
+  userStatistics.optional.audiocall.stat[0].rightAnswers += correctAnswersList.length;
+  userStatistics.optional.audiocall.stat[0].wrongAnswers += wrongAnswersList.length;
+  userStatistics.optional.audiocall.stat[0].newWordsQty += +gameState.newWords;
+  userStatistics.optional.words.stat[0].newWordsQty += +gameState.newWords;
+  userStatistics.optional.words.stat[0].rightAnswers += correctAnswersList.length;
   await updateUserStatistic(userStatistics);
 }
 
