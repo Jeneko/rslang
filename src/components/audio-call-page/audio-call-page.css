@@ -35,6 +35,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-bottom: 12px;
 }
 
 .buttons-level-block {
@@ -53,7 +54,7 @@
 }
 
 .btn-play-again {
-  margin-top: 20px;
+  margin-top: 2rem;
 }
 
 .audiocall-speaker-image {
@@ -70,7 +71,7 @@
 
 .row-buttons-choice-wrapper {
   margin-top: 24px;
-  height: 60px;
+  min-height: 90px;
 }
 
 .current-word-info {
@@ -102,6 +103,7 @@
 .btn-next-question {
   margin-top: 40px;
   font-size: 30px;
+  min-width: 240px;
 }
 
 .wrong-icon-audiocall {
@@ -112,4 +114,27 @@
 .correct-icon-audiocall {
   color: transparent;  
   text-shadow: 0 0 0 white;
+}
+
+.row-buttons-choice-wrapper > *{
+  margin-top: 1rem;
+}
+
+.modal-body {
+  padding-bottom: 2rem;
+}
+
+.current-word-info {
+  animation: show 0.5s ease-out forwards;
+}
+
+@keyframes show {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 100;
+    transform: translateY(0px);
+  }
 }

@@ -2,7 +2,7 @@ import {
   getAggregatedWords, getUserStatistic, updateUserStatistic, updateUserWord,
 } from 'API/index';
 import {
-  Word, WordWithUserWord, GameStatistic, WordStatus, WordsStatistic, Statistic,
+  Word, WordWithUserWord, GameStatistic, WordStatus, WordsStatistic, Statistic, ResponseUserWord,
 } from 'types/index';
 import { getTodayStat } from 'utils/statistic';
 import { GameState } from '../startNewGame/game.types';
@@ -14,12 +14,13 @@ export async function sendDataToServer(correctAnswersList: WordWithUserWord[], w
   const userStatistics = await getUserStatistic();
   const gameStatistics = getTodayStat<GameStatistic>(userStatistics, 'audiocall');
   const wordStatistics = getTodayStat<WordsStatistic>(userStatistics, 'words');
-  updateWordStatistic(correctAnswersList, wrongAnswersList, wordStatistics);
-  updateGameStatistic(gameStatistics, wordStatistics, correctAnswersList, wrongAnswersList, gameState, userStatistics);
+  await updateWordStatistic(correctAnswersList, wrongAnswersList, wordStatistics);
+  await updateGameStatistic(gameStatistics, wordStatistics, correctAnswersList, wrongAnswersList, gameState, userStatistics);
 }
 
-function updateWordStatistic(correctAnswersList: WordWithUserWord[], wrongAnswersList: WordWithUserWord[], wordStatistics: WordsStatistic) {
-  correctAnswersList.forEach((el) => {
+async function updateWordStatistic(correctAnswersList: WordWithUserWord[], wrongAnswersList: WordWithUserWord[], wordStatistics: WordsStatistic) {
+  const arrayPromise: Promise<ResponseUserWord>[] = [];
+  correctAnswersList.forEach(async (el) => {
     const optionals = {
       difficulty: el.userWord ? el.userWord.difficulty : WordStatus.default,
       optional: {
@@ -33,7 +34,7 @@ function updateWordStatistic(correctAnswersList: WordWithUserWord[], wrongAnswer
       wordStatistics.learnedWordsQty += 1;
     }
     // eslint-disable-next-line no-underscore-dangle
-    updateUserWord(el._id as string, optionals);
+    arrayPromise.push(updateUserWord(el.id || el._id as string, optionals));
   });
   wrongAnswersList.forEach((el) => {
     const optionals = {
@@ -49,24 +50,26 @@ function updateWordStatistic(correctAnswersList: WordWithUserWord[], wrongAnswer
       wordStatistics.learnedWordsQty -= 1;
     }
     // eslint-disable-next-line no-underscore-dangle
-    updateUserWord(el._id as string, optionals);
+    arrayPromise.push(updateUserWord(el.id || el._id as string, optionals));
   });
+  await Promise.all(arrayPromise);
 }
 
 async function updateGameStatistic(gameStatistics: GameStatistic, wordStatistics: WordsStatistic, correctAnswersList: WordWithUserWord[], wrongAnswersList: WordWithUserWord[], gameState: GameState, userStatistics: Statistic) {
-  gameStatistics.newWordsQty += gameState.newWords;
-  gameStatistics.longestRow = gameStatistics.longestRow < gameState.longestStreakForGame ? gameState.longestStreakForGame : gameStatistics.longestRow;
-  gameStatistics.rightAnswers += correctAnswersList.length;
-  gameStatistics.wrongAnswers += wrongAnswersList.length;
-  wordStatistics.newWordsQty += gameState.newWords;
-  wordStatistics.rightAnswers += correctAnswersList.length;
+  userStatistics.learnedWords = wordStatistics.learnedWordsQty;
+  userStatistics.optional.audiocall.stat[0].longestRow = gameStatistics.longestRow < gameState.longestStreakForGame ? gameState.longestStreakForGame : gameStatistics.longestRow;
+  userStatistics.optional.audiocall.stat[0].rightAnswers += correctAnswersList.length;
+  userStatistics.optional.audiocall.stat[0].wrongAnswers += wrongAnswersList.length;
+  userStatistics.optional.audiocall.stat[0].newWordsQty += +gameState.newWords;
+  userStatistics.optional.words.stat[0].newWordsQty += +gameState.newWords;
+  userStatistics.optional.words.stat[0].rightAnswers += correctAnswersList.length;
   await updateUserStatistic(userStatistics);
 }
 
 export async function getAuthWords(currentLevel: string | number, currentPage: string | number): Promise<Word[]> {
   const words: Word[] = [];
   async function getMoreWords(level: number, page: number) {
-    const filter = `{"$and":[{"userWord.difficulty": {"$not": {"$eq": "learned"}}},{"page":${level}},{"group": ${page}}]}`;
+    const filter = `{"$and":[{"userWord.difficulty": {"$not": {"$eq": "learned"}}},{"page":${page}},{"group": ${level}}]}`;
     const resp = await getAggregatedWords(filter, NUMBER_OF_WORDS_TO_PLAY);
     let result = resp[0].paginatedResults;
     if (words.length + result.length > NUMBER_OF_WORDS_TO_PLAY) {
@@ -74,8 +77,7 @@ export async function getAuthWords(currentLevel: string | number, currentPage: s
       result = result.splice(length);
     }
     words.push(...result);
-
-    if (page > 0 && words.length < NUMBER_OF_WORDS_TO_PLAY) {
+    if (page - 1 >= 0 && words.length < NUMBER_OF_WORDS_TO_PLAY) {
       await getMoreWords(level, page - 1);
     }
   }

@@ -1,6 +1,5 @@
 import { SOURCE } from 'API/index';
 import { Word, WordWithUserWord } from 'types/index';
-import imageAudio from 'assets/speaker-icon.svg';
 import getRandomWords from './getRandomWords/getRandomWords';
 import addEventsForChoiceButtons, { addEventsForKeyboard } from '../addEventsForChoiceButtons/addEventsForChoiceButtons';
 import playAudio from '../playAudio/playAudio';
@@ -21,7 +20,7 @@ export default async function generateWindowGame(currentWord: Word | WordWithUse
       <div class="row">
         <div class="col current-word">
           <button id="playAudio" type="button" class="btn button-audio">
-            <img class="audiocall-speaker-image" src="${imageAudio}" alt="speaker">
+            <img class="audiocall-speaker-image" src="assets/speaker-icon.svg" alt="speaker">
           </button>
           <div data-id=${id} class="card current-word-info current-word-info--hidden">
             <img src="${imageResponse}" class="card-img-top" alt="Word">

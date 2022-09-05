@@ -42,7 +42,10 @@ async function checkAnswer(e: Event, eventExecutor: string, buttonsChoice: NodeL
 }
 
 function getCheckButton(e: Event, eventExecutor: string): HTMLElement | null {
-  const buttonNextQuestion = document.querySelector('.btn-next-question') as HTMLElement;
+  const buttonNextQuestion = document.querySelector('.btn-next-question');
+  if (!buttonNextQuestion) {
+    return null;
+  }
   if (eventExecutor === 'key') {
     const valuesKeyTargets = ['Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5'];
     const keyTarget = (e as KeyboardEvent).code;
@@ -58,11 +61,13 @@ function getCheckButton(e: Event, eventExecutor: string): HTMLElement | null {
       const numberButton = valuesKeyTargets.indexOf(keyTarget);
       const allButtons = document.querySelectorAll('.btn-choice-of-answer');
       const currentButton = allButtons[numberButton];
-      buttonNextQuestion.dataset.wordchosen = 'true';
+      (buttonNextQuestion as HTMLElement).dataset.status = 'true';
+      (buttonNextQuestion as HTMLElement).dataset.wordchosen = 'true';
       return currentButton as HTMLElement;
     }
   } else if (eventExecutor === 'click') {
-    buttonNextQuestion.dataset.wordchosen = 'true';
+    (buttonNextQuestion as HTMLElement).dataset.status = 'true';
+    (buttonNextQuestion as HTMLElement).dataset.wordchosen = 'true';
     return e.target as HTMLElement;
   }
 

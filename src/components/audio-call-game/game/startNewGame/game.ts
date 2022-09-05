@@ -1,12 +1,12 @@
-import { getWords, getWord } from 'API/index';
+import { getWords, getWord, getAggregatedWord } from 'API/index';
 import { updateState, getState } from 'utils/state';
-import { Word, WordWithUserWord } from 'types/index';
+import { Word, WordWithUserWord, AlertType } from 'types/index';
 import { GameState } from 'game.types';
+import { outputAlert, clearAlerts } from 'components/alert-message/alert-message';
 import controlGameWindow from 'components/audio-call-game/game/controlGameWindow/controlGameWindow';
 import createMenuGame from 'components/audio-call-game/createMenuGame';
 import { getAllUserWordsWithData, setWordOptional } from 'utils/user-words';
 import { getAuth } from 'utils/auth';
-import audioImage from 'assets/speaker-icon.svg';
 import { showLoadSpinner } from 'components/load-spinner/load-spinner';
 import { sendDataToServer, getAuthWords } from '../sendingToServer/sendingToServer';
 import generateWindowGame from './generateWindowGame/generateWindowGame';
@@ -23,6 +23,9 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
   // play for menu level
   const statusAuth = getAuth();
   if (event) {
+    if (!(event?.target as HTMLElement).classList.contains('btn-select-level')) {
+      return;
+    }
     const level = +((event.target as HTMLElement).dataset.level as string);
     showLoadSpinner(true);
     if (!statusAuth && +((event.target as HTMLElement).dataset.level as string) === USER_LEVEL) {
@@ -30,7 +33,7 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
         showLoadSpinner(false);
         return;
       }
-      document.body.append(getModalNoAuth());
+      getModalNoAuth();
       showLoadSpinner(false);
       return;
     }
@@ -42,6 +45,7 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
         return;
       }
     }
+    document.querySelector('.audio-call-message')?.remove();
     document.querySelector('.info-no-auth')?.remove();
     const buttonCheck = event.target as HTMLElement;
     const buttonsWrapper = document.querySelector('.button-wrapper-audiocall');
@@ -75,6 +79,9 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
         if (checkWrongStartGame(listWords)) {
           return;
         }
+
+        listWords = shuffleArrayRandom(listWords);
+
         await generateWindowGame(listWords[0], listWords, state);
         windowGameBlock?.append(blockButtonNextQuestion);
         addEventsForNextQuestionButton(windowGameBlock, listWords, state);
@@ -108,6 +115,8 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
     } else {
       listWords = statusAuth ? await getAuthWords(currentChapter, currentPage) : await getWords(currentChapter, currentPage);
     }
+
+    listWords = shuffleArrayRandom(listWords);
 
     state.newWords = statusAuth ? await checkNewWords(listWords as WordWithUserWord[]) : 0;
     await generateWindowGame(listWords[0], listWords, state);
@@ -163,7 +172,7 @@ function addAllAnswersForPage(list: Word[], blockList: HTMLElement) {
   list.forEach((el) => {
     const listItem = document.createElement('li');
     listItem.classList.add('list-group-item');
-    listItem.innerHTML = `<button class="button-audio-result"><img class="button-audio-image" src="${audioImage}"></button> ${el.word} | ${el.wordTranslate}`;
+    listItem.innerHTML = `<button class="button-audio-result"><img class="button-audio-image" src="assets/speaker-icon.svg"></button> ${el.word} | ${el.wordTranslate}`;
     const buttonAudio = listItem.querySelector('.button-audio-result');
     buttonAudio?.addEventListener('click', () => {
       playAudio(el.audio);
@@ -201,7 +210,7 @@ function playAgainButtonClickHandler(modalResultGame: HTMLElement): void {
   });
 }
 
-function showResult(modalResultGame: HTMLElement, gameState: GameState): void {
+async function showResult(modalResultGame: HTMLElement, gameState: GameState): Promise<void> {
   const buttonNextQuestion = document.querySelector('.btn-next-question');
   const parentModal = document.querySelector('.game-window');
   const blockListCorrect = modalResultGame.querySelector('.list-group-correct') as HTMLElement;
@@ -209,7 +218,7 @@ function showResult(modalResultGame: HTMLElement, gameState: GameState): void {
   const { correctAnswers, wrongAnswers } = gameState;
 
   if (getAuth()) {
-    sendDataToServer(correctAnswers as WordWithUserWord[], wrongAnswers as WordWithUserWord[], gameState);
+    await sendDataToServer(correctAnswers as WordWithUserWord[], wrongAnswers as WordWithUserWord[], gameState);
   }
 
   addAllAnswersForPage(correctAnswers, blockListCorrect);
@@ -222,12 +231,15 @@ function showResult(modalResultGame: HTMLElement, gameState: GameState): void {
 export async function checkNextQuestion(e: Event, buttonNextQuestion: HTMLElement, listWords: Word[], gameState: GameState): Promise<void> {
   const currentIndex = getState().indexWord + 1;
 
-  if (currentIndex >= listWords.length && buttonNextQuestion.dataset.status === 'false') {
+  if (currentIndex >= listWords.length && buttonNextQuestion.dataset.status === 'true') {
+    document.querySelector('.button-wrapper-audiocall')?.remove();
+    showLoadSpinner(true);
     clearGameWindow();
     const modalGameResult = getModalResultGame(gameState);
     playAgainButtonClickHandler(modalGameResult);
-    showResult(modalGameResult, gameState);
+    await showResult(modalGameResult, gameState);
     updateState('indexWord', currentIndex);
+    showLoadSpinner(false);
   } else if (buttonNextQuestion.dataset.wordchosen === 'false') {
     hiddenAllButtons();
     showCurrentWordInfo();
@@ -235,8 +247,8 @@ export async function checkNextQuestion(e: Event, buttonNextQuestion: HTMLElemen
     buttonNextQuestion.dataset.wordchosen = 'true';
     buttonNextQuestion.dataset.status = 'true';
     const wordId = (document.querySelector('.current-word-info') as HTMLElement).dataset.id as string;
-    const word = await getWord(wordId);
-    gameState.wrongAnswers.push(word);
+    const word = getAuth() ? await getAggregatedWord(wordId) : await getWord(wordId);
+    gameState.wrongAnswers.push(word as Word);
   } else {
     buttonNextQuestion.textContent = SKIP;
     buttonNextQuestion.dataset.status = 'false';
@@ -272,18 +284,11 @@ async function checkNewWords(array: WordWithUserWord[]): Promise<number> {
 }
 
 function addTitleNoHardWords(): void {
-  const elem = document.querySelector('.no-hard-words-info');
-  if (elem) {
-    return;
-  }
-  const modalInfo = document.createElement('div');
-  modalInfo.innerHTML = `
-    <p class="no-hard-words-info">
-      You do not have hard words! Learn more in the  <a class="load-page-link" href="#study-book">study book</a>!
-    </p>
-    `;
-  modalInfo.classList.add('container', 'info-empty-hard-words');
-  document.body.append(modalInfo);
+  const modalInfo = document.querySelector('.audio-call-message') as HTMLElement;
+  clearAlerts(modalInfo);
+  const text = 'You do not have hard words! Learn more in the  <a class="load-page-link" href="#study-book">study book</a>!';
+
+  outputAlert(modalInfo, AlertType.info, text);
 }
 
 function checkNoWardsTitle(): void {
@@ -302,15 +307,12 @@ function getButtonNextQuestion(): HTMLElement {
   return blockButtonNextQuestion;
 }
 
-function getModalNoAuth(): HTMLElement {
-  const modalInfo = document.createElement('div');
-  modalInfo.innerHTML = `
-    <p>
-      Chapter 7 contains the most difficult words user selected manually. Please, <a class="load-page-link" href="#login">Login</a> or <a class="load-page-link" href="#register">Register</a> to start using this chapter.
-    </p>
-  `;
-  modalInfo.classList.add('container', 'info-no-auth');
-  return modalInfo;
+function getModalNoAuth(): void {
+  const modalInfo = document.querySelector('.audio-call-message') as HTMLElement;
+  clearAlerts(modalInfo);
+  const text = 'Chapter 7 contains the most difficult words user selected manually. Please, <a class="load-page-link" href="#login">Login</a> or <a class="load-page-link" href="#register">Register</a> to start using this chapter.';
+
+  outputAlert(modalInfo, AlertType.info, text);
 }
 
 function checkWrongStartGame(listWords: Word[]): Boolean {
@@ -325,4 +327,8 @@ function checkWrongStartGame(listWords: Word[]): Boolean {
   }
   showLoadSpinner(false);
   return false;
+}
+
+function shuffleArrayRandom(array: Word[]) {
+  return array.sort(() => Math.random() - 0.5);
 }
