@@ -182,7 +182,7 @@ function getCards(respStatistics: ObjectStatisticsType, learnedWords: number) {
       </div>
     <h2 class="statistics-title display-2">Statistics for the day</h2>
   `;
-  elem.classList.add('row');
+  elem.classList.add('row', 'gy-4');
   const wordsLength = respStatistics.allStatWords.length;
   const audioLength = respStatistics.allStatAudiocall.length;
   const sprintLength = respStatistics.allStatSprint.length;

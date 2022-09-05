@@ -3,6 +3,10 @@
   outline: none;
 }
 
+.row-buttons-choice-wrapper {
+  min-height: 206px;
+}
+
 .current-word {
   height: 440px;
 }
@@ -112,7 +116,6 @@
 
 .row-buttons-choice-wrapper > *{
   margin-top: 1rem;
-  min-height: 206px;
 }
 
 .modal-body {
@@ -132,4 +135,20 @@
     opacity: 100;
     transform: translateY(0px);
   }
+}
+
+@media (max-width: 390px) {
+
+  .card-img-top {
+    display: none;
+  }
+
+  .current-word {
+    height: 200px;
+  }
+
+  .row-buttons-choice-wrapper {
+    min-height: 230px;
+  }
+
 }
