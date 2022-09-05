@@ -147,9 +147,9 @@ const getWordsForRegisterMember = async (lvl: number, currentPage: number): Prom
 };
 
 const messageHardWords = `
-  <p>Chapter 7 contains the most difficult words user selected manually. Please, <a href="#login" class="load-page-link">Login</a> or <a href="#register" class="load-page-link">Register</a> to start using this chapter.</p>
+  Chapter 7 contains the most difficult words user selected manually. Please, <a href="#login" class="load-page-link">Login</a> or <a href="#register" class="load-page-link">Register</a> to start using this chapter.
 `;
 
 const messageNoWords = `
-  <p>You don't have words in this category! Choose other level.</p>
+  You don't have words in this category! Choose other level.
 `;

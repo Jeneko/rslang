@@ -21,7 +21,7 @@ export const renderModal = `
       <p class="lvl-instructions">
         Game controls: you can play with both, mouse/touchpad and keyboard.<br>
         Use <kbd>ArrowLeft</kbd> and <kbd>ArrowRight</kbd> to select an answer.
-      <p>
+      </p>
       <div class="message"></div>
     </div>
   </div>
