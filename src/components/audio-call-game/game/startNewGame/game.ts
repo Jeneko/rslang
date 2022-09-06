@@ -1,4 +1,6 @@
-import { getWords, getWord, getAggregatedWord } from 'API/index';
+import {
+  getWords, getWord, getAggregatedWord, getAggregatedWords,
+} from 'API/index';
 import { updateState, getState } from 'utils/state';
 import { Word, WordWithUserWord, AlertType } from 'types/index';
 import { GameState } from 'game.types';
@@ -18,6 +20,7 @@ const MAX_PAGE_NUM = 30;
 const USER_LEVEL = 6;
 const NEXT_QUESTION = 'Next question';
 const SKIP = 'Skip';
+const WORD_AMOUNT_FOR_PAGE = 20;
 
 export async function startNewGame(event: Event | null, startPage: HTMLElement | undefined): Promise<void> {
   // play for menu level
@@ -70,7 +73,12 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
         updateState('indexWord', 0);
         let listWords;
         if (statusAuth) {
-          listWords = +currentLevel !== USER_LEVEL ? await getAuthWords(+currentLevel, randomPage) : await getAllUserWordsWithData();
+          if (+currentLevel === USER_LEVEL) {
+            listWords = await getAllUserWordsWithData();
+          } else {
+            const aggregatedWords = await getAggregatedWords(undefined, WORD_AMOUNT_FOR_PAGE, +currentLevel, randomPage);
+            listWords = aggregatedWords[0].paginatedResults;
+          }
           state.newWords = await checkNewWords(listWords as WordWithUserWord[]);
         } else {
           listWords = await getWords(+currentLevel, randomPage);
