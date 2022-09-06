@@ -76,8 +76,8 @@ export async function startNewGame(event: Event | null, startPage: HTMLElement |
           if (+currentLevel === USER_LEVEL) {
             listWords = await getAllUserWordsWithData();
           } else {
-            listWords = await getAggregatedWords(undefined, WORD_AMOUNT_FOR_PAGE, +currentLevel, randomPage);
-            listWords = listWords[0].paginatedResults;
+            const aggregatedWords = await getAggregatedWords(undefined, WORD_AMOUNT_FOR_PAGE, +currentLevel, randomPage);
+            listWords = aggregatedWords[0].paginatedResults;
           }
           state.newWords = await checkNewWords(listWords as WordWithUserWord[]);
         } else {
