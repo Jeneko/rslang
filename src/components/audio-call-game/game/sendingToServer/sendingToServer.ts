@@ -66,7 +66,6 @@ async function updateGameStatistic(gameStatistics: GameStatistic, wordStatistics
   userStatistics.optional.words.stat[lengthWordsList].newWordsQty += +gameState.newWords;
   userStatistics.optional.words.stat[lengthWordsList].rightAnswers += correctAnswersList.length;
   userStatistics.optional.words.stat[lengthWordsList].wrongAnswers += +wrongAnswersList.length;
-  console.log(userStatistics, gameState);
   await updateUserStatistic(userStatistics);
 }
 
