@@ -56,14 +56,17 @@ async function updateWordStatistic(correctAnswersList: WordWithUserWord[], wrong
 }
 
 async function updateGameStatistic(gameStatistics: GameStatistic, wordStatistics: WordsStatistic, correctAnswersList: WordWithUserWord[], wrongAnswersList: WordWithUserWord[], gameState: GameState, userStatistics: Statistic) {
+  const lengthAudiocallList = userStatistics.optional.audiocall.stat.length === 0 ? 0 : userStatistics.optional.audiocall.stat.length - 1;
+  const lengthWordsList = userStatistics.optional.words.stat.length === 0 ? 0 : userStatistics.optional.words.stat.length - 1;
   userStatistics.learnedWords = wordStatistics.learnedWordsQty;
-  userStatistics.optional.audiocall.stat[0].longestRow = gameStatistics.longestRow < gameState.longestStreakForGame ? gameState.longestStreakForGame : gameStatistics.longestRow;
-  userStatistics.optional.audiocall.stat[0].rightAnswers += correctAnswersList.length;
-  userStatistics.optional.audiocall.stat[0].wrongAnswers += wrongAnswersList.length;
-  userStatistics.optional.audiocall.stat[0].newWordsQty += +gameState.newWords;
-  userStatistics.optional.words.stat[0].newWordsQty += +gameState.newWords;
-  userStatistics.optional.words.stat[0].rightAnswers += correctAnswersList.length;
-  userStatistics.optional.words.stat[0].wrongAnswers += +wrongAnswersList.length;
+  userStatistics.optional.audiocall.stat[lengthAudiocallList].longestRow = gameStatistics.longestRow < gameState.longestStreakForGame ? gameState.longestStreakForGame : gameStatistics.longestRow;
+  userStatistics.optional.audiocall.stat[lengthAudiocallList].rightAnswers += correctAnswersList.length;
+  userStatistics.optional.audiocall.stat[lengthAudiocallList].wrongAnswers += wrongAnswersList.length;
+  userStatistics.optional.audiocall.stat[lengthAudiocallList].newWordsQty += +gameState.newWords;
+  userStatistics.optional.words.stat[lengthWordsList].newWordsQty += +gameState.newWords;
+  userStatistics.optional.words.stat[lengthWordsList].rightAnswers += correctAnswersList.length;
+  userStatistics.optional.words.stat[lengthWordsList].wrongAnswers += +wrongAnswersList.length;
+  console.log(userStatistics, gameState);
   await updateUserStatistic(userStatistics);
 }
 
