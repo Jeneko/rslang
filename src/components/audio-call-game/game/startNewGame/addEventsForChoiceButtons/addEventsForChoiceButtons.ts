@@ -77,12 +77,12 @@ function getCheckButton(e: Event, eventExecutor: string): HTMLElement | null {
 export function addEventsForKeyboard(currentWord: string, gameState: GameState, correctWord: Word) {
   const buttonsChoice = document.querySelectorAll('.btn-choice-of-answer');
   const gamePage = document.querySelector('.row-buttons-choice-wrapper') as HTMLElement;
-  gamePage.focus();
+  gamePage.focus({ preventScroll: true });
   gamePage.addEventListener('keyup', (e) => {
     checkAnswer(e, 'key', buttonsChoice, currentWord, gameState, correctWord);
   });
   gamePage.addEventListener('blur', () => {
-    gamePage.focus();
+    gamePage.focus({ preventScroll: true });
   });
 }
 

@@ -13,7 +13,7 @@ export enum ChartType {
 }
 
 function getArrayOfPercsOfMax(array: number[]): number[] {
-  const maxValue = Math.max(...array);
+  const maxValue = Math.max(...array) || 100;
 
   return array.map((el) => (el * 100) / maxValue);
 }

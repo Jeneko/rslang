@@ -56,13 +56,19 @@ async function updateWordStatistic(correctAnswersList: WordWithUserWord[], wrong
 }
 
 async function updateGameStatistic(gameStatistics: GameStatistic, wordStatistics: WordsStatistic, correctAnswersList: WordWithUserWord[], wrongAnswersList: WordWithUserWord[], gameState: GameState, userStatistics: Statistic) {
+  const lengthAudiocallList = userStatistics.optional.audiocall.stat.length === 0 ? 0 : userStatistics.optional.audiocall.stat.length - 1;
+  const lengthWordsList = userStatistics.optional.words.stat.length === 0 ? 0 : userStatistics.optional.words.stat.length - 1;
+  const audiocallStat = userStatistics.optional.audiocall.stat;
+  const wordsStat = userStatistics.optional.words.stat;
+
   userStatistics.learnedWords = wordStatistics.learnedWordsQty;
-  userStatistics.optional.audiocall.stat[0].longestRow = gameStatistics.longestRow < gameState.longestStreakForGame ? gameState.longestStreakForGame : gameStatistics.longestRow;
-  userStatistics.optional.audiocall.stat[0].rightAnswers += correctAnswersList.length;
-  userStatistics.optional.audiocall.stat[0].wrongAnswers += wrongAnswersList.length;
-  userStatistics.optional.audiocall.stat[0].newWordsQty += +gameState.newWords;
-  userStatistics.optional.words.stat[0].newWordsQty += +gameState.newWords;
-  userStatistics.optional.words.stat[0].rightAnswers += correctAnswersList.length;
+  audiocallStat[lengthAudiocallList].longestRow = gameStatistics.longestRow < gameState.longestStreakForGame ? gameState.longestStreakForGame : gameStatistics.longestRow;
+  audiocallStat[lengthAudiocallList].rightAnswers += correctAnswersList.length;
+  audiocallStat[lengthAudiocallList].wrongAnswers += wrongAnswersList.length;
+  audiocallStat[lengthAudiocallList].newWordsQty += +gameState.newWords;
+  wordsStat[lengthWordsList].newWordsQty += +gameState.newWords;
+  wordsStat[lengthWordsList].rightAnswers += correctAnswersList.length;
+  wordsStat[lengthWordsList].wrongAnswers += +wrongAnswersList.length;
   await updateUserStatistic(userStatistics);
 }
 

@@ -7,7 +7,7 @@ export default async function getStatisticInfoAllDays(statistic: Statistic) {
   const row = document.createElement('div');
   const tableNew = document.createElement('div');
   const tableLearned = document.createElement('div');
-  row.classList.add('row');
+  row.classList.add('row', 'gy-4');
 
   elem.innerHTML = `
     <h2 class="statistics-title display-2">All time statistic</h2>
